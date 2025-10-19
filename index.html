@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MoncadaArt - Portafolio</title>
+
+  <!-- Meta básicas -->
+  <meta name="description" content="Portafolio de Christian Moncada: arte digital, modelado 3D, diseño visual, animación y tecnología.">
+  <meta name="theme-color" content="#1fa2ff">
+
+  <!-- Fuentes + CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- HERO -->
+  <header class="hero" role="banner" aria-label="Portada">
+    <img src="assets/img/portada.jpeg" alt="Portada artística" class="cover"/>
+    <div class="overlay"></div>
+    <div class="perfil" role="complementary" aria-label="Tarjeta de perfil">
+      <img src="assets/img/perfil.jpeg" alt="Foto de perfil" class="avatar"/>
+      <div class="info">
+        <h1>Christian Moncada</h1>
+        <p>Artista Digital · Modelador 3D · Diseñador Visual</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="about" aria-labelledby="about_title">
+      <h2 id="about_title">Sobre mí</h2>
+      <p>
+        Hola, soy Christian Moncada, un artista y desarrollador digital de Querétaro.
+        Combino modelado 3D, animación, diseño, texturizado y programación para crear
+        experiencias visuales completas que unen arte y tecnología.
+      </p>
+    </section>
+
+    <!-- 🌟 BOTONES DE CATEGORÍAS (incluye 🎮 Juegos) -->
+    <section id="categorias">
+      <div class="botones-grid">
+        <a href="3d.html" class="btn-cat">🎨 Modelado 3D</a>
+        <a href="programacion.html" class="btn-cat">💻 Programación</a>
+        <a href="edicion.html" class="btn-cat">🎬 Edición</a>
+        <a href="musica.html" class="btn-cat">🎧 Música</a>
+        <a href="ia.html" class="btn-cat">🤖 IA</a>
+        <a href="juegos.html" class="btn-cat">🎮 Juegos</a> <!-- NUEVO -->
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects_title">
+      <h2 id="projects_title">Proyectos</h2>
+      <div id="project-grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 MoncadaArt · Creado con pasión y creatividad</p>
+  </footer>
+
+  <!-- Tu catálogo dinámico -->
+  <script src="script.js"></script>
+
+  <!-- 🔁 Modo claro/oscuro automático por hora (7:00–19:00 claro, fuera de ese rango oscuro) -->
+  <script>
+    (function setThemeByTime(){
+      const hour = new Date().getHours();
+      const isDay = hour >= 7 && hour < 19;
+
+      // Variables de color usadas por style.css
+      const root = document.documentElement;
+      if (isDay){
+        root.style.setProperty('--bg', '#f5f6fb');
+        root.style.setProperty('--card', '#ffffff');
+        root.style.setProperty('--text', '#0f1222');
+        root.style.setProperty('--muted', '#5a6275');
+      } else {
+        root.style.setProperty('--bg', '#0b0e13');
+        root.style.setProperty('--card', '#11151c');
+        root.style.setProperty('--text', '#eaf0ff');
+        root.style.setProperty('--muted', '#b1b8cc');
+      }
+
+      // Opcional: ajustar la meta theme-color para la barra del navegador en móviles
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', isDay ? '#f5f6fb' : '#0b0e13');
+    })();
+  </script>
+</body>
+</html>

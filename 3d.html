@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modelado 3D — MoncadaArt</title>
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{ --radius:16px; --accent:#8ab4ff; --accent2:#55ffe1; }
+
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Poppins,system-ui}
+    body{transition:background .4s,color .4s}
+
+    /* === Modos (se aplican por JS según la hora) === */
+    body.dark{ --bg:#0b0e13; --card:#11151c; --soft:#1c2230; --ink:#eaf0ff; --muted:#b1b8cc; background:var(--bg); color:var(--ink); }
+    body.light{ --bg:#f5f6fb; --card:#ffffff; --soft:#e9eef4; --ink:#0f1222; --muted:#5a6275; background:var(--bg); color:var(--ink); }
+
+    a{color:var(--accent);text-decoration:none}
+
+    /* === HERO (igual a “Edición”) === */
+    header.hero{ position:relative; min-height:36vh; display:grid; place-items:end center; overflow:hidden; border-bottom:1px solid rgba(255,255,255,.06)}
+    .hero .cover{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(.6)}
+    .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(11,14,19,.95))}
+    .perfil{ position:relative; display:flex; gap:14px; align-items:center; margin:16px; padding:12px 14px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); backdrop-filter:blur(10px); border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    body.light .perfil{ background:rgba(255,255,255,0.85); border:1px solid rgba(0,0,0,0.1); box-shadow:0 8px 25px rgba(0,0,0,0.15)}
+    .avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.2)}
+    .info h1{margin:0;font-size:clamp(22px,3.6vw,38px)}
+    .info p{margin:.2rem 0 0;color:var(--muted)}
+
+    /* === MAIN / Toolbar === */
+    main{max-width:1100px;margin:26px auto;padding:0 18px}
+    .toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:10px 0 18px}
+    .search{display:flex;align-items:center;gap:8px;background:var(--soft);border:1px solid rgba(255,255,255,.08);padding:10px 12px;border-radius:12px;min-width:230px}
+    body.light .search{border:1px solid #e7e9f3;box-shadow:0 3px 8px rgba(0,0,0,.1)}
+    .search input{all:unset;width:100%}
+
+    /* === GRID (cards igual a “Edición”) === */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.06);transition:transform .18s ease,box-shadow .18s ease}
+    .card:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(0,0,0,.35)}
+    .poster{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center;background:#0f1a24;border-radius:12px}
+    .titleWrap{padding:10px 12px}
+    .title{font-weight:800;font-size:16px;line-height:1.25;margin:0 0 6px}
+    .desc{color:var(--muted);font-size:13px;line-height:1.4;min-height:2.2em;margin:0 0 10px}
+    .btns{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0f16;font-weight:800;padding:8px 12px;border-radius:10px;font-size:13px}
+    .btn.secondary{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.18)}
+
+    .empty{color:var(--muted);text-align:center;padding:18px}
+
+    /* === MODAL / VISOR (manteniendo tu estructura con links/galería) === */
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.55); backdrop-filter: blur(6px); z-index:50 }
+    .modal.open{ display:flex }
+    .modal .box{ width:min(960px,92vw); height:min(86vh,960px); background:var(--card); border:1px solid rgba(255,255,255,.12); border-radius:20px; overflow:auto; box-shadow:0 30px 80px rgba(0,0,0,.55) }
+    .mHead{ position:sticky; top:0; background:var(--card); display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.10) }
+    .mTitle{ font-size:20px; font-weight:800 }
+    .close{ all:unset; cursor:pointer; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16) }
+
+    .mBody{ padding:16px; display:grid; grid-template-columns:1.1fr .9fr; gap:18px }
+    @media (max-width:860px){ .mBody{ grid-template-columns:1fr } }
+
+    .mMedia .shot{ width:100%; max-height:60vh; object-fit:contain; object-position:center; background:#0f1a24; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.25); margin-bottom:10px }
+    .mDesc{ color:var(--muted); line-height:1.6; margin-bottom:12px }
+    .mLinks{ display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 0 }
+    .mLinks a{ display:inline-block; padding:6px 10px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:var(--ink); font-size:12px }
+    body.light .mLinks a{ background:#f1f4fa; border:1px solid #e1e5f0; color:#0f1222 }
+    .mActs{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px }
+  </style>
+</head>
+<body>
+  <!-- HERO -->
+  <header class="hero">
+    <img class="cover" src="assets/img/portada.jpeg" alt="Portada">
+    <div class="overlay"></div>
+    <div class="perfil">
+      <img class="avatar" src="assets/img/perfil.jpeg" alt="Perfil">
+      <div class="info">
+        <h1>Modelado 3D</h1>
+        <p>Modelado 3D, Retopologá, texturizado y renders.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input id="q" placeholder="Buscar por título..." aria-label="Buscar proyectos">
+      </div>
+    </div>
+
+    <section id="grid" class="grid"></section>
+  </main>
+
+  <!-- MODAL / VISOR -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="box" id="mBox">
+      <div class="mHead">
+        <h2 class="mTitle" id="mTitle">Proyecto</h2>
+        <button class="close" id="mClose" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="mBody">
+        <div class="mMedia" id="mMedia"></div>
+        <div>
+          <p class="mDesc" id="mDesc">Sin descripción.</p>
+          <div class="mLinks" id="mLinks"></div>
+          <div class="mActs" id="mActs"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* === Tema automático por hora (igual que “Edición”) === */
+    function setMode(){
+      const h=new Date().getHours();
+      document.body.className=(h>=7&&h<19)?"light":"dark";
+    }
+    setMode();
+
+    /* === Elements === */
+    const GRID=document.getElementById("grid"),
+          Q=document.getElementById("q"),
+          MODAL=document.getElementById("modal"),
+          mTitle=document.getElementById("mTitle"),
+          mDesc=document.getElementById("mDesc"),
+          mMedia=document.getElementById("mMedia"),
+          mLinks=document.getElementById("mLinks"),
+          mActs=document.getElementById("mActs"),
+          mClose=document.getElementById("mClose");
+
+    let projects=[];
+
+    /* Placeholder SVG para portadas faltantes */
+    function placeholder(t="Proyecto"){
+      return `data:image/svg+xml,${encodeURIComponent(
+        "<svg xmlns='http://www.w3.org/2000/svg' width='800' height='450'>"
+        +"<rect width='100%' height='100%' fill='#0f1a24'/>"
+        +"<text x='50%' y='50%' fill='#87a7ff' text-anchor='middle' dominant-baseline='middle' font-family='Poppins' font-size='24'>"
+        +t.replace(/&/g,"&amp;")
+        +"</text></svg>"
+      )}`;
+    }
+
+    /* Render del grid (respeta tu lógica de createElement) */
+    function render(list){
+      GRID.innerHTML = "";
+      if(!list.length){
+        GRID.innerHTML = `<div class="empty">Sin proyectos. Edita <code>Modelado/manifest.json</code> con <code>title</code>, <code>cover</code>, <code>desc</code>, <code>href</code> (opcional), <code>links</code> (opcional) y <code>gallery</code> (opcional).</div>`;
+        return;
+      }
+      list.forEach((p, idx)=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const img = document.createElement('img');
+        img.className = 'poster';
+        img.src = p.cover || placeholder(p.title);
+        img.alt = p.title;
+        img.loading = "lazy";
+        img.onerror = () => { img.src = placeholder(p.title); };
+
+        const wrap = document.createElement('div');
+        wrap.className = 'titleWrap';
+        wrap.innerHTML = `
+          <h3 class="title">${p.title||"Proyecto"}</h3>
+          <p class="desc">${p.desc||""}</p>
+          <div class="btns">
+            <a href="#" class="btn" data-i="${idx}">Ver proyecto</a>
+          </div>
+        `;
+
+        img.addEventListener('click',(e)=>{ e.preventDefault(); openViewer(idx); });
+        wrap.querySelector('a.btn').addEventListener('click',(e)=>{ e.preventDefault(); openViewer(idx); });
+
+        card.appendChild(img);
+        card.appendChild(wrap);
+        GRID.appendChild(card);
+      });
+    }
+
+    /* Filtro por texto */
+    function applyFilter(){
+      const q = (Q.value||"").toLowerCase();
+      const list = projects.filter(p =>
+        (p.title||"").toLowerCase().includes(q) || (p.desc||"").toLowerCase().includes(q)
+      );
+      render(list);
+    }
+    Q.addEventListener('input', applyFilter);
+
+    /* Visor con media + links + acciones (igual a tu 3D) */
+    function openViewer(i){
+      const p = projects[i];
+      if(!p) return;
+      mTitle.textContent = p.title || "Proyecto";
+      mDesc.textContent  = p.desc || "";
+
+      // links
+      mLinks.innerHTML = "";
+      (p.links||[]).forEach(l=>{
+        if(!l || !l.href) return;
+        const a = document.createElement('a');
+        a.href = l.href; a.target="_blank"; a.rel="noopener";
+        a.textContent = l.label || new URL(l.href, location.href).hostname.replace(/^www\./,'');
+        mLinks.appendChild(a);
+      });
+
+      // media
+      mMedia.innerHTML = "";
+      const media = [];
+      if(p.cover) media.push({type:'img', src:p.cover});
+      (p.gallery||[]).forEach(src=> media.push({type:'img', src}));
+      if(p.video){
+        if(p.video.includes("youtube")||p.video.includes("youtu.be")){
+          const id=p.video.split("v=")[1]?.split("&")[0]||p.video.split("youtu.be/")[1];
+          media.push({type:'yt', src:`https://www.youtube.com/embed/${id}`});
+        }else if(/\.(mp4|webm|mov)$/i.test(p.video)){
+          media.push({type:'vid', src:p.video});
+        }
+      }
+      if(!media.length && p.cover===undefined){
+        media.push({type:'img', src:placeholder(p.title||"Proyecto")});
+      }
+
+      media.forEach(m=>{
+        if(m.type==='img'){
+          const el=document.createElement('img');
+          el.className='shot'; el.src=m.src; el.alt=p.title||"Proyecto"; el.loading="lazy";
+          mMedia.appendChild(el);
+        }else if(m.type==='yt'){
+          const el=document.createElement('iframe');
+          el.className='shot'; el.src=m.src; el.frameBorder="0"; el.allowFullscreen=true;
+          mMedia.appendChild(el);
+        }else if(m.type==='vid'){
+          const el=document.createElement('video');
+          el.className='shot'; el.src=m.src; el.controls=true;
+          mMedia.appendChild(el);
+        }
+      });
+
+      // acciones
+      mActs.innerHTML = "";
+      if(p.href){
+        const a = document.createElement('a');
+        a.className = 'btn';
+        a.href = p.href; a.target="_blank"; a.rel="noopener"; a.textContent = "Abrir página";
+        mActs.appendChild(a);
+      }
+      if(p.cover){
+        const a2 = document.createElement('a');
+        a2.className = 'btn secondary';
+        a2.href = p.cover; a2.target="_blank"; a2.rel="noopener"; a2.textContent = "Ver imagen";
+        mActs.appendChild(a2);
+      }
+
+      MODAL.classList.add('open');
+      MODAL.setAttribute('aria-hidden','false');
+      mClose.focus();
+    }
+
+    function closeViewer(){
+      MODAL.classList.remove('open');
+      MODAL.setAttribute('aria-hidden','true');
+    }
+    document.getElementById('mClose').addEventListener('click', closeViewer);
+    MODAL.addEventListener('click', e=>{ if(e.target===MODAL) closeViewer(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeViewer(); });
+
+    /* Carga del catálogo (mantengo tu ruta de 3D) */
+    async function load(){
+      try{
+        const r = await fetch("Modelado/manifest.json",{cache:"no-store"});
+        const data = await r.json();
+        projects = (data.projects||[]).map(p=>({
+          title: p.title || "Proyecto",
+          cover: p.cover || "",
+          desc:  p.desc  || "",
+          href:  p.href  || "",
+          links: Array.isArray(p.links)? p.links : [],
+          gallery: Array.isArray(p.gallery)? p.gallery : [],
+          video: p.video || ""
+        }));
+        applyFilter();
+      }catch{
+        projects = [];
+        render([]);
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

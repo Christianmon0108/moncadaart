@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Música — MoncadaArt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{ --radius:16px; --accent:#8ab4ff; --accent2:#55ffe1; }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Poppins,system-ui}
+    body{transition:background .4s,color .4s}
+    body.dark{ --bg:#0b0e13; --card:#11151c; --soft:#1c2230; --ink:#eaf0ff; --muted:#b1b8cc; background:var(--bg); color:var(--ink); }
+    body.light{ --bg:#f5f6fb; --card:#ffffff; --soft:#e9eef4; --ink:#0f1222; --muted:#5a6275; background:var(--bg); color:var(--ink); }
+
+    header.hero{ position:relative; min-height:36vh; display:grid; place-items:end center; overflow:hidden; border-bottom:1px solid rgba(255,255,255,.06)}
+    .hero .cover{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(.6)}
+    .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(11,14,19,.95))}
+    .perfil{ position:relative; display:flex; gap:14px; align-items:center; margin:16px; padding:12px 14px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); backdrop-filter:blur(10px); border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    body.light .perfil{ background:rgba(255,255,255,0.85); border:1px solid rgba(0,0,0,0.1); box-shadow:0 8px 25px rgba(0,0,0,0.15)}
+    .avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.2)}
+    .info h1{margin:0;font-size:clamp(22px,3.6vw,38px)}
+    .info p{margin:.2rem 0 0;color:var(--muted)}
+
+    main{max-width:1100px;margin:26px auto;padding:0 18px}
+    .toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:10px 0 18px}
+    .search{display:flex;align-items:center;gap:8px;background:var(--soft);border:1px solid rgba(255,255,255,.08);padding:10px 12px;border-radius:12px;min-width:230px}
+    body.light .search{border:1px solid #e7e9f3;box-shadow:0 3px 8px rgba(0,0,0,.1)}
+    .search input{all:unset;width:100%}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+    .card{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.06);transition:transform .18s ease,box-shadow .18s ease}
+    .card:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(0,0,0,.35)}
+    .poster{display:block;width:100%;height:180px;object-fit:cover;object-position:center;background:#0f1a24;border-radius:12px}
+    .titleWrap{padding:10px 12px}
+    .title{font-weight:800;font-size:16px;line-height:1.25;margin:0 0 6px}
+    .desc{color:var(--muted);font-size:13px;line-height:1.4;min-height:2.2em;margin:0 0 10px}
+    .btns{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0f16;font-weight:800;padding:8px 12px;border-radius:10px;font-size:13px}
+
+    .modal{ position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.55); backdrop-filter: blur(6px); z-index:50 }
+    .modal.open{ display:grid }
+    .modal .box{ width:min(900px,94vw); max-height:min(86vh,980px); border-radius:20px; overflow:hidden; background:var(--card); border:1px solid rgba(255,255,255,.12); box-shadow:0 30px 80px rgba(0,0,0,.55); display:flex; flex-direction:column }
+    .proj-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.10); position:sticky; top:0; background:var(--card) }
+    .proj-title{ font-size:22px; font-weight:800; margin:0 }
+    .close-btn{ all:unset; cursor:pointer; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16) }
+
+    .proj{ display:grid; grid-template-columns: 1.15fr .85fr; gap:18px; padding:18px; overflow:auto }
+    @media (max-width:860px){ .proj{ grid-template-columns:1fr } }
+    .proj-hero{ width:100%; max-height:60vh; object-fit:contain; object-position:center; background:#0f1a24; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.25); margin-bottom:10px; }
+    .proj-sub{ color:var(--muted); margin-top:6px; line-height:1.6 }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <img class="cover" src="assets/img/portada.jpeg" alt="Portada">
+    <div class="overlay"></div>
+    <div class="perfil">
+      <img class="avatar" src="assets/img/perfil.jpeg" alt="Perfil">
+      <div class="info">
+        <h1>Música</h1>
+        <p>Beats, mezcla y experimentos sonoros.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <div class="search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="q" placeholder="Buscar por título..." aria-label="Buscar proyectos">
+      </div>
+    </div>
+    <section id="grid" class="grid"></section>
+  </main>
+
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="box" id="modalBox">
+      <div class="proj-head">
+        <h2 class="proj-title" id="projTitle">Proyecto</h2>
+        <button class="close-btn" id="closeBtn" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="proj" id="modalContent"></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){ const h=new Date().getHours(); document.body.className=(h>=7&&h<19)?'light':'dark'; })();
+
+    const GRID=document.getElementById("grid"),
+          Q=document.getElementById("q"),
+          MODAL=document.getElementById("modal"),
+          MODAL_TITLE=document.getElementById("projTitle"),
+          MODAL_CONTENT=document.getElementById("modalContent"),
+          CLOSE_BTN=document.getElementById("closeBtn");
+    let projects=[];
+
+    function placeholder(t="Proyecto"){
+      return `data:image/svg+xml,${encodeURIComponent(
+        "<svg xmlns='http://www.w3.org/2000/svg' width='800' height='450'>"
+        +"<rect width='100%' height='100%' fill='#0f1a24'/>"
+        +"<text x='50%' y='50%' fill='#87a7ff' text-anchor='middle' dominant-baseline='middle' font-family='Poppins' font-size='24'>"
+        +t+"</text></svg>"
+      )}`;
+    }
+
+    function render(list){
+      if(!list.length){ GRID.innerHTML="<p style='color:var(--muted);text-align:center;'>Sin proyectos disponibles.</p>"; return; }
+      GRID.innerHTML=list.map((p,i)=>`
+        <div class='card'>
+          <img class='poster' src='${p.cover||placeholder(p.title)}' alt='${p.title}'>
+          <div class='titleWrap'>
+            <h3 class='title'>${p.title}</h3>
+            <p class='desc'>${p.desc||""}</p>
+            <div class='btns'><a href='#' class='btn' data-i='${i}'>Ver proyecto</a></div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    Q.addEventListener('input',()=>{
+      const q=Q.value.toLowerCase();
+      render(projects.filter(p=>(p.title||"").toLowerCase().includes(q) || (p.desc||"").toLowerCase().includes(q)));
+    });
+
+    function openModalFor(p){
+      MODAL_TITLE.textContent=p.title||"Proyecto";
+      const media=[];
+      if(p.cover) media.push(`<img class="proj-hero" src="${p.cover}" alt="${p.title}">`);
+      if(p.gallery && Array.isArray(p.gallery)){ p.gallery.forEach(img=> media.push(`<img class="proj-hero" src="${img}" alt="Vista de ${p.title}">`)); }
+      if(p.video){
+        if(p.video.includes("youtube")||p.video.includes("youtu.be")){
+          const id=p.video.split("v=")[1]?.split("&")[0]||p.video.split("youtu.be/")[1];
+          media.push(`<iframe class="proj-hero" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>`);
+        }else if(p.video.endsWith(".mp4")){
+          media.push(`<video class="proj-hero" src="${p.video}" controls></video>`);
+        }
+      }
+      MODAL_CONTENT.innerHTML=`<div>${media.join("")}</div><div><h3 style="margin-bottom:6px;">Descripción</h3><p class="proj-sub">${p.desc||"Sin descripción."}</p></div>`;
+      MODAL.classList.add('open'); MODAL.setAttribute('aria-hidden','false'); CLOSE_BTN.focus();
+    }
+
+    function closeModal(){ MODAL.classList.remove('open'); MODAL.setAttribute('aria-hidden','true'); }
+    GRID.addEventListener('click',e=>{ const b=e.target.closest('[data-i]'); if(!b)return; e.preventDefault(); openModalFor(projects[b.dataset.i]); });
+    CLOSE_BTN.addEventListener('click', closeModal);
+    MODAL.addEventListener('click', e=>{ if(e.target===MODAL) closeModal(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+    async function load(){
+      try{
+        const r=await fetch("Musica/manifest.json",{cache:"no-store"});
+        const d=await r.json();
+        projects=d.projects||[];
+      }catch{
+        projects=[];
+      }
+      render(projects);
+    }
+    load();
+  </script>
+</body>
+</html>
