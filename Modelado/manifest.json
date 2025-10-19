@@ -1,0 +1,138 @@
+{
+  "projects": [
+    {
+      "title": "🎧 RetroVibes – Radio estilo Cartoon",
+      "cover": "Modelado/Radio/radio.png",
+      "desc": "Una reinterpretación colorida de una radio vintage con estética cartoon. El objetivo fue combinar formas retro y un acabado estilizado, utilizando sombras planas y gradientes cálidos para lograr una apariencia animada y nostálgica..",
+      "links": [
+      ],
+      "gallery": [
+        "Modelado/Radio/modelo.png"
+      ],
+      "video":"Modelado/Radio/Radio.mp4"
+      
+    },
+    {
+      "title": "🎶 Vintage Spin – Tocadiscos 3D",
+      "cover": "Modelado/Tocadiscos/tocadiscto2.png",
+      "desc": "Inspirado en los clásicos tocadiscos de los 70, este modelo combina formas limpias y texturas cálidas. Creado en Blender y Substance Painter, buscando transmitir la sensación nostálgica del vinilo en una pieza 3D moderna.",
+      "links": [
+      ],
+      "gallery": [
+        "Modelado/tocadiscos/tocadiscto.png",
+        "Modelado/Tocadiscos/tocadiscos.png"
+      ]
+    },
+    {
+      "title": "🔥 Essence of Fire – Simulación en Blender",
+      "cover": "Modelado/Fuego/Fuego.png",
+      "desc": "Representación estilizada del fuego como símbolo de energía y destrucción. Simulación de fuego en Blender, explorando el comportamiento volumétrico, la emisión de luz y el contraste entre densidad y temperatura. Un estudio de efectos visuales realistas con énfasis en el control del shader y la iluminación. ",
+      "links": [
+      ],
+      "gallery": [
+      ],
+      "video": "Modelado/Fuego/Fuego.mp4"
+    },
+    {
+      "title": "💾 PixelDream – Computadora Retro Cartoon",
+      "cover": "Modelado/Computadora/Computadora.png",
+      "desc": "Inspirada en la era digital de los 90, esta computadora fue modelada en Blender con un enfoque cartoon minimalista. El objetivo fue capturar la personalidad y calidez de los primeros equipos personales con un toque moderno y divertido.",
+      "links": [
+      ],
+      "gallery": [
+        "Modelado/Computadora/compu.png",
+        "Modelado/Computadora/Com.png"
+      ],
+      "video": "Modelado/Computadora/Compu.mp4"
+    },
+    {
+      "title": "🤖 Robot Viejito – Modelado y Texturizado 3D",
+      "cover": "Modelado/Robot/Robot viejito.png",
+      "desc": "Modelo 3D realizado en Blender y texturizado en Substance Painter, con enfoque en materiales metálicos envejecidos y detalles de desgaste realista. El proyecto explora el flujo de trabajo PBR, el control de luces y la presentación de un personaje con personalidad visual y estilo retro.",
+      "links": [
+      ],
+      "gallery": [
+    
+      ],
+      "video": "Modelado/Robot/Robot.mp4"
+    },
+    {
+      "title": "💣 Dinamita Cartoon – Modelado 3D en Blender",
+      "cover": "Modelado/Dinamita/Dinamita.png",
+      "desc": "Modelo 3D con estilo cartoon, creado y renderizado en Blender. Se trabajó el toon shading, los contornos y la iluminación bicolor para lograr una apariencia estilizada con enfoque visual dinámico. Un ejercicio de modelado limpio y sombreado no realista (NPR).",
+      "links": [
+      ],
+      "gallery": [
+    
+      ],
+      "video": ""
+    },
+    {
+      "title": "💰 Moneda 3D – Modelado e Iluminación",
+      "cover": "Modelado/Moneda/Moneda.png",
+      "desc": "Modelo 3D creado en Blender, explorando materiales metálicos, reflejos y composición visual. Se realizaron dos versiones —una con sombras realistas y otra con estilo cartoon (toon shading)— para estudiar el contraste entre acabados PBR y no realistas (NPR). Proyecto enfocado en forma, iluminación y presentación.",
+      "links": [
+      ],
+      "gallery": [
+        "Modelado/Moneda/Moneda_2.png"
+      ],
+      "video": ""
+    },
+    {
+      "title": "🏐 Modelado Toon – Balón 3D",
+      "cover": "Modelado/Balon/Balon.png",
+      "desc": "Diseño de balón modelado en Blender con materiales simples y bordes delineados. Prueba de iluminación controlada y renderizado NPR en estilo caricatura.",
+      "links": [
+      ],
+      "gallery": [
+        "Modelado/Moneda/Moneda_2.png"
+      ],
+      "video": ""
+    },
+    {
+      "title": "🪵 Espada de Madera – Modelado 3D en Blender",
+      "cover": "Modelado/Espada/Espada de madera.png",
+      "desc": "Modelo 3D creado en Blender, con enfoque en forma, proporciones y texturizado natural. El proyecto explora materiales PBR de madera, control de luces cálidas y reflejos suaves, logrando una estética realista con composición simple. Ejercicio de modelado de objetos artesanales y presentación visual.",
+      "links": [
+      ],
+      "gallery": [
+        
+      ],
+      "video": ""
+    },
+    {
+      "title": "🐔 Gallina Cartoon – Modelado de Personaje 3D",
+      "cover": "Modelado/Gallina/Gallina.png",
+      "desc": "Modelo de personaje creado en Blender, con enfoque en formas simples, materiales suaves y estilo cartoon. El proyecto explora iluminación bicolor, expresividad visual y modelado estilizado, logrando un diseño amigable y limpio. Ejercicio centrado en carácter, forma y presentación de personaje.",
+      "links": [
+      ],
+      "gallery": [
+        
+      ],
+      "video": ""
+    },
+    {
+      "title": "🛹 Patineta Cartoon – Modelado 3D en Blender",
+      "cover": "Modelado/Panineta/Patineta.png",
+      "desc": "Modelo 3D con estilo cartoon, desarrollado en Blender. Se trabajó la forma estilizada, los materiales brillantes y la iluminación colorida, buscando una composición moderna y visualmente atractiva.",
+      "links": [
+      ],
+      "gallery": [
+        
+      ],
+      "video": ""
+    },
+    {
+      "title": "🛋️ Sofá 3D – Modelado y Texturizado en Blender",
+      "cover": "Modelado/Sillon/Sillon.png",
+      "desc": "Modelo de sofá moderno realizado en Blender, con materiales PBR que simulan tela acolchada y cojines tejidos. El proyecto se enfocó en la composición, iluminación de estudio y detalle de superficie, logrando un resultado realista y equilibrado.",
+      "links": [
+      ],
+      "gallery": [
+        
+      ],
+      "video": ""
+    }
+    
+  ]
+}
