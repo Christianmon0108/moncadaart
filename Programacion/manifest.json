@@ -1,0 +1,13 @@
+{
+  "projects": [
+    {
+      "title": "📝 Tus Notas – App de Organización Personal",
+      "desc": "Aplicación de escritorio desarrollada en Python con una interfaz moderna y herramientas de edición esenciales. Permite crear, guardar y organizar notas de manera sencilla, con soporte para formato, zoom y búsqueda. Un proyecto enfocado en productividad y diseño limpio.",
+      "cover": "Programacion/Notas/Notas.png",
+      "gallery": [
+        "Programacion/Notas/Notas_oscuro.png"
+      ],
+      "video": ""
+    }
+  ]
+}
