@@ -1,0 +1,69 @@
+{
+  "projects": [
+    {
+      "title": "📺 Publicidad Seguros – Motion Graphic Comercial",
+      "desc": "Spot animado creado en After Effects, enfocado en comunicación visual clara y ritmo publicitario. Incluye transiciones dinámicas, tipografía corporativa y composición limpia, destacando el mensaje de marca con fluidez visual.",
+      "cover": "Edicion/CRMI/Crmi.png",
+      "gallery": [
+        "Edicion/CRMI/Publicidad Seguros.gif"
+      ],
+      "video": ""
+    },
+    {
+      "title": "🌌 Cinematic Unreal – Escena 3D en Tiempo Real",
+      "desc": "Corto renderizado en Unreal Engine 5, explorando composición, iluminación dinámica y atmósfera realista. Proyecto centrado en el uso de Lumen, cámara virtual y postprocesado cinematográfico, buscando una experiencia visual inmersiva.",
+      "cover": "Edicion/Cinematic/Baile_Zombie.png",
+      "gallery": [
+      ],
+      "video": "https://youtu.be/pr3wdkvSFkg"
+    },
+    {
+      "title": "🎮 Cinemáticas en Tiempo Real – Unreal Engine",
+      "desc": "Secuencia cinematográfica desarrollada en Unreal Engine 5, enfocada en la creación de cinemáticas interactivas para videojuegos. El proyecto combina render en tiempo real, movimiento de cámara, iluminación dinámica y narrativa visual, optimizado para ejecución fluida dentro del motor.",
+      "cover": "Edicion/Cinemáticas/CM.png",
+      "gallery": [
+      ],
+      "video": "https://youtu.be/AfscoKUWi0k"
+    },
+    {
+      "title": "🗡️ La Espada en la Roca – Iluminación y Render Final",
+      "desc": "Proyecto desarrollado para la clase de Iluminación y Render, centrado en la creación de una atmósfera fantástica y mística.Se trabajó el control de luces volumétricas, sombras suaves y reflejos sutiles para resaltar la narrativa visual del entorno. Renderizado final con enfoque en composición y profundidad.",
+      "cover": "Edicion/Espada/Espada.png",
+      "gallery": [
+      ],
+      "video": ""
+    },
+    {
+      "title": "🌆 Cinematic Test – Escena en Tiempo Real",
+      "desc": "Prueba visual creada en Unreal Engine 5, explorando iluminación, movimiento de cámara y atmósfera ambiental en tiempo real. El proyecto se centró en el flujo de trabajo cinematográfico dentro del motor, aplicando Lumen y ajustes de postprocesado para lograr una estética realista y fluida.",
+      "cover": "Edicion/Pueblo_Chino/PC.png",
+      "gallery": [
+      ],
+      "video": "Edicion/Pueblo_Chino/Puebo_C.mp4"
+    },
+    {
+      "title": "🌀 Composición Cinemática – Proyecto en Nuke",
+      "desc": "Proyecto realizado en Nuke, enfocado en la composición de planos, corrección de color y efectos visuales integrados. Se trabajó la profundidad, el blending y el control del enfoque para lograr una integración realista entre elementos 2D y 3D dentro de la escena.",
+      "cover": "Edicion/Paris/Nave.png",
+      "gallery": [
+      ],
+      "video": "Edicion/Paris/Paris_Nave.mp4"
+    },
+    {
+      "title": "🎞️ Composición Avanzada – Proyecto en Nuke",
+      "desc": "Ejercicio de composición digital y corrección de color desarrollado en Nuke, aplicando tracking, keying y retoque por capas. El proyecto busca lograr una integración realista entre elementos filmados y generados digitalmente mediante un flujo de trabajo nodal profesional.",
+      "cover": "Edicion/Nave/NV.png",
+      "gallery": [
+      ],
+      "video": "Edicion/Nave/NAV.mp4"
+    },
+    {
+      "title": "⚡ SPEEDWAY – Motion Design en After Effects",
+      "desc": "Proyecto de motion graphics y edición dinámica creado en After Effects. Combina velocidad, ritmo y composición tipográfica con efectos visuales fluidos y sincronía sonora. El enfoque estuvo en transiciones cinematográficas, control de cámara y energía visual.",
+      "cover": "Edicion/Pista/Pis.png",
+      "gallery": [
+      ],
+      "video": "Edicion/Pista/pista.mp4"
+    }
+  ]
+}
