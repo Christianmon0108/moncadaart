@@ -8,12 +8,14 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap"
     rel="stylesheet"
   >
 
   <style>
+
     :root {
       --radius: 16px;
       --accent: #8ab4ff;
@@ -53,9 +55,10 @@
       color: var(--ink);
     }
 
-    /* =========================
+
+    /* =====================================================
        HERO
-       ========================= */
+       ===================================================== */
 
     header.hero {
       position: relative;
@@ -63,21 +66,27 @@
       display: grid;
       place-items: end center;
       overflow: hidden;
-      border-bottom: 1px solid rgba(255, 255, 255, .06);
+
+      border-bottom:
+        1px solid rgba(255, 255, 255, .06);
     }
 
     .hero .cover {
       position: absolute;
       inset: 0;
+
       width: 100%;
       height: 100%;
+
       object-fit: cover;
+
       filter: brightness(.6);
     }
 
     .overlay {
       position: absolute;
       inset: 0;
+
       background: linear-gradient(
         180deg,
         rgba(0, 0, 0, .45),
@@ -87,142 +96,220 @@
 
     .perfil {
       position: relative;
+
       display: flex;
       gap: 14px;
       align-items: center;
+
       margin: 16px;
       padding: 12px 14px;
-      background: rgba(255, 255, 255, .08);
-      border: 1px solid rgba(255, 255, 255, .18);
+
+      background:
+        rgba(255, 255, 255, .08);
+
+      border:
+        1px solid rgba(255, 255, 255, .18);
+
       backdrop-filter: blur(10px);
+
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, .35);
     }
 
     body.light .perfil {
-      background: rgba(255, 255, 255, .85);
-      border: 1px solid rgba(0, 0, 0, .1);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+      background:
+        rgba(255, 255, 255, .85);
+
+      border:
+        1px solid rgba(0, 0, 0, .1);
+
+      box-shadow:
+        0 8px 25px rgba(0, 0, 0, .15);
     }
 
     .avatar {
       width: 64px;
       height: 64px;
+
       border-radius: 50%;
+
       object-fit: cover;
-      border: 3px solid rgba(255, 255, 255, .2);
+
+      border:
+        3px solid rgba(255, 255, 255, .2);
     }
 
     .info h1 {
       margin: 0;
-      font-size: clamp(22px, 3.6vw, 38px);
+
+      font-size:
+        clamp(22px, 3.6vw, 38px);
     }
 
     .info p {
       margin: .2rem 0 0;
+
       color: var(--muted);
     }
 
-    /* =========================
-       CONTENIDO
-       ========================= */
+
+    /* =====================================================
+       CONTENIDO PRINCIPAL
+       ===================================================== */
 
     main {
-      max-width: 1200px;
+      width: min(1400px, 96vw);
+
       margin: 26px auto;
+
       padding: 0 18px;
     }
 
-    /* =========================
+
+    /* =====================================================
        BUSCADOR
-       ========================= */
+       ===================================================== */
 
     .toolbar {
       display: flex;
+
       gap: 10px;
+
       align-items: center;
+
       justify-content: space-between;
+
       margin: 10px 0 18px;
     }
 
     .search {
       display: flex;
+
       align-items: center;
+
       gap: 8px;
+
       background: var(--soft);
-      border: 1px solid rgba(255, 255, 255, .08);
+
+      border:
+        1px solid rgba(255, 255, 255, .08);
+
       padding: 10px 12px;
+
       border-radius: 12px;
-      min-width: 260px;
+
+      min-width: 280px;
     }
 
     body.light .search {
-      border: 1px solid #e7e9f3;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, .1);
+      border:
+        1px solid #e7e9f3;
+
+      box-shadow:
+        0 3px 8px rgba(0, 0, 0, .1);
     }
 
     .search input {
       all: unset;
+
       width: 100%;
     }
 
-    /* =========================
+
+    /* =====================================================
        GRID
-       ========================= */
+       4 escritorio
+       2 tablet
+       1 móvil
+       ===================================================== */
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+
+      grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
       gap: 16px;
+
       align-items: stretch;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 950px) {
+
       .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
       }
+
     }
 
     @media (max-width: 560px) {
+
       .grid {
         grid-template-columns: 1fr;
       }
 
-      .toolbar,
-      .search {
+      .toolbar {
         width: 100%;
       }
+
+      .search {
+        width: 100%;
+        min-width: 0;
+      }
+
     }
 
-    /* =========================
+
+    /* =====================================================
        TARJETAS
-       ========================= */
+       ===================================================== */
 
     .card {
       position: relative;
-      border-radius: var(--radius);
+
       overflow: hidden;
-      background: var(--card);
-      border: 1px solid rgba(255, 255, 255, .06);
-      transition: transform .18s ease, box-shadow .18s ease;
 
       display: flex;
       flex-direction: column;
+
       height: 100%;
+
+      background: var(--card);
+
+      border:
+        1px solid rgba(255, 255, 255, .06);
+
+      border-radius: var(--radius);
+
+      transition:
+        transform .18s ease,
+        box-shadow .18s ease;
     }
 
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, .35);
+      transform:
+        translateY(-3px);
+
+      box-shadow:
+        0 14px 28px rgba(0, 0, 0, .35);
     }
 
     .poster {
       display: block;
+
       width: 100%;
+
       height: 180px;
+
       object-fit: cover;
+
       object-position: center;
+
       background: #0f1a24;
+
       flex-shrink: 0;
     }
 
@@ -232,94 +319,158 @@
 
     .titleWrap {
       padding: 12px;
+
       display: flex;
+
       flex-direction: column;
+
       flex: 1;
     }
 
+
+    /* =====================================================
+       CATEGORÍA
+       ===================================================== */
+
     .category {
       display: inline-block;
+
       width: max-content;
+
       max-width: 100%;
+
       margin-bottom: 8px;
+
       padding: 4px 8px;
+
       border-radius: 20px;
 
       font-size: 11px;
+
       font-weight: 600;
+
       color: #0a0f16;
 
-      background: linear-gradient(
-        135deg,
-        var(--accent),
-        var(--accent2)
-      );
+      background:
+        linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent2)
+        );
     }
+
+
+    /* =====================================================
+       TÍTULO
+       ===================================================== */
 
     .title {
       font-weight: 800;
+
       font-size: 15px;
+
       line-height: 1.3;
+
       margin: 0 0 7px;
+
       min-height: 39px;
 
       display: -webkit-box;
+
       -webkit-line-clamp: 2;
+
       line-clamp: 2;
+
       -webkit-box-orient: vertical;
+
       overflow: hidden;
     }
+
+
+    /* =====================================================
+       DESCRIPCIÓN
+       ===================================================== */
 
     .desc {
       color: var(--muted);
+
       font-size: 12.5px;
+
       line-height: 1.45;
+
       margin: 0 0 12px;
+
       min-height: 54px;
 
       display: -webkit-box;
+
       -webkit-line-clamp: 3;
+
       line-clamp: 3;
+
       -webkit-box-orient: vertical;
+
       overflow: hidden;
     }
 
+
+    /* =====================================================
+       BOTONES
+       ===================================================== */
+
     .btns {
       display: flex;
+
       gap: 8px;
+
       flex-wrap: wrap;
+
       margin-top: auto;
     }
 
     .btn {
       display: inline-block;
-      background: linear-gradient(
-        135deg,
-        var(--accent),
-        var(--accent2)
-      );
+
+      padding: 8px 12px;
+
+      border-radius: 10px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent2)
+        );
 
       color: #0a0f16;
-      font-weight: 800;
-      padding: 8px 12px;
-      border-radius: 10px;
+
       font-size: 13px;
+
+      font-weight: 800;
+
       text-decoration: none;
     }
 
-    /* =========================
+
+    /* =====================================================
        MODAL
-       ========================= */
+       ===================================================== */
 
     .modal {
       position: fixed;
+
       inset: 0;
 
       display: none;
+
       place-items: center;
 
-      background: rgba(0, 0, 0, .55);
-      backdrop-filter: blur(6px);
+      padding: 20px;
+
+      background:
+        rgba(0, 0, 0, .62);
+
+      backdrop-filter: blur(7px);
 
       z-index: 50;
     }
@@ -329,27 +480,41 @@
     }
 
     .modal .box {
-      width: min(900px, 94vw);
-      max-height: min(86vh, 980px);
+      width:
+        min(1000px, 94vw);
+
+      max-height:
+        min(88vh, 1000px);
 
       border-radius: 20px;
+
       overflow: hidden;
 
       background: var(--card);
 
-      border: 1px solid rgba(255, 255, 255, .12);
+      border:
+        1px solid rgba(255, 255, 255, .12);
 
       box-shadow:
         0 30px 80px rgba(0, 0, 0, .55);
 
       display: flex;
+
       flex-direction: column;
     }
 
+
+    /* =====================================================
+       CABECERA MODAL
+       ===================================================== */
+
     .proj-head {
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
+
       gap: 20px;
 
       padding: 14px 18px;
@@ -358,6 +523,7 @@
         1px solid rgba(255, 255, 255, .10);
 
       position: sticky;
+
       top: 0;
 
       background: var(--card);
@@ -366,41 +532,77 @@
     }
 
     .proj-title {
-      font-size: 22px;
-      font-weight: 800;
       margin: 0;
+
+      font-size: 21px;
+
+      font-weight: 800;
     }
 
     .close-btn {
       all: unset;
+
       cursor: pointer;
+
       padding: 8px 10px;
+
       border-radius: 10px;
-      background: rgba(255, 255, 255, .08);
-      border: 1px solid rgba(255, 255, 255, .16);
+
+      background:
+        rgba(255, 255, 255, .08);
+
+      border:
+        1px solid rgba(255, 255, 255, .16);
+
+      flex-shrink: 0;
     }
+
+    body.light .close-btn {
+      background: #edf0f5;
+
+      border-color: #dde1ea;
+    }
+
+
+    /* =====================================================
+       CONTENIDO DEL MODAL
+       ===================================================== */
 
     .proj {
       display: grid;
-      grid-template-columns: 1.15fr .85fr;
+
+      grid-template-columns:
+        minmax(0, 1.25fr)
+        minmax(240px, .75fr);
+
       gap: 18px;
+
       padding: 18px;
+
       overflow: auto;
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 800px) {
+
       .proj {
         grid-template-columns: 1fr;
       }
+
     }
 
+
+    /* =====================================================
+       VIDEO / MEDIA DEL MODAL
+       ===================================================== */
+
     .proj-hero {
+      display: block;
+
       width: 100%;
-      max-height: 60vh;
-      object-fit: contain;
-      object-position: center;
 
       background: #0f1a24;
+
+      border: 0;
 
       border-radius: 14px;
 
@@ -412,42 +614,80 @@
 
     iframe.proj-hero {
       width: 100%;
-      min-height: 350px;
+
       aspect-ratio: 16 / 9;
+
+      min-height: 300px;
     }
 
     video.proj-hero {
       width: 100%;
-      height: auto;
+
+      max-height: 65vh;
+
+      object-fit: contain;
     }
 
-    .proj-sub {
-      color: var(--muted);
-      margin-top: 6px;
-      line-height: 1.6;
+    img.proj-hero {
+      width: 100%;
+
+      max-height: 65vh;
+
+      object-fit: contain;
     }
+
+
+    /* =====================================================
+       INFORMACIÓN DEL MODAL
+       ===================================================== */
 
     .project-meta {
       margin-bottom: 16px;
+
       display: flex;
+
       flex-wrap: wrap;
+
       gap: 8px;
     }
 
     .meta-item {
       display: inline-block;
+
       padding: 5px 9px;
+
       border-radius: 20px;
+
       background: var(--soft);
+
       font-size: 12px;
+
       color: var(--muted);
     }
+
+    .proj-sub {
+      color: var(--muted);
+
+      margin-top: 6px;
+
+      line-height: 1.7;
+
+      font-size: 14px;
+    }
+
   </style>
 </head>
 
+
 <body>
 
+
+  <!-- =====================================================
+       HERO
+       ===================================================== -->
+
   <header class="hero">
+
     <img
       class="cover"
       src="assets/img/portada.jpeg"
@@ -456,24 +696,45 @@
 
     <div class="overlay"></div>
 
+
     <div class="perfil">
+
       <img
         class="avatar"
         src="assets/img/perfil.jpeg"
         alt="Perfil"
       >
 
+
       <div class="info">
-        <h1>Edición (Foto y Video)</h1>
-        <p>Color, ritmo, motion y narrativa visual.</p>
+
+        <h1>
+          Edición (Foto y Video)
+        </h1>
+
+        <p>
+          Color, ritmo, motion y narrativa visual.
+        </p>
+
       </div>
+
     </div>
+
   </header>
+
+
+  <!-- =====================================================
+       CONTENIDO
+       ===================================================== -->
 
   <main>
 
+
     <div class="toolbar">
+
+
       <div class="search">
+
 
         <svg
           width="18"
@@ -482,6 +743,7 @@
           fill="none"
           aria-hidden="true"
         >
+
           <circle
             cx="11"
             cy="11"
@@ -496,7 +758,9 @@
             stroke-width="2"
             stroke-linecap="round"
           />
+
         </svg>
+
 
         <input
           id="q"
@@ -504,11 +768,25 @@
           aria-label="Buscar proyectos"
         >
 
+
       </div>
+
+
     </div>
 
-    <section id="grid" class="grid"></section>
+
+    <section
+      id="grid"
+      class="grid"
+    ></section>
+
+
   </main>
+
+
+  <!-- =====================================================
+       MODAL
+       ===================================================== -->
 
   <div
     id="modal"
@@ -518,9 +796,15 @@
     aria-modal="true"
   >
 
-    <div class="box" id="modalBox">
+
+    <div
+      class="box"
+      id="modalBox"
+    >
+
 
       <div class="proj-head">
+
 
         <h2
           class="proj-title"
@@ -528,6 +812,7 @@
         >
           Proyecto
         </h2>
+
 
         <button
           class="close-btn"
@@ -537,88 +822,152 @@
           ✕
         </button>
 
+
       </div>
+
 
       <div
         class="proj"
         id="modalContent"
       ></div>
 
+
     </div>
+
+
   </div>
+
+
 
   <script>
 
-    /* =========================
+
+    /* =====================================================
        TEMA AUTOMÁTICO
-       ========================= */
+       ===================================================== */
 
     function setMode() {
-      const h = new Date().getHours();
+
+      const hour =
+        new Date().getHours();
+
 
       document.body.className =
-        (h >= 7 && h < 19)
+        (
+          hour >= 7 &&
+          hour < 19
+        )
           ? "light"
           : "dark";
+
     }
+
 
     setMode();
 
 
-    /* =========================
+
+    /* =====================================================
        ELEMENTOS
-       ========================= */
+       ===================================================== */
 
     const GRID =
       document.getElementById("grid");
 
+
     const Q =
       document.getElementById("q");
+
 
     const MODAL =
       document.getElementById("modal");
 
+
     const MODAL_TITLE =
       document.getElementById("projTitle");
 
+
     const MODAL_CONTENT =
       document.getElementById("modalContent");
+
 
     const CLOSE_BTN =
       document.getElementById("closeBtn");
 
 
+
     let projects = [];
+
     let visibleProjects = [];
 
 
-    /* =========================
+
+    /* =====================================================
        ESCAPE HTML
-       ========================= */
+       ===================================================== */
 
     function escapeHTML(value = "") {
+
       return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
     }
 
 
-    /* =========================
-       PLACEHOLDER
-       ========================= */
 
-    function placeholder(t = "Proyecto") {
+    /* =====================================================
+       PLACEHOLDER
+       ===================================================== */
+
+    function placeholder(
+      title = "Proyecto"
+    ) {
 
       const safeTitle =
-        String(t)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+        String(title)
+
+          .replace(
+            /&/g,
+            "&amp;"
+          )
+
+          .replace(
+            /</g,
+            "&lt;"
+          )
+
+          .replace(
+            />/g,
+            "&gt;"
+          );
+
 
       const svg = `
+
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="800"
@@ -626,11 +975,13 @@
         >
 
           <defs>
+
             <linearGradient
-              id="g"
+              id="gradient"
               x1="0"
               x2="1"
             >
+
               <stop
                 offset="0%"
                 stop-color="#1c2230"
@@ -640,14 +991,18 @@
                 offset="100%"
                 stop-color="#0f1a24"
               />
+
             </linearGradient>
+
           </defs>
+
 
           <rect
             width="100%"
             height="100%"
-            fill="url(#g)"
+            fill="url(#gradient)"
           />
+
 
           <text
             x="50%"
@@ -659,27 +1014,192 @@
             font-size="25"
             font-weight="bold"
           >
+
             ${safeTitle}
+
           </text>
 
         </svg>
+
       `;
 
-      return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+
+      return (
+        "data:image/svg+xml," +
+        encodeURIComponent(svg)
+      );
+
     }
 
 
-    /* =========================
-       RENDER
-       ========================= */
+
+    /* =====================================================
+       OBTENER ID DE YOUTUBE
+       SOPORTA:
+       - youtube.com/watch
+       - youtu.be
+       - youtube.com/embed
+       - youtube.com/shorts
+       ===================================================== */
+
+    function getYouTubeID(url) {
+
+      try {
+
+        if (!url) {
+
+          return "";
+
+        }
+
+
+        /*
+          VIDEO NORMAL
+        */
+
+        if (
+          url.includes(
+            "youtube.com/watch"
+          )
+        ) {
+
+          return (
+            new URL(url)
+              .searchParams
+              .get("v")
+            || ""
+          );
+
+        }
+
+
+        /*
+          URL CORTA
+        */
+
+        if (
+          url.includes(
+            "youtu.be/"
+          )
+        ) {
+
+          return url
+
+            .split(
+              "youtu.be/"
+            )[1]
+
+            .split(
+              /[?&]/
+            )[0];
+
+        }
+
+
+        /*
+          EMBED
+        */
+
+        if (
+          url.includes(
+            "youtube.com/embed/"
+          )
+        ) {
+
+          return url
+
+            .split(
+              "youtube.com/embed/"
+            )[1]
+
+            .split(
+              /[?&]/
+            )[0];
+
+        }
+
+
+        /*
+          SHORT
+        */
+
+        if (
+          url.includes(
+            "youtube.com/shorts/"
+          )
+        ) {
+
+          return url
+
+            .split(
+              "youtube.com/shorts/"
+            )[1]
+
+            .split(
+              /[?&]/
+            )[0];
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "No se pudo obtener el ID de YouTube:",
+          error
+        );
+
+      }
+
+
+      return "";
+
+    }
+
+
+
+    /* =====================================================
+       MINIATURA DE YOUTUBE
+       ===================================================== */
+
+    function getYouTubeThumbnail(url) {
+
+      const youtubeID =
+        getYouTubeID(url);
+
+
+      if (!youtubeID) {
+
+        return "";
+
+      }
+
+
+      return (
+        "https://img.youtube.com/vi/" +
+        youtubeID +
+        "/hqdefault.jpg"
+      );
+
+    }
+
+
+
+    /* =====================================================
+       RENDER DE TARJETAS
+       ===================================================== */
 
     function render(list) {
 
+
       visibleProjects = list;
+
 
       if (!list.length) {
 
         GRID.innerHTML = `
+
           <p
             style="
               color:var(--muted);
@@ -688,494 +1208,712 @@
               padding:30px;
             "
           >
+
             No se encontraron proyectos.
+
           </p>
+
         `;
 
+
         return;
+
       }
 
 
+
       GRID.innerHTML =
-        list.map((p, i) => {
-
-          const title =
-            escapeHTML(
-              p.title || "Proyecto"
-            );
-
-          const desc =
-            escapeHTML(
-              p.desc || ""
-            );
-
-          const category =
-            escapeHTML(
-              p.categoria || "Edición"
-            );
+        list.map(
+          (project, index) => {
 
 
-          let mediaCard = "";
+            const title =
+              escapeHTML(
+                project.title ||
+                "Proyecto"
+              );
 
 
-          /* =========================
-             SI EXISTE COVER
-             ========================= */
-
-          if (p.cover) {
-
-            mediaCard = `
-              <img
-                class="poster"
-                src="${escapeHTML(p.cover)}"
-                alt="${title}"
-                loading="lazy"
-                data-fallback="${escapeHTML(
-                  placeholder(p.title)
-                )}"
-              >
-            `;
-
-          }
-
-          /* =========================
-             SI NO HAY COVER
-             USAR VIDEO COMO IMAGEN
-             ========================= */
-
-          else if (
-            p.video &&
-            /\.mp4$/i.test(p.video)
-          ) {
-
-            mediaCard = `
-              <video
-                class="poster static-video"
-                src="${escapeHTML(p.video)}"
-                muted
-                playsinline
-                preload="metadata"
-              ></video>
-            `;
-
-          }
-
-          /* =========================
-             PLACEHOLDER
-             ========================= */
-
-          else {
-
-            mediaCard = `
-              <img
-                class="poster"
-                src="${placeholder(p.title)}"
-                alt="${title}"
-              >
-            `;
-
-          }
+            const description =
+              escapeHTML(
+                project.desc ||
+                ""
+              );
 
 
-          return `
-            <article class="card">
+            const category =
+              escapeHTML(
+                project.categoria ||
+                "Edición"
+              );
 
-              ${mediaCard}
 
-              <div class="titleWrap">
+            /*
+              Miniatura automática
+              desde YouTube
+            */
 
-                <span class="category">
-                  ${category}
-                </span>
+            const youtubeThumbnail =
+              getYouTubeThumbnail(
+                project.video || ""
+              );
 
-                <h3 class="title">
-                  ${title}
-                </h3>
 
-                <p class="desc">
-                  ${desc}
-                </p>
+            let cardMedia = "";
 
-                <div class="btns">
 
-                  <a
-                    href="#"
-                    class="btn"
-                    data-i="${i}"
-                  >
-                    Ver proyecto
-                  </a>
+
+            /* ==============================================
+               1. VIDEO DE YOUTUBE
+               -> Miniatura automática
+               ============================================== */
+
+            if (youtubeThumbnail) {
+
+
+              cardMedia = `
+
+                <img
+                  class="poster"
+                  src="${youtubeThumbnail}"
+                  alt="${title}"
+                  loading="lazy"
+                  data-fallback="${escapeHTML(
+                    placeholder(
+                      project.title
+                    )
+                  )}"
+                >
+
+              `;
+
+            }
+
+
+            /* ==============================================
+               2. COVER PROPIO
+               ============================================== */
+
+            else if (
+              project.cover
+            ) {
+
+
+              cardMedia = `
+
+                <img
+                  class="poster"
+                  src="${escapeHTML(
+                    project.cover
+                  )}"
+                  alt="${title}"
+                  loading="lazy"
+                  data-fallback="${escapeHTML(
+                    placeholder(
+                      project.title
+                    )
+                  )}"
+                >
+
+              `;
+
+            }
+
+
+            /* ==============================================
+               3. VIDEO LOCAL
+               -> fotograma estático
+               ============================================== */
+
+            else if (
+              project.video &&
+              /\.(mp4|webm|mov)$/i.test(
+                project.video
+              )
+            ) {
+
+
+              cardMedia = `
+
+                <video
+                  class="poster static-video"
+                  src="${escapeHTML(
+                    project.video
+                  )}"
+                  muted
+                  playsinline
+                  preload="metadata"
+                ></video>
+
+              `;
+
+            }
+
+
+            /* ==============================================
+               4. PLACEHOLDER
+               ============================================== */
+
+            else {
+
+
+              cardMedia = `
+
+                <img
+                  class="poster"
+                  src="${placeholder(
+                    project.title
+                  )}"
+                  alt="${title}"
+                >
+
+              `;
+
+            }
+
+
+
+            return `
+
+              <article class="card">
+
+
+                ${cardMedia}
+
+
+                <div class="titleWrap">
+
+
+                  <span class="category">
+
+                    ${category}
+
+                  </span>
+
+
+                  <h3 class="title">
+
+                    ${title}
+
+                  </h3>
+
+
+                  <p class="desc">
+
+                    ${description}
+
+                  </p>
+
+
+                  <div class="btns">
+
+
+                    <a
+                      href="#"
+                      class="btn"
+                      data-i="${index}"
+                    >
+
+                      Ver proyecto
+
+                    </a>
+
+
+                  </div>
+
 
                 </div>
 
-              </div>
 
-            </article>
-          `;
+              </article>
 
-        }).join("");
-
-
-      /* =========================
-         ERROR EN IMÁGENES
-         ========================= */
-
-      GRID
-        .querySelectorAll("img.poster")
-        .forEach(img => {
-
-          img.addEventListener(
-            "error",
-            () => {
-
-              if (img.dataset.fallback) {
-                img.src = img.dataset.fallback;
-              }
-
-            },
-            { once: true }
-          );
-
-        });
-
-
-      /* =========================
-         VIDEO COMO MINIATURA FIJA
-         ========================= */
-
-      GRID
-        .querySelectorAll(".static-video")
-        .forEach(video => {
-
-          const setStaticFrame = () => {
-
-            try {
-
-              if (
-                Number.isFinite(video.duration) &&
-                video.duration > 0
-              ) {
-
-                /*
-                  Si dura más de 3 segundos,
-                  muestra el segundo 3.
-
-                  Si dura menos,
-                  toma la mitad.
-                */
-
-                const frameTime =
-                  video.duration > 3
-                    ? 3
-                    : video.duration / 2;
-
-                video.currentTime =
-                  frameTime;
-
-              }
-
-            } catch (error) {
-
-              console.log(
-                "No se pudo mostrar el fotograma:",
-                error
-              );
-
-            }
-
-          };
-
-
-          if (video.readyState >= 1) {
-
-            setStaticFrame();
-
-          } else {
-
-            video.addEventListener(
-              "loadedmetadata",
-              setStaticFrame,
-              { once: true }
-            );
+            `;
 
           }
+        )
+        .join("");
 
 
-          /*
-            El video se mantiene pausado.
-          */
 
-          video.pause();
+      /* ===================================================
+         FALLBACK DE IMÁGENES
+         =================================================== */
 
-          video.addEventListener(
-            "play",
-            () => {
-              video.pause();
+      GRID
+        .querySelectorAll(
+          "img.poster"
+        )
+        .forEach(
+          image => {
+
+
+            image.addEventListener(
+              "error",
+              () => {
+
+
+                if (
+                  image.dataset.fallback
+                ) {
+
+                  image.src =
+                    image.dataset.fallback;
+
+                }
+
+              },
+              {
+                once: true
+              }
+            );
+
+
+          }
+        );
+
+
+
+      /* ===================================================
+         VIDEO LOCAL COMO MINIATURA ESTÁTICA
+         =================================================== */
+
+      GRID
+        .querySelectorAll(
+          ".static-video"
+        )
+        .forEach(
+          video => {
+
+
+            const setStaticFrame =
+              () => {
+
+
+                try {
+
+
+                  if (
+                    Number.isFinite(
+                      video.duration
+                    ) &&
+                    video.duration > 0
+                  ) {
+
+
+                    const frameTime =
+
+                      video.duration > 3
+
+                        ? 3
+
+                        : video.duration / 2;
+
+
+                    video.currentTime =
+                      frameTime;
+
+                  }
+
+
+                }
+
+                catch (error) {
+
+
+                  console.log(
+                    "No se pudo cargar el fotograma:",
+                    error
+                  );
+
+
+                }
+
+
+              };
+
+
+            if (
+              video.readyState >= 1
+            ) {
+
+
+              setStaticFrame();
+
+
             }
-          );
 
-        });
+            else {
+
+
+              video.addEventListener(
+                "loadedmetadata",
+                setStaticFrame,
+                {
+                  once: true
+                }
+              );
+
+
+            }
+
+
+            video.pause();
+
+
+          }
+        );
+
 
     }
 
 
-    /* =========================
+
+    /* =====================================================
        BUSCADOR
-       ========================= */
+       ===================================================== */
 
     Q.addEventListener(
       "input",
       () => {
 
-        const q =
+
+        const search =
           Q.value
             .trim()
             .toLowerCase();
 
-        if (!q) {
-          render(projects);
+
+        if (!search) {
+
+
+          render(
+            projects
+          );
+
+
           return;
+
         }
 
 
+
         const result =
-          projects.filter(p => {
-
-            const searchable = [
-              p.title,
-              p.desc,
-              p.categoria,
-              p.empresa
-            ]
-              .filter(Boolean)
-              .join(" ")
-              .toLowerCase();
-
-            return searchable.includes(q);
-
-          });
+          projects.filter(
+            project => {
 
 
-        render(result);
+              const searchable =
+                [
+
+                  project.title,
+
+                  project.desc,
+
+                  project.categoria,
+
+                  project.empresa
+
+                ]
+
+                  .filter(Boolean)
+
+                  .join(" ")
+
+                  .toLowerCase();
+
+
+              return (
+                searchable.includes(
+                  search
+                )
+              );
+
+
+            }
+          );
+
+
+        render(
+          result
+        );
+
+
       }
     );
 
 
-    /* =========================
-       YOUTUBE
-       ========================= */
 
-    function getYouTubeID(url) {
-
-      try {
-
-        if (url.includes("youtu.be/")) {
-
-          return url
-            .split("youtu.be/")[1]
-            .split(/[?&]/)[0];
-
-        }
-
-
-        if (url.includes("youtube.com/watch")) {
-
-          return new URL(url)
-            .searchParams
-            .get("v");
-
-        }
-
-
-        if (url.includes("youtube.com/embed/")) {
-
-          return url
-            .split("youtube.com/embed/")[1]
-            .split(/[?&]/)[0];
-
-        }
-
-      } catch (error) {
-
-        return "";
-
-      }
-
-
-      return "";
-    }
-
-
-    /* =========================
+    /* =====================================================
        ABRIR MODAL
-       ========================= */
+       ===================================================== */
 
-    function openModalFor(p) {
+    function openModalFor(
+      project
+    ) {
 
-      if (!p) {
+
+      if (!project) {
+
         return;
+
       }
 
 
       MODAL_TITLE.textContent =
-        p.title || "Proyecto";
+        project.title ||
+        "Proyecto";
 
 
       const media = [];
 
 
-      /* PORTADA */
+      const videoURL =
+        String(
+          project.video || ""
+        );
 
-      if (p.cover) {
+
+      const youtubeID =
+        getYouTubeID(
+          videoURL
+        );
+
+
+
+      /* ===================================================
+         VIDEO YOUTUBE
+         =================================================== */
+
+      if (youtubeID) {
+
 
         media.push(`
-          <img
+
+          <iframe
             class="proj-hero"
-            src="${escapeHTML(p.cover)}"
-            alt="${escapeHTML(
-              p.title || "Proyecto"
+            src="https://www.youtube.com/embed/${escapeHTML(
+              youtubeID
             )}"
-          >
+            title="${escapeHTML(
+              project.title ||
+              "Proyecto"
+            )}"
+            allow="
+              accelerometer;
+              autoplay;
+              clipboard-write;
+              encrypted-media;
+              gyroscope;
+              picture-in-picture;
+              web-share
+            "
+            allowfullscreen
+          ></iframe>
+
         `);
 
+
       }
 
 
-      /* GALERÍA */
+      /* ===================================================
+         VIDEO LOCAL
+         =================================================== */
 
-      if (
-        Array.isArray(p.gallery)
+      else if (
+        /\.(mp4|webm|mov)$/i.test(
+          videoURL
+        )
       ) {
 
-        p.gallery.forEach(img => {
 
-          media.push(`
-            <img
-              class="proj-hero"
-              src="${escapeHTML(img)}"
-              alt="Vista de ${escapeHTML(
-                p.title || "Proyecto"
-              )}"
-            >
-          `);
+        media.push(`
 
-        });
+          <video
+            class="proj-hero"
+            src="${escapeHTML(
+              videoURL
+            )}"
+            controls
+            preload="metadata"
+            playsinline
+          ></video>
+
+        `);
+
 
       }
 
 
-      /* VIDEO */
+      /* ===================================================
+         SI NO HAY VIDEO -> COVER
+         =================================================== */
 
-      if (p.video) {
-
-        const videoURL =
-          String(p.video);
-
-
-        const youtubeID =
-          getYouTubeID(videoURL);
+      else if (
+        project.cover
+      ) {
 
 
-        if (youtubeID) {
+        media.push(`
 
-          media.push(`
-            <iframe
-              class="proj-hero"
-              src="https://www.youtube.com/embed/${escapeHTML(youtubeID)}"
-              frameborder="0"
-              allow="
-                accelerometer;
-                autoplay;
-                clipboard-write;
-                encrypted-media;
-                gyroscope;
-                picture-in-picture
-              "
-              allowfullscreen
-            ></iframe>
-          `);
+          <img
+            class="proj-hero"
+            src="${escapeHTML(
+              project.cover
+            )}"
+            alt="${escapeHTML(
+              project.title ||
+              "Proyecto"
+            )}"
+          >
 
-        }
+        `);
 
-        else if (
-          /\.(mp4|webm|mov)$/i.test(videoURL)
-        ) {
-
-          media.push(`
-            <video
-              class="proj-hero"
-              src="${escapeHTML(videoURL)}"
-              controls
-              preload="metadata"
-              playsinline
-            ></video>
-          `);
-
-        }
 
       }
 
 
-      /* META */
+
+      /* ===================================================
+         GALERÍA
+         =================================================== */
+
+      if (
+        Array.isArray(
+          project.gallery
+        )
+      ) {
+
+
+        project.gallery.forEach(
+          image => {
+
+
+            media.push(`
+
+              <img
+                class="proj-hero"
+                src="${escapeHTML(
+                  image
+                )}"
+                alt="Vista de ${escapeHTML(
+                  project.title ||
+                  "Proyecto"
+                )}"
+              >
+
+            `);
+
+
+          }
+        );
+
+
+      }
+
+
+
+      /* ===================================================
+         METADATOS
+         =================================================== */
 
       let meta = "";
 
 
-      if (p.categoria) {
+      if (
+        project.categoria
+      ) {
+
 
         meta += `
+
           <span class="meta-item">
-            ${escapeHTML(p.categoria)}
+
+            ${escapeHTML(
+              project.categoria
+            )}
+
           </span>
+
         `;
+
 
       }
 
 
-      if (p.empresa) {
+      if (
+        project.empresa
+      ) {
+
 
         meta += `
+
           <span class="meta-item">
-            ${escapeHTML(p.empresa)}
+
+            ${escapeHTML(
+              project.empresa
+            )}
+
           </span>
+
         `;
+
 
       }
 
 
-      /* MODAL */
+
+      /* ===================================================
+         CONTENIDO DEL MODAL
+         =================================================== */
 
       MODAL_CONTENT.innerHTML = `
+
+
         <div>
+
 
           ${
             media.length
+
               ? media.join("")
+
               : `
+
                 <img
                   class="proj-hero"
                   src="${placeholder(
-                    p.title || "Proyecto"
+                    project.title ||
+                    "Proyecto"
                   )}"
                   alt="${escapeHTML(
-                    p.title || "Proyecto"
+                    project.title ||
+                    "Proyecto"
                   )}"
                 >
+
               `
           }
+
 
         </div>
 
 
+
         <div>
 
+
           <div class="project-meta">
+
             ${meta}
+
           </div>
 
 
-          <h3 style="margin-bottom:6px;">
+          <h3>
+
             Descripción
+
           </h3>
 
 
@@ -1183,15 +1921,19 @@
 
             ${
               escapeHTML(
-                p.desc ||
+                project.desc ||
                 "Sin descripción."
               )
             }
 
           </p>
 
+
         </div>
+
+
       `;
+
 
 
       MODAL.classList.add(
@@ -1211,22 +1953,42 @@
 
       CLOSE_BTN.focus();
 
+
     }
 
 
-    /* =========================
+
+    /* =====================================================
        CERRAR MODAL
-       ========================= */
+       ===================================================== */
 
     function closeModal() {
 
+
+      /*
+        Detiene videos locales.
+      */
+
       MODAL
-        .querySelectorAll("video")
-        .forEach(video => {
+        .querySelectorAll(
+          "video"
+        )
+        .forEach(
+          video => {
 
-          video.pause();
+            video.pause();
 
-        });
+          }
+        );
+
+
+      /*
+        Borramos iframe para
+        detener YouTube.
+      */
+
+      MODAL_CONTENT.innerHTML =
+        "";
 
 
       MODAL.classList.remove(
@@ -1244,29 +2006,33 @@
         "";
 
 
-      MODAL_CONTENT.innerHTML = "";
-
     }
 
 
-    /* =========================
-       EVENTOS
-       ========================= */
+
+    /* =====================================================
+       CLICK EN VER PROYECTO
+       ===================================================== */
 
     GRID.addEventListener(
       "click",
-      e => {
+      event => {
+
 
         const button =
-          e.target.closest("[data-i]");
+          event.target.closest(
+            "[data-i]"
+          );
 
 
         if (!button) {
+
           return;
+
         }
 
 
-        e.preventDefault();
+        event.preventDefault();
 
 
         const index =
@@ -1276,12 +2042,20 @@
 
 
         openModalFor(
-          visibleProjects[index]
+          visibleProjects[
+            index
+          ]
         );
+
 
       }
     );
 
+
+
+    /* =====================================================
+       CERRAR CON BOTÓN
+       ===================================================== */
 
     CLOSE_BTN.addEventListener(
       "click",
@@ -1289,46 +2063,69 @@
     );
 
 
+
+    /* =====================================================
+       CERRAR AL HACER CLICK FUERA
+       ===================================================== */
+
     MODAL.addEventListener(
       "click",
-      e => {
+      event => {
+
 
         if (
-          e.target === MODAL
+          event.target === MODAL
         ) {
+
 
           closeModal();
 
+
         }
+
 
       }
     );
 
+
+
+    /* =====================================================
+       CERRAR CON ESC
+       ===================================================== */
 
     document.addEventListener(
       "keydown",
-      e => {
+      event => {
+
 
         if (
-          e.key === "Escape" &&
-          MODAL.classList.contains("open")
+          event.key === "Escape" &&
+          MODAL.classList.contains(
+            "open"
+          )
         ) {
+
 
           closeModal();
 
+
         }
+
 
       }
     );
 
 
-    /* =========================
+
+    /* =====================================================
        CARGAR MANIFEST
-       ========================= */
+       ===================================================== */
 
     async function load() {
 
+
       try {
+
 
         const response =
           await fetch(
@@ -1339,11 +2136,17 @@
           );
 
 
-        if (!response.ok) {
+        if (
+          !response.ok
+        ) {
+
 
           throw new Error(
-            `Error HTTP: ${response.status}`
+            `Error HTTP: ${
+              response.status
+            }`
           );
+
 
         }
 
@@ -1353,16 +2156,24 @@
 
 
         projects =
-          Array.isArray(data.projects)
+          Array.isArray(
+            data.projects
+          )
+
             ? data.projects
+
             : [];
 
 
-        render(projects);
+        render(
+          projects
+        );
+
 
       }
 
       catch (error) {
+
 
         console.error(
           "Error cargando Edicion/manifest.json:",
@@ -1374,6 +2185,7 @@
 
 
         GRID.innerHTML = `
+
           <p
             style="
               color:var(--muted);
@@ -1382,18 +2194,30 @@
               padding:30px;
             "
           >
+
             No fue posible cargar los proyectos.
+
           </p>
+
         `;
 
+
       }
+
 
     }
 
 
+
+    /* =====================================================
+       INICIAR
+       ===================================================== */
+
     load();
 
+
   </script>
+
 
 </body>
 </html>
