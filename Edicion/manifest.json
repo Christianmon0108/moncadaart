@@ -1,16 +1,158 @@
 {
   "projects": [
     {
-      "title": "Los niños de México le dan la bienvenida al mundo | Somos Uno (World Cup 2026)",
-      "desc": "Proyecto audiovisual realizado como parte de una producción inspirada en la Copa Mundial de la FIFA 2026, con el objetivo de transmitir un mensaje de bienvenida, unión y orgullo cultural a través de la música y la participación de niños mexicanos. Participé en la grabación y edición del video, colaborando en la organización del material audiovisual, el montaje y la construcción del ritmo narrativo para obtener una pieza dinámica y emotiva.",
-      "cover": "Edicion/Cancion mundial/CancionM.png",
-      "gallery": [
-      ],
-      "video": "https://www.youtube.com/watch?v=Exx6c963T5c"
+      "title": "Video Institucional — Chem Trend",
+      "categoria": "Video Institucional",
+      "empresa": "Chem Trend",
+      "desc": "Producción audiovisual realizada con empleados de Chem Trend, participando en la grabación y edición para comunicar mensajes relacionados con la empresa.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=UXF5leB84B0"
     },
     {
-      "title": "📺 Publicidad Seguros – Motion Graphic Comercial",
-      "desc": "Spot animado creado en After Effects, enfocado en comunicación visual clara y ritmo publicitario. Incluye transiciones dinámicas, tipografía corporativa y composición limpia, destacando el mensaje de marca con fluidez visual.",
+      "title": "Testimonio — Cámara Brasil-México",
+      "categoria": "Video Institucional",
+      "empresa": "Cámara Brasil-México",
+      "desc": "Cobertura audiovisual de una reunión de la Cámara Brasil-México, incluyendo grabación y edición de una entrevista testimonial sobre la experiencia del participante.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=dxHbHSlNFgI"
+    },
+    {
+      "title": "Producción de Contenido Comercial — Radwell",
+      "categoria": "Publicidad",
+      "empresa": "Radwell",
+      "desc": "Pieza audiovisual creada para la comunicación comercial de Radwell, participando en la producción y edición de contenido destinado a medios digitales.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/shorts/PzF51EZPkKM"
+    },
+    {
+      "title": "Campaña Audiovisual — Radwell",
+      "categoria": "Publicidad",
+      "empresa": "Radwell",
+      "desc": "Contenido promocional desarrollado para Radwell a partir de material grabado y edición orientada a comunicación de marca.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/shorts/A-EkFDWlGiE"
+    },
+
+    {
+      "title": "Contenido para Redes Sociales — IXT Dental",
+      "categoria": "Redes Sociales",
+      "empresa": "IXT Dental",
+      "desc": "Reel desarrollado como contenido publicitario para IXT Dental, utilizando edición ágil y recursos visuales adaptados al formato de redes sociales.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/shorts/A7hrboFJAeA"
+    },
+    {
+      "title": "Publicidad Digital — IXT Dental",
+      "categoria": "Redes Sociales",
+      "empresa": "IXT Dental",
+      "desc": "Pieza audiovisual para redes sociales de IXT Dental enfocada en la promoción de sus servicios mediante edición breve y dinámica.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/shorts/Pt-_Q39hOog"
+    },
+    {
+      "title": "Contenido Publicitario para Redes — Radwell",
+      "categoria": "Redes Sociales",
+      "empresa": "Radwell",
+      "desc": "Reel desarrollado para la comunicación digital de Radwell, combinando edición audiovisual y recursos visuales orientados a redes sociales.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/shorts/fPJQ9eDst8w"
+    },
+    {
+      "title": "Reel Publicitario — IXT Dental",
+      "categoria": "Publicidad",
+      "empresa": "IXT Dental",
+      "desc": "Contenido promocional para IXT Dental diseñado para redes sociales, combinando edición dinámica, identidad visual y presentación de marca.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/shorts/zO2fW7LjBKI"
+    },
+
+    {
+      "title": "Gamini TV — Segmento de Bienvenida",
+      "categoria": "Edición de Video",
+      "empresa": "Gamini TV",
+      "desc": "Segmento producido para Gamini TV, participando en la grabación y edición del material para construir una presentación clara y dinámica.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=MJ56ZH8IRDo"
+    },
+    {
+      "title": "Gamini TV — Palabra Mágica",
+      "categoria": "Edición de Video",
+      "empresa": "Gamini TV",
+      "desc": "Sección audiovisual de Gamini TV grabada y editada para el programa, trabajando montaje, selección de tomas y ritmo narrativo.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=RgbCBQeu77w"
+    },
+    {
+      "title": "Gamini TV — Juego Virtual",
+      "categoria": "Edición de Video",
+      "empresa": "Gamini TV",
+      "desc": "Sección de entretenimiento producida para Gamini TV, participando en la grabación y edición para integrar la dinámica del juego dentro del programa.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=NQKvhr9KUEQ"
+    },
+    {
+      "title": "Los niños de México le dan la bienvenida al mundo | Somos Uno",
+      "categoria": "Edición de Video",
+      "empresa": "Somos Uno",
+      "desc": "Producción audiovisual inspirada en la Copa Mundial 2026. Participé en la grabación y edición, trabajando el montaje y ritmo narrativo de una pieza enfocada en unión y orgullo cultural.",
+      "cover": "Edicion/Cancion mundial/CancionM.png",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=Exx6c963T5c"
+    },
+
+    {
+      "title": "Publicidad Animada 2D — Radwell",
+      "categoria": "Motion Graphics",
+      "empresa": "Radwell",
+      "desc": "Pieza publicitaria animada desarrollada para Radwell utilizando recursos gráficos 2D, movimiento y composición orientados a comunicación comercial.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=LsX-gLGJ4f0"
+    },
+    {
+      "title": "Mapa Animado — Instituto de San Juan del Río",
+      "categoria": "Animación",
+      "empresa": "Instituto de San Juan del Río",
+      "desc": "Animación geográfica que realiza un recorrido desde una vista global hasta la universidad y posteriormente destaca puntos importantes ubicados alrededor del campus.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=B0yalb61CWI"
+    },
+    {
+      "title": "Video Personalizado de Cumpleaños — Chem Trend",
+      "categoria": "Edición de Video",
+      "empresa": "Chem Trend",
+      "desc": "Edición audiovisual personalizada para celebrar el cumpleaños de un colaborador de Chem Trend, adaptando contenido y elementos visuales para comunicación interna.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=wnivOBkH7NM"
+    },
+    {
+      "title": "Video Personalizado de Cumpleaños — Klüber",
+      "categoria": "Edición de Video",
+      "empresa": "Klüber",
+      "desc": "Pieza audiovisual personalizada desarrollada para el cumpleaños de una colaboradora de Klüber, combinando edición y recursos visuales para comunicación interna.",
+      "cover": "",
+      "gallery": [],
+      "video": "https://www.youtube.com/watch?v=af0vJVDrz2U"
+    },
+
+    {
+      "title": "Publicidad Seguros — Motion Graphic Comercial",
+      "categoria": "Motion Graphics",
+      "empresa": "",
+      "desc": "Spot animado creado en After Effects, enfocado en comunicación visual clara y ritmo publicitario mediante transiciones dinámicas, tipografía corporativa y composición limpia.",
       "cover": "Edicion/CRMI/Crmi.png",
       "gallery": [
         "Edicion/CRMI/Publicidad Seguros.gif"
@@ -18,60 +160,67 @@
       "video": ""
     },
     {
-      "title": "🌌 Cinematic Unreal – Escena 3D en Tiempo Real",
-      "desc": "Corto renderizado en Unreal Engine 5, explorando composición, iluminación dinámica y atmósfera realista. Proyecto centrado en el uso de Lumen, cámara virtual y postprocesado cinematográfico, buscando una experiencia visual inmersiva.",
+      "title": "SPEEDWAY — Motion Design en After Effects",
+      "categoria": "Motion Graphics",
+      "empresa": "",
+      "desc": "Proyecto de motion graphics y edición dinámica creado en After Effects, combinando ritmo, composición tipográfica, efectos visuales y sincronía sonora.",
+      "cover": "Edicion/Pista/Pis.png",
+      "gallery": [],
+      "video": "Edicion/Pista/pista.mp4"
+    },
+    {
+      "title": "Cinematic Unreal — Escena 3D en Tiempo Real",
+      "categoria": "Cinemáticas",
+      "empresa": "",
+      "desc": "Corto renderizado en Unreal Engine 5 explorando composición, iluminación dinámica, cámara virtual y postprocesado cinematográfico.",
       "cover": "Edicion/Cinematic/Baile_Zombie.png",
-      "gallery": [
-      ],
+      "gallery": [],
       "video": "https://youtu.be/pr3wdkvSFkg"
     },
     {
-      "title": "🎮 Cinemáticas en Tiempo Real – Unreal Engine",
-      "desc": "Secuencia cinematográfica desarrollada en Unreal Engine 5, enfocada en la creación de cinemáticas interactivas para videojuegos. El proyecto combina render en tiempo real, movimiento de cámara, iluminación dinámica y narrativa visual, optimizado para ejecución fluida dentro del motor.",
+      "title": "Cinemáticas en Tiempo Real — Unreal Engine",
+      "categoria": "Cinemáticas",
+      "empresa": "",
+      "desc": "Secuencia cinematográfica desarrollada en Unreal Engine 5, combinando render en tiempo real, movimiento de cámara, iluminación dinámica y narrativa visual.",
       "cover": "Edicion/Cinemáticas/CM.png",
-      "gallery": [
-      ],
+      "gallery": [],
       "video": "https://youtu.be/AfscoKUWi0k"
     },
     {
-      "title": "🗡️ La Espada en la Roca – Iluminación y Render Final",
-      "desc": "Proyecto desarrollado para la clase de Iluminación y Render, centrado en la creación de una atmósfera fantástica y mística.Se trabajó el control de luces volumétricas, sombras suaves y reflejos sutiles para resaltar la narrativa visual del entorno. Renderizado final con enfoque en composición y profundidad.",
-      "cover": "Edicion/Espada/Espada.png",
-      "gallery": [
-      ],
-      "video": ""
-    },
-    {
-      "title": "🌆 Cinematic Test – Escena en Tiempo Real",
-      "desc": "Prueba visual creada en Unreal Engine 5, explorando iluminación, movimiento de cámara y atmósfera ambiental en tiempo real. El proyecto se centró en el flujo de trabajo cinematográfico dentro del motor, aplicando Lumen y ajustes de postprocesado para lograr una estética realista y fluida.",
+      "title": "Cinematic Test — Escena en Tiempo Real",
+      "categoria": "Cinemáticas",
+      "empresa": "",
+      "desc": "Prueba visual creada en Unreal Engine 5 explorando iluminación, movimiento de cámara, atmósfera ambiental y flujo de trabajo cinematográfico.",
       "cover": "Edicion/Pueblo_Chino/PC.png",
-      "gallery": [
-      ],
+      "gallery": [],
       "video": "Edicion/Pueblo_Chino/Puebo_C.mp4"
     },
     {
-      "title": "🌀 Composición Cinemática – Proyecto en Nuke",
-      "desc": "Proyecto realizado en Nuke, enfocado en la composición de planos, corrección de color y efectos visuales integrados. Se trabajó la profundidad, el blending y el control del enfoque para lograr una integración realista entre elementos 2D y 3D dentro de la escena.",
+      "title": "La Espada en la Roca — Iluminación y Render Final",
+      "categoria": "Cinemáticas",
+      "empresa": "",
+      "desc": "Proyecto centrado en la creación de una atmósfera fantástica mediante iluminación, luces volumétricas, sombras, reflejos, composición y profundidad.",
+      "cover": "Edicion/Espada/Espada.png",
+      "gallery": [],
+      "video": ""
+    },
+    {
+      "title": "Composición Cinemática — Proyecto en Nuke",
+      "categoria": "Composición / VFX",
+      "empresa": "",
+      "desc": "Proyecto realizado en Nuke enfocado en composición de planos, corrección de color, profundidad y efectos visuales integrados.",
       "cover": "Edicion/Paris/Nave.png",
-      "gallery": [
-      ],
+      "gallery": [],
       "video": "Edicion/Paris/Paris_Nave.mp4"
     },
     {
-      "title": "🎞️ Composición Avanzada – Proyecto en Nuke",
-      "desc": "Ejercicio de composición digital y corrección de color desarrollado en Nuke, aplicando tracking, keying y retoque por capas. El proyecto busca lograr una integración realista entre elementos filmados y generados digitalmente mediante un flujo de trabajo nodal profesional.",
+      "title": "Composición Avanzada — Proyecto en Nuke",
+      "categoria": "Composición / VFX",
+      "empresa": "",
+      "desc": "Ejercicio de composición digital desarrollado en Nuke aplicando tracking, keying, corrección de color y retoque por capas.",
       "cover": "Edicion/Nave/NV.png",
-      "gallery": [
-      ],
+      "gallery": [],
       "video": "Edicion/Nave/NAV.mp4"
-    },
-    {
-      "title": "⚡ SPEEDWAY – Motion Design en After Effects",
-      "desc": "Proyecto de motion graphics y edición dinámica creado en After Effects. Combina velocidad, ritmo y composición tipográfica con efectos visuales fluidos y sincronía sonora. El enfoque estuvo en transiciones cinematográficas, control de cámara y energía visual.",
-      "cover": "Edicion/Pista/Pis.png",
-      "gallery": [
-      ],
-      "video": "Edicion/Pista/pista.mp4"
     }
   ]
 }
