@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Edición (Foto y Video) — MoncadaArt</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap"
@@ -15,7 +26,6 @@
   >
 
   <style>
-
     :root {
       --radius: 16px;
       --accent: #8ab4ff;
@@ -55,7 +65,6 @@
       color: var(--ink);
     }
 
-
     /* =====================================================
        HERO
        ===================================================== */
@@ -63,8 +72,10 @@
     header.hero {
       position: relative;
       min-height: 36vh;
+
       display: grid;
       place-items: end center;
+
       overflow: hidden;
 
       border-bottom:
@@ -87,11 +98,12 @@
       position: absolute;
       inset: 0;
 
-      background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, .45),
-        rgba(11, 14, 19, .95)
-      );
+      background:
+        linear-gradient(
+          180deg,
+          rgba(0, 0, 0, .45),
+          rgba(11, 14, 19, .95)
+        );
     }
 
     .perfil {
@@ -154,9 +166,8 @@
       color: var(--muted);
     }
 
-
     /* =====================================================
-       CONTENIDO PRINCIPAL
+       MAIN
        ===================================================== */
 
     main {
@@ -167,18 +178,15 @@
       padding: 0 18px;
     }
 
-
     /* =====================================================
        BUSCADOR
        ===================================================== */
 
     .toolbar {
       display: flex;
-
       gap: 10px;
 
       align-items: center;
-
       justify-content: space-between;
 
       margin: 10px 0 18px;
@@ -186,7 +194,6 @@
 
     .search {
       display: flex;
-
       align-items: center;
 
       gap: 8px;
@@ -213,16 +220,11 @@
 
     .search input {
       all: unset;
-
       width: 100%;
     }
 
-
     /* =====================================================
        GRID
-       4 escritorio
-       2 tablet
-       1 móvil
        ===================================================== */
 
     .grid {
@@ -237,16 +239,13 @@
     }
 
     @media (max-width: 950px) {
-
       .grid {
         grid-template-columns:
           repeat(2, minmax(0, 1fr));
       }
-
     }
 
     @media (max-width: 560px) {
-
       .grid {
         grid-template-columns: 1fr;
       }
@@ -259,9 +258,7 @@
         width: 100%;
         min-width: 0;
       }
-
     }
-
 
     /* =====================================================
        TARJETAS
@@ -301,11 +298,9 @@
       display: block;
 
       width: 100%;
-
       height: 180px;
 
       object-fit: cover;
-
       object-position: center;
 
       background: #0f1a24;
@@ -321,12 +316,10 @@
       padding: 12px;
 
       display: flex;
-
       flex-direction: column;
 
       flex: 1;
     }
-
 
     /* =====================================================
        CATEGORÍA
@@ -336,7 +329,6 @@
       display: inline-block;
 
       width: max-content;
-
       max-width: 100%;
 
       margin-bottom: 8px;
@@ -346,7 +338,6 @@
       border-radius: 20px;
 
       font-size: 11px;
-
       font-weight: 600;
 
       color: #0a0f16;
@@ -359,7 +350,6 @@
         );
     }
 
-
     /* =====================================================
        TÍTULO
        ===================================================== */
@@ -368,7 +358,6 @@
       font-weight: 800;
 
       font-size: 15px;
-
       line-height: 1.3;
 
       margin: 0 0 7px;
@@ -378,14 +367,12 @@
       display: -webkit-box;
 
       -webkit-line-clamp: 2;
-
       line-clamp: 2;
 
       -webkit-box-orient: vertical;
 
       overflow: hidden;
     }
-
 
     /* =====================================================
        DESCRIPCIÓN
@@ -395,7 +382,6 @@
       color: var(--muted);
 
       font-size: 12.5px;
-
       line-height: 1.45;
 
       margin: 0 0 12px;
@@ -405,14 +391,12 @@
       display: -webkit-box;
 
       -webkit-line-clamp: 3;
-
       line-clamp: 3;
 
       -webkit-box-orient: vertical;
 
       overflow: hidden;
     }
-
 
     /* =====================================================
        BOTONES
@@ -445,12 +429,10 @@
       color: #0a0f16;
 
       font-size: 13px;
-
       font-weight: 800;
 
       text-decoration: none;
     }
-
 
     /* =====================================================
        MODAL
@@ -458,11 +440,9 @@
 
     .modal {
       position: fixed;
-
       inset: 0;
 
       display: none;
-
       place-items: center;
 
       padding: 20px;
@@ -499,10 +479,8 @@
         0 30px 80px rgba(0, 0, 0, .55);
 
       display: flex;
-
       flex-direction: column;
     }
-
 
     /* =====================================================
        CABECERA MODAL
@@ -512,7 +490,6 @@
       display: flex;
 
       align-items: center;
-
       justify-content: space-between;
 
       gap: 20px;
@@ -563,7 +540,6 @@
       border-color: #dde1ea;
     }
 
-
     /* =====================================================
        CONTENIDO DEL MODAL
        ===================================================== */
@@ -572,8 +548,8 @@
       display: grid;
 
       grid-template-columns:
-        minmax(0, 1.25fr)
-        minmax(240px, .75fr);
+        minmax(0, 1.3fr)
+        minmax(240px, .7fr);
 
       gap: 18px;
 
@@ -583,17 +559,18 @@
     }
 
     @media (max-width: 800px) {
-
       .proj {
         grid-template-columns: 1fr;
       }
-
     }
 
-
     /* =====================================================
-       VIDEO / MEDIA DEL MODAL
+       MEDIA DEL MODAL
        ===================================================== */
+
+    .modal-media {
+      min-width: 0;
+    }
 
     .proj-hero {
       display: block;
@@ -608,8 +585,6 @@
 
       box-shadow:
         0 8px 24px rgba(0, 0, 0, .25);
-
-      margin-bottom: 10px;
     }
 
     iframe.proj-hero {
@@ -636,10 +611,13 @@
       object-fit: contain;
     }
 
-
     /* =====================================================
        INFORMACIÓN DEL MODAL
        ===================================================== */
+
+    .modal-info {
+      min-width: 0;
+    }
 
     .project-meta {
       margin-bottom: 16px;
@@ -678,9 +656,7 @@
   </style>
 </head>
 
-
 <body>
-
 
   <!-- =====================================================
        HERO
@@ -696,7 +672,6 @@
 
     <div class="overlay"></div>
 
-
     <div class="perfil">
 
       <img
@@ -704,7 +679,6 @@
         src="assets/img/perfil.jpeg"
         alt="Perfil"
       >
-
 
       <div class="info">
 
@@ -722,19 +696,15 @@
 
   </header>
 
-
   <!-- =====================================================
        CONTENIDO
        ===================================================== -->
 
   <main>
 
-
     <div class="toolbar">
 
-
       <div class="search">
-
 
         <svg
           width="18"
@@ -743,7 +713,6 @@
           fill="none"
           aria-hidden="true"
         >
-
           <circle
             cx="11"
             cy="11"
@@ -758,9 +727,7 @@
             stroke-width="2"
             stroke-linecap="round"
           />
-
         </svg>
-
 
         <input
           id="q"
@@ -768,21 +735,16 @@
           aria-label="Buscar proyectos"
         >
 
-
       </div>
 
-
     </div>
-
 
     <section
       id="grid"
       class="grid"
     ></section>
 
-
   </main>
-
 
   <!-- =====================================================
        MODAL
@@ -796,15 +758,12 @@
     aria-modal="true"
   >
 
-
     <div
       class="box"
       id="modalBox"
     >
 
-
       <div class="proj-head">
-
 
         <h2
           class="proj-title"
@@ -812,7 +771,6 @@
         >
           Proyecto
         </h2>
-
 
         <button
           class="close-btn"
@@ -822,25 +780,18 @@
           ✕
         </button>
 
-
       </div>
-
 
       <div
         class="proj"
         id="modalContent"
       ></div>
 
-
     </div>
-
 
   </div>
 
-
-
   <script>
-
 
     /* =====================================================
        TEMA AUTOMÁTICO
@@ -850,7 +801,6 @@
 
       const hour =
         new Date().getHours();
-
 
       document.body.className =
         (
@@ -862,9 +812,7 @@
 
     }
 
-
     setMode();
-
 
 
     /* =====================================================
@@ -874,26 +822,20 @@
     const GRID =
       document.getElementById("grid");
 
-
     const Q =
       document.getElementById("q");
-
 
     const MODAL =
       document.getElementById("modal");
 
-
     const MODAL_TITLE =
       document.getElementById("projTitle");
-
 
     const MODAL_CONTENT =
       document.getElementById("modalContent");
 
-
     const CLOSE_BTN =
       document.getElementById("closeBtn");
-
 
 
     let projects = [];
@@ -901,42 +843,20 @@
     let visibleProjects = [];
 
 
-
     /* =====================================================
-       ESCAPE HTML
+       ESCAPAR HTML
        ===================================================== */
 
     function escapeHTML(value = "") {
 
       return String(value)
-
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-
-        .replace(
-          /</g,
-          "&lt;"
-        )
-
-        .replace(
-          />/g,
-          "&gt;"
-        )
-
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-
-        .replace(
-          /'/g,
-          "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
     }
-
 
 
     /* =====================================================
@@ -949,25 +869,12 @@
 
       const safeTitle =
         String(title)
-
-          .replace(
-            /&/g,
-            "&amp;"
-          )
-
-          .replace(
-            /</g,
-            "&lt;"
-          )
-
-          .replace(
-            />/g,
-            "&gt;"
-          );
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
 
 
       const svg = `
-
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="800"
@@ -996,13 +903,11 @@
 
           </defs>
 
-
           <rect
             width="100%"
             height="100%"
             fill="url(#gradient)"
           />
-
 
           <text
             x="50%"
@@ -1014,13 +919,10 @@
             font-size="25"
             font-weight="bold"
           >
-
             ${safeTitle}
-
           </text>
 
         </svg>
-
       `;
 
 
@@ -1032,39 +934,39 @@
     }
 
 
-
     /* =====================================================
        OBTENER ID DE YOUTUBE
-       SOPORTA:
-       - youtube.com/watch
-       - youtu.be
-       - youtube.com/embed
-       - youtube.com/shorts
        ===================================================== */
 
-    function getYouTubeID(url) {
+    function getYouTubeID(
+      url = ""
+    ) {
 
       try {
 
         if (!url) {
-
           return "";
-
         }
 
 
-        /*
-          VIDEO NORMAL
-        */
+        const parsedURL =
+          new URL(url);
+
+
+        const hostname =
+          parsedURL.hostname
+            .replace(/^www\./, "");
+
+
+        /* youtube.com/watch?v=... */
 
         if (
-          url.includes(
-            "youtube.com/watch"
-          )
+          hostname === "youtube.com" &&
+          parsedURL.pathname === "/watch"
         ) {
 
           return (
-            new URL(url)
+            parsedURL
               .searchParams
               .get("v")
             || ""
@@ -1073,71 +975,71 @@
         }
 
 
-        /*
-          URL CORTA
-        */
+        /* youtu.be/ID */
 
         if (
-          url.includes(
-            "youtu.be/"
-          )
+          hostname === "youtu.be"
         ) {
 
-          return url
-
-            .split(
-              "youtu.be/"
-            )[1]
-
-            .split(
-              /[?&]/
-            )[0];
+          return (
+            parsedURL.pathname
+              .replace("/", "")
+              .split("/")[0]
+            || ""
+          );
 
         }
 
 
-        /*
-          EMBED
-        */
+        /* youtube.com/shorts/ID */
 
         if (
-          url.includes(
-            "youtube.com/embed/"
+          hostname === "youtube.com" &&
+          parsedURL.pathname.startsWith(
+            "/shorts/"
           )
         ) {
 
-          return url
-
-            .split(
-              "youtube.com/embed/"
-            )[1]
-
-            .split(
-              /[?&]/
-            )[0];
+          return (
+            parsedURL.pathname
+              .split("/")[2]
+            || ""
+          );
 
         }
 
 
-        /*
-          SHORT
-        */
+        /* youtube.com/embed/ID */
 
         if (
-          url.includes(
-            "youtube.com/shorts/"
+          hostname === "youtube.com" &&
+          parsedURL.pathname.startsWith(
+            "/embed/"
           )
         ) {
 
-          return url
+          return (
+            parsedURL.pathname
+              .split("/")[2]
+            || ""
+          );
 
-            .split(
-              "youtube.com/shorts/"
-            )[1]
+        }
 
-            .split(
-              /[?&]/
-            )[0];
+
+        /* m.youtube.com */
+
+        if (
+          hostname === "m.youtube.com" &&
+          parsedURL.pathname === "/watch"
+        ) {
+
+          return (
+            parsedURL
+              .searchParams
+              .get("v")
+            || ""
+          );
 
         }
 
@@ -1146,7 +1048,8 @@
       catch (error) {
 
         console.error(
-          "No se pudo obtener el ID de YouTube:",
+          "Error leyendo URL de YouTube:",
+          url,
           error
         );
 
@@ -1158,40 +1061,65 @@
     }
 
 
-
     /* =====================================================
-       MINIATURA DE YOUTUBE
+       MINIATURAS DE YOUTUBE
        ===================================================== */
 
-    function getYouTubeThumbnail(url) {
+    function getYouTubeThumbnail(
+      url = ""
+    ) {
 
-      const youtubeID =
+      const id =
         getYouTubeID(url);
 
 
-      if (!youtubeID) {
-
+      if (!id) {
         return "";
+      }
 
+
+      /*
+        Primero probamos maxresdefault.
+        Si no existe, el HTML cambia
+        automáticamente a hqdefault.
+      */
+
+      return (
+        "https://i.ytimg.com/vi/" +
+        id +
+        "/maxresdefault.jpg"
+      );
+
+    }
+
+
+    function getYouTubeThumbnailFallback(
+      url = ""
+    ) {
+
+      const id =
+        getYouTubeID(url);
+
+
+      if (!id) {
+        return "";
       }
 
 
       return (
-        "https://img.youtube.com/vi/" +
-        youtubeID +
+        "https://i.ytimg.com/vi/" +
+        id +
         "/hqdefault.jpg"
       );
 
     }
 
 
-
     /* =====================================================
-       RENDER DE TARJETAS
+       RENDER
        ===================================================== */
 
     function render(list) {
-
 
       visibleProjects = list;
 
@@ -1199,7 +1127,6 @@
       if (!list.length) {
 
         GRID.innerHTML = `
-
           <p
             style="
               color:var(--muted);
@@ -1208,243 +1135,213 @@
               padding:30px;
             "
           >
-
             No se encontraron proyectos.
-
           </p>
-
         `;
 
-
         return;
-
       }
 
 
-
       GRID.innerHTML =
-        list.map(
-          (project, index) => {
+        list
+          .map(
+            (project, index) => {
 
 
-            const title =
-              escapeHTML(
-                project.title ||
-                "Proyecto"
-              );
+              const title =
+                escapeHTML(
+                  project.title ||
+                  "Proyecto"
+                );
 
 
-            const description =
-              escapeHTML(
-                project.desc ||
-                ""
-              );
+              const description =
+                escapeHTML(
+                  project.desc ||
+                  ""
+                );
 
 
-            const category =
-              escapeHTML(
-                project.categoria ||
-                "Edición"
-              );
+              const category =
+                escapeHTML(
+                  project.categoria ||
+                  "Edición"
+                );
 
 
-            /*
-              Miniatura automática
-              desde YouTube
-            */
-
-            const youtubeThumbnail =
-              getYouTubeThumbnail(
-                project.video || ""
-              );
+              const youtubeID =
+                getYouTubeID(
+                  project.video || ""
+                );
 
 
-            let cardMedia = "";
+              let cardMedia = "";
 
 
+              /* ============================================
+                 YOUTUBE
+                 ============================================ */
 
-            /* ==============================================
-               1. VIDEO DE YOUTUBE
-               -> Miniatura automática
-               ============================================== */
+              if (youtubeID) {
 
-            if (youtubeThumbnail) {
-
-
-              cardMedia = `
-
-                <img
-                  class="poster"
-                  src="${youtubeThumbnail}"
-                  alt="${title}"
-                  loading="lazy"
-                  data-fallback="${escapeHTML(
-                    placeholder(
-                      project.title
-                    )
-                  )}"
-                >
-
-              `;
-
-            }
-
-
-            /* ==============================================
-               2. COVER PROPIO
-               ============================================== */
-
-            else if (
-              project.cover
-            ) {
-
-
-              cardMedia = `
-
-                <img
-                  class="poster"
-                  src="${escapeHTML(
-                    project.cover
-                  )}"
-                  alt="${title}"
-                  loading="lazy"
-                  data-fallback="${escapeHTML(
-                    placeholder(
-                      project.title
-                    )
-                  )}"
-                >
-
-              `;
-
-            }
-
-
-            /* ==============================================
-               3. VIDEO LOCAL
-               -> fotograma estático
-               ============================================== */
-
-            else if (
-              project.video &&
-              /\.(mp4|webm|mov)$/i.test(
-                project.video
-              )
-            ) {
-
-
-              cardMedia = `
-
-                <video
-                  class="poster static-video"
-                  src="${escapeHTML(
+                const thumbnail =
+                  getYouTubeThumbnail(
                     project.video
-                  )}"
-                  muted
-                  playsinline
-                  preload="metadata"
-                ></video>
-
-              `;
-
-            }
+                  );
 
 
-            /* ==============================================
-               4. PLACEHOLDER
-               ============================================== */
-
-            else {
-
-
-              cardMedia = `
-
-                <img
-                  class="poster"
-                  src="${placeholder(
-                    project.title
-                  )}"
-                  alt="${title}"
-                >
-
-              `;
-
-            }
+                const fallback =
+                  getYouTubeThumbnailFallback(
+                    project.video
+                  );
 
 
+                cardMedia = `
+                  <img
+                    class="poster youtube-thumb"
+                    src="${escapeHTML(thumbnail)}"
+                    alt="${title}"
+                    loading="lazy"
+                    data-hq="${escapeHTML(fallback)}"
+                    data-placeholder="${escapeHTML(
+                      placeholder(
+                        project.title
+                      )
+                    )}"
+                  >
+                `;
 
-            return `
-
-              <article class="card">
-
-
-                ${cardMedia}
-
-
-                <div class="titleWrap">
-
-
-                  <span class="category">
-
-                    ${category}
-
-                  </span>
-
-
-                  <h3 class="title">
-
-                    ${title}
-
-                  </h3>
+              }
 
 
-                  <p class="desc">
+              /* ============================================
+                 COVER PROPIO
+                 ============================================ */
 
-                    ${description}
+              else if (
+                project.cover
+              ) {
 
-                  </p>
+                cardMedia = `
+                  <img
+                    class="poster normal-cover"
+                    src="${escapeHTML(
+                      project.cover
+                    )}"
+                    alt="${title}"
+                    loading="lazy"
+                    data-placeholder="${escapeHTML(
+                      placeholder(
+                        project.title
+                      )
+                    )}"
+                  >
+                `;
+
+              }
 
 
-                  <div class="btns">
+              /* ============================================
+                 VIDEO LOCAL
+                 ============================================ */
+
+              else if (
+                project.video &&
+                /\.(mp4|webm|mov)$/i.test(
+                  project.video
+                )
+              ) {
+
+                cardMedia = `
+                  <video
+                    class="poster static-video"
+                    src="${escapeHTML(
+                      project.video
+                    )}"
+                    muted
+                    playsinline
+                    preload="metadata"
+                  ></video>
+                `;
+
+              }
 
 
-                    <a
-                      href="#"
-                      class="btn"
-                      data-i="${index}"
-                    >
+              /* ============================================
+                 SIN MEDIA
+                 ============================================ */
 
-                      Ver proyecto
+              else {
 
-                    </a>
+                cardMedia = `
+                  <img
+                    class="poster"
+                    src="${placeholder(
+                      project.title
+                    )}"
+                    alt="${title}"
+                  >
+                `;
 
+              }
+
+
+              return `
+                <article class="card">
+
+                  ${cardMedia}
+
+                  <div class="titleWrap">
+
+                    <span class="category">
+                      ${category}
+                    </span>
+
+                    <h3 class="title">
+                      ${title}
+                    </h3>
+
+                    <p class="desc">
+                      ${description}
+                    </p>
+
+                    <div class="btns">
+
+                      <a
+                        href="#"
+                        class="btn"
+                        data-i="${index}"
+                      >
+                        Ver proyecto
+                      </a>
+
+                    </div>
 
                   </div>
 
+                </article>
+              `;
 
-                </div>
-
-
-              </article>
-
-            `;
-
-          }
-        )
-        .join("");
-
+            }
+          )
+          .join("");
 
 
       /* ===================================================
-         FALLBACK DE IMÁGENES
+         FALLBACK YOUTUBE
+         maxres -> hq -> placeholder
          =================================================== */
 
       GRID
         .querySelectorAll(
-          "img.poster"
+          ".youtube-thumb"
         )
         .forEach(
           image => {
+
+
+            let fallbackStep = 0;
 
 
             image.addEventListener(
@@ -1453,11 +1350,59 @@
 
 
                 if (
-                  image.dataset.fallback
+                  fallbackStep === 0 &&
+                  image.dataset.hq
+                ) {
+
+                  fallbackStep = 1;
+
+                  image.src =
+                    image.dataset.hq;
+
+                  return;
+                }
+
+
+                if (
+                  fallbackStep === 1 &&
+                  image.dataset.placeholder
+                ) {
+
+                  fallbackStep = 2;
+
+                  image.src =
+                    image.dataset.placeholder;
+
+                }
+
+              }
+            );
+
+          }
+        );
+
+
+      /* ===================================================
+         COVER LOCAL FALLBACK
+         =================================================== */
+
+      GRID
+        .querySelectorAll(
+          ".normal-cover"
+        )
+        .forEach(
+          image => {
+
+            image.addEventListener(
+              "error",
+              () => {
+
+                if (
+                  image.dataset.placeholder
                 ) {
 
                   image.src =
-                    image.dataset.fallback;
+                    image.dataset.placeholder;
 
                 }
 
@@ -1467,14 +1412,12 @@
               }
             );
 
-
           }
         );
 
 
-
       /* ===================================================
-         VIDEO LOCAL COMO MINIATURA ESTÁTICA
+         VIDEO LOCAL COMO FRAME
          =================================================== */
 
       GRID
@@ -1485,7 +1428,7 @@
           video => {
 
 
-            const setStaticFrame =
+            const setFrame =
               () => {
 
 
@@ -1500,19 +1443,16 @@
                   ) {
 
 
-                    const frameTime =
-
-                      video.duration > 3
-
-                        ? 3
-
-                        : video.duration / 2;
-
-
                     video.currentTime =
-                      frameTime;
+                      Math.min(
+                        3,
+                        video.duration / 2
+                      );
 
                   }
+
+
+                  video.pause();
 
 
                 }
@@ -1520,8 +1460,8 @@
                 catch (error) {
 
 
-                  console.log(
-                    "No se pudo cargar el fotograma:",
+                  console.error(
+                    "No se pudo usar frame de video:",
                     error
                   );
 
@@ -1536,36 +1476,27 @@
               video.readyState >= 1
             ) {
 
-
-              setStaticFrame();
-
+              setFrame();
 
             }
 
             else {
 
-
               video.addEventListener(
                 "loadedmetadata",
-                setStaticFrame,
+                setFrame,
                 {
                   once: true
                 }
               );
 
-
             }
-
-
-            video.pause();
 
 
           }
         );
 
-
     }
-
 
 
     /* =====================================================
@@ -1585,16 +1516,12 @@
 
         if (!search) {
 
-
           render(
             projects
           );
 
-
           return;
-
         }
-
 
 
         const result =
@@ -1604,21 +1531,13 @@
 
               const searchable =
                 [
-
                   project.title,
-
                   project.desc,
-
                   project.categoria,
-
                   project.empresa
-
                 ]
-
                   .filter(Boolean)
-
                   .join(" ")
-
                   .toLowerCase();
 
 
@@ -1642,7 +1561,6 @@
     );
 
 
-
     /* =====================================================
        ABRIR MODAL
        ===================================================== */
@@ -1653,18 +1571,13 @@
 
 
       if (!project) {
-
         return;
-
       }
 
 
       MODAL_TITLE.textContent =
         project.title ||
         "Proyecto";
-
-
-      const media = [];
 
 
       const videoURL =
@@ -1679,25 +1592,26 @@
         );
 
 
+      let mediaHTML = "";
+
 
       /* ===================================================
-         VIDEO YOUTUBE
+         1. YOUTUBE
          =================================================== */
 
       if (youtubeID) {
 
-
-        media.push(`
-
+        mediaHTML = `
           <iframe
             class="proj-hero"
             src="https://www.youtube.com/embed/${escapeHTML(
               youtubeID
-            )}"
+            )}?rel=0"
             title="${escapeHTML(
               project.title ||
               "Proyecto"
             )}"
+            frameborder="0"
             allow="
               accelerometer;
               autoplay;
@@ -1709,15 +1623,13 @@
             "
             allowfullscreen
           ></iframe>
-
-        `);
-
+        `;
 
       }
 
 
       /* ===================================================
-         VIDEO LOCAL
+         2. VIDEO LOCAL
          =================================================== */
 
       else if (
@@ -1726,9 +1638,7 @@
         )
       ) {
 
-
-        media.push(`
-
+        mediaHTML = `
           <video
             class="proj-hero"
             src="${escapeHTML(
@@ -1738,24 +1648,20 @@
             preload="metadata"
             playsinline
           ></video>
-
-        `);
-
+        `;
 
       }
 
 
       /* ===================================================
-         SI NO HAY VIDEO -> COVER
+         3. SIN VIDEO -> COVER
          =================================================== */
 
       else if (
         project.cover
       ) {
 
-
-        media.push(`
-
+        mediaHTML = `
           <img
             class="proj-hero"
             src="${escapeHTML(
@@ -1766,22 +1672,62 @@
               "Proyecto"
             )}"
           >
-
-        `);
-
+        `;
 
       }
 
 
-
       /* ===================================================
-         GALERÍA
+         4. PLACEHOLDER
          =================================================== */
 
+      else {
+
+        mediaHTML = `
+          <img
+            class="proj-hero"
+            src="${placeholder(
+              project.title ||
+              "Proyecto"
+            )}"
+            alt="${escapeHTML(
+              project.title ||
+              "Proyecto"
+            )}"
+          >
+        `;
+
+      }
+
+
+      /* ===================================================
+         IMPORTANTE:
+         
+         Solo mostramos gallery si NO existe
+         ningún video.
+
+         Esto evita:
+         portada + YouTube
+         o
+         galería + YouTube
+         duplicados.
+         =================================================== */
+
+      const hasVideo =
+        Boolean(
+          youtubeID ||
+          /\.(mp4|webm|mov)$/i.test(
+            videoURL
+          )
+        );
+
+
       if (
+        !hasVideo &&
         Array.isArray(
           project.gallery
-        )
+        ) &&
+        project.gallery.length
       ) {
 
 
@@ -1789,8 +1735,7 @@
           image => {
 
 
-            media.push(`
-
+            mediaHTML += `
               <img
                 class="proj-hero"
                 src="${escapeHTML(
@@ -1800,9 +1745,9 @@
                   project.title ||
                   "Proyecto"
                 )}"
+                style="margin-top:10px;"
               >
-
-            `);
+            `;
 
 
           }
@@ -1812,31 +1757,24 @@
       }
 
 
-
       /* ===================================================
          METADATOS
          =================================================== */
 
-      let meta = "";
+      let metaHTML = "";
 
 
       if (
         project.categoria
       ) {
 
-
-        meta += `
-
+        metaHTML += `
           <span class="meta-item">
-
             ${escapeHTML(
               project.categoria
             )}
-
           </span>
-
         `;
-
 
       }
 
@@ -1845,95 +1783,55 @@
         project.empresa
       ) {
 
-
-        meta += `
-
+        metaHTML += `
           <span class="meta-item">
-
             ${escapeHTML(
               project.empresa
             )}
-
           </span>
-
         `;
-
 
       }
 
 
-
       /* ===================================================
-         CONTENIDO DEL MODAL
+         CONTENIDO MODAL
          =================================================== */
 
       MODAL_CONTENT.innerHTML = `
 
+        <div class="modal-media">
 
-        <div>
-
-
-          ${
-            media.length
-
-              ? media.join("")
-
-              : `
-
-                <img
-                  class="proj-hero"
-                  src="${placeholder(
-                    project.title ||
-                    "Proyecto"
-                  )}"
-                  alt="${escapeHTML(
-                    project.title ||
-                    "Proyecto"
-                  )}"
-                >
-
-              `
-          }
-
+          ${mediaHTML}
 
         </div>
 
 
-
-        <div>
-
+        <div class="modal-info">
 
           <div class="project-meta">
 
-            ${meta}
+            ${metaHTML}
 
           </div>
 
 
           <h3>
-
             Descripción
-
           </h3>
 
 
           <p class="proj-sub">
 
-            ${
-              escapeHTML(
-                project.desc ||
-                "Sin descripción."
-              )
-            }
+            ${escapeHTML(
+              project.desc ||
+              "Sin descripción."
+            )}
 
           </p>
 
-
         </div>
-
-
       `;
-
 
 
       MODAL.classList.add(
@@ -1953,9 +1851,7 @@
 
       CLOSE_BTN.focus();
 
-
     }
-
 
 
     /* =====================================================
@@ -1964,10 +1860,6 @@
 
     function closeModal() {
 
-
-      /*
-        Detiene videos locales.
-      */
 
       MODAL
         .querySelectorAll(
@@ -1983,8 +1875,8 @@
 
 
       /*
-        Borramos iframe para
-        detener YouTube.
+        Eliminar contenido detiene también
+        el iframe de YouTube.
       */
 
       MODAL_CONTENT.innerHTML =
@@ -2005,9 +1897,7 @@
       document.body.style.overflow =
         "";
 
-
     }
-
 
 
     /* =====================================================
@@ -2026,9 +1916,7 @@
 
 
         if (!button) {
-
           return;
-
         }
 
 
@@ -2047,14 +1935,12 @@
           ]
         );
 
-
       }
     );
 
 
-
     /* =====================================================
-       CERRAR CON BOTÓN
+       BOTÓN CERRAR
        ===================================================== */
 
     CLOSE_BTN.addEventListener(
@@ -2063,9 +1949,8 @@
     );
 
 
-
     /* =====================================================
-       CERRAR AL HACER CLICK FUERA
+       CLICK FUERA
        ===================================================== */
 
     MODAL.addEventListener(
@@ -2077,20 +1962,16 @@
           event.target === MODAL
         ) {
 
-
           closeModal();
 
-
         }
-
 
       }
     );
 
 
-
     /* =====================================================
-       CERRAR CON ESC
+       ESC
        ===================================================== */
 
     document.addEventListener(
@@ -2105,16 +1986,12 @@
           )
         ) {
 
-
           closeModal();
-
 
         }
 
-
       }
     );
-
 
 
     /* =====================================================
@@ -2127,9 +2004,16 @@
       try {
 
 
+        /*
+          El ?v=Date.now evita que durante
+          las pruebas el navegador use una
+          versión vieja del manifest.json.
+        */
+
         const response =
           await fetch(
-            "Edicion/manifest.json",
+            "Edicion/manifest.json?v=" +
+            Date.now(),
             {
               cache: "no-store"
             }
@@ -2140,13 +2024,11 @@
           !response.ok
         ) {
 
-
           throw new Error(
             `Error HTTP: ${
               response.status
             }`
           );
-
 
         }
 
@@ -2159,10 +2041,14 @@
           Array.isArray(
             data.projects
           )
-
             ? data.projects
-
             : [];
+
+
+        console.log(
+          "Proyectos cargados:",
+          projects
+        );
 
 
         render(
@@ -2185,7 +2071,6 @@
 
 
         GRID.innerHTML = `
-
           <p
             style="
               color:var(--muted);
@@ -2194,19 +2079,13 @@
               padding:30px;
             "
           >
-
             No fue posible cargar los proyectos.
-
           </p>
-
         `;
-
 
       }
 
-
     }
-
 
 
     /* =====================================================
@@ -2215,9 +2094,7 @@
 
     load();
 
-
   </script>
-
 
 </body>
 </html>
