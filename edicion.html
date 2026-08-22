@@ -65,39 +65,31 @@
       color: var(--ink);
     }
 
-    /* =====================================================
+    /* =========================
        HERO
-       ===================================================== */
+       ========================= */
 
     header.hero {
       position: relative;
       min-height: 36vh;
-
       display: grid;
       place-items: end center;
-
       overflow: hidden;
-
-      border-bottom:
-        1px solid rgba(255, 255, 255, .06);
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
     }
 
     .hero .cover {
       position: absolute;
       inset: 0;
-
       width: 100%;
       height: 100%;
-
       object-fit: cover;
-
       filter: brightness(.6);
     }
 
     .overlay {
       position: absolute;
       inset: 0;
-
       background:
         linear-gradient(
           180deg,
@@ -108,114 +100,79 @@
 
     .perfil {
       position: relative;
-
       display: flex;
       gap: 14px;
       align-items: center;
-
       margin: 16px;
       padding: 12px 14px;
-
-      background:
-        rgba(255, 255, 255, .08);
-
-      border:
-        1px solid rgba(255, 255, 255, .18);
-
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .18);
       backdrop-filter: blur(10px);
-
       border-radius: 20px;
-
-      box-shadow:
-        0 10px 30px rgba(0, 0, 0, .35);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
     }
 
     body.light .perfil {
-      background:
-        rgba(255, 255, 255, .85);
-
-      border:
-        1px solid rgba(0, 0, 0, .1);
-
-      box-shadow:
-        0 8px 25px rgba(0, 0, 0, .15);
+      background: rgba(255, 255, 255, .85);
+      border: 1px solid rgba(0, 0, 0, .1);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
     }
 
     .avatar {
       width: 64px;
       height: 64px;
-
       border-radius: 50%;
-
       object-fit: cover;
-
-      border:
-        3px solid rgba(255, 255, 255, .2);
+      border: 3px solid rgba(255, 255, 255, .2);
     }
 
     .info h1 {
       margin: 0;
-
-      font-size:
-        clamp(22px, 3.6vw, 38px);
+      font-size: clamp(22px, 3.6vw, 38px);
     }
 
     .info p {
       margin: .2rem 0 0;
-
       color: var(--muted);
     }
 
-    /* =====================================================
+    /* =========================
        MAIN
-       ===================================================== */
+       MÁS ANCHO
+       ========================= */
 
     main {
-      width: min(1400px, 96vw);
-
+      width: min(1600px, 98vw);
       margin: 26px auto;
-
-      padding: 0 18px;
+      padding: 0 16px;
     }
 
-    /* =====================================================
+    /* =========================
        BUSCADOR
-       ===================================================== */
+       ========================= */
 
     .toolbar {
       display: flex;
       gap: 10px;
-
       align-items: center;
       justify-content: space-between;
-
       margin: 10px 0 18px;
     }
 
     .search {
       display: flex;
       align-items: center;
-
       gap: 8px;
-
       background: var(--soft);
-
-      border:
-        1px solid rgba(255, 255, 255, .08);
-
+      border: 1px solid rgba(255, 255, 255, .08);
       padding: 10px 12px;
-
       border-radius: 12px;
-
       min-width: 280px;
     }
 
     body.light .search {
-      border:
-        1px solid #e7e9f3;
-
-      box-shadow:
-        0 3px 8px rgba(0, 0, 0, .1);
+      border: 1px solid #e7e9f3;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, .1);
     }
 
     .search input {
@@ -223,25 +180,20 @@
       width: 100%;
     }
 
-    /* =====================================================
+    /* =========================
        GRID
-       ===================================================== */
+       ========================= */
 
     .grid {
       display: grid;
-
-      grid-template-columns:
-        repeat(4, minmax(0, 1fr));
-
-      gap: 16px;
-
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
       align-items: stretch;
     }
 
     @media (max-width: 950px) {
       .grid {
-        grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
@@ -260,51 +212,34 @@
       }
     }
 
-    /* =====================================================
+    /* =========================
        TARJETAS
-       ===================================================== */
+       ========================= */
 
     .card {
       position: relative;
-
       overflow: hidden;
-
       display: flex;
       flex-direction: column;
-
       height: 100%;
-
       background: var(--card);
-
-      border:
-        1px solid rgba(255, 255, 255, .06);
-
+      border: 1px solid rgba(255, 255, 255, .06);
       border-radius: var(--radius);
-
-      transition:
-        transform .18s ease,
-        box-shadow .18s ease;
+      transition: transform .18s ease, box-shadow .18s ease;
     }
 
     .card:hover {
-      transform:
-        translateY(-3px);
-
-      box-shadow:
-        0 14px 28px rgba(0, 0, 0, .35);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, .35);
     }
 
     .poster {
       display: block;
-
       width: 100%;
-      height: 180px;
-
+      height: 190px;
       object-fit: cover;
       object-position: center;
-
       background: #0f1a24;
-
       flex-shrink: 0;
     }
 
@@ -314,34 +249,25 @@
 
     .titleWrap {
       padding: 12px;
-
       display: flex;
       flex-direction: column;
-
       flex: 1;
     }
 
-    /* =====================================================
+    /* =========================
        CATEGORÍA
-       ===================================================== */
+       ========================= */
 
     .category {
       display: inline-block;
-
       width: max-content;
       max-width: 100%;
-
       margin-bottom: 8px;
-
       padding: 4px 8px;
-
       border-radius: 20px;
-
       font-size: 11px;
       font-weight: 600;
-
       color: #0a0f16;
-
       background:
         linear-gradient(
           135deg,
@@ -350,108 +276,81 @@
         );
     }
 
-    /* =====================================================
+    /* =========================
        TÍTULO
-       ===================================================== */
+       ========================= */
 
     .title {
       font-weight: 800;
-
       font-size: 15px;
       line-height: 1.3;
-
       margin: 0 0 7px;
-
       min-height: 39px;
 
       display: -webkit-box;
-
       -webkit-line-clamp: 2;
       line-clamp: 2;
-
       -webkit-box-orient: vertical;
-
       overflow: hidden;
     }
 
-    /* =====================================================
+    /* =========================
        DESCRIPCIÓN
-       ===================================================== */
+       ========================= */
 
     .desc {
       color: var(--muted);
-
       font-size: 12.5px;
       line-height: 1.45;
-
       margin: 0 0 12px;
-
       min-height: 54px;
 
       display: -webkit-box;
-
       -webkit-line-clamp: 3;
       line-clamp: 3;
-
       -webkit-box-orient: vertical;
-
       overflow: hidden;
     }
 
-    /* =====================================================
+    /* =========================
        BOTONES
-       ===================================================== */
+       ========================= */
 
     .btns {
       display: flex;
-
       gap: 8px;
-
       flex-wrap: wrap;
-
       margin-top: auto;
     }
 
     .btn {
       display: inline-block;
-
       padding: 8px 12px;
-
       border-radius: 10px;
-
       background:
         linear-gradient(
           135deg,
           var(--accent),
           var(--accent2)
         );
-
       color: #0a0f16;
-
       font-size: 13px;
       font-weight: 800;
-
       text-decoration: none;
     }
 
-    /* =====================================================
+    /* =========================
        MODAL
-       ===================================================== */
+       ========================= */
 
     .modal {
       position: fixed;
       inset: 0;
-
       display: none;
       place-items: center;
-
       padding: 20px;
-
-      background:
-        rgba(0, 0, 0, .62);
-
+      background: rgba(0, 0, 0, .62);
       backdrop-filter: blur(7px);
-
       z-index: 50;
     }
 
@@ -460,101 +359,63 @@
     }
 
     .modal .box {
-      width:
-        min(1000px, 94vw);
-
-      max-height:
-        min(88vh, 1000px);
-
+      width: min(1000px, 94vw);
+      max-height: min(88vh, 1000px);
       border-radius: 20px;
-
       overflow: hidden;
-
       background: var(--card);
-
-      border:
-        1px solid rgba(255, 255, 255, .12);
-
-      box-shadow:
-        0 30px 80px rgba(0, 0, 0, .55);
-
+      border: 1px solid rgba(255, 255, 255, .12);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
       display: flex;
       flex-direction: column;
     }
 
-    /* =====================================================
-       CABECERA MODAL
-       ===================================================== */
-
     .proj-head {
       display: flex;
-
       align-items: center;
       justify-content: space-between;
-
       gap: 20px;
-
       padding: 14px 18px;
-
-      border-bottom:
-        1px solid rgba(255, 255, 255, .10);
-
+      border-bottom: 1px solid rgba(255, 255, 255, .10);
       position: sticky;
-
       top: 0;
-
       background: var(--card);
-
       z-index: 2;
     }
 
     .proj-title {
       margin: 0;
-
       font-size: 21px;
-
       font-weight: 800;
     }
 
     .close-btn {
       all: unset;
-
       cursor: pointer;
-
       padding: 8px 10px;
-
       border-radius: 10px;
-
-      background:
-        rgba(255, 255, 255, .08);
-
-      border:
-        1px solid rgba(255, 255, 255, .16);
-
+      background: rgba(255, 255, 255, .08);
+      border: 1px solid rgba(255, 255, 255, .16);
       flex-shrink: 0;
     }
 
     body.light .close-btn {
       background: #edf0f5;
-
       border-color: #dde1ea;
     }
 
-    /* =====================================================
+    /* =========================
        CONTENIDO DEL MODAL
-       ===================================================== */
+       ========================= */
 
     .proj {
       display: grid;
-
       grid-template-columns:
         minmax(0, 1.3fr)
         minmax(240px, .7fr);
 
       gap: 18px;
-
       padding: 18px;
-
       overflow: auto;
     }
 
@@ -564,56 +425,36 @@
       }
     }
 
-    /* =====================================================
-       MEDIA DEL MODAL
-       ===================================================== */
-
     .modal-media {
       min-width: 0;
     }
 
     .proj-hero {
       display: block;
-
       width: 100%;
-
       background: #0f1a24;
-
       border: 0;
-
       border-radius: 14px;
-
-      box-shadow:
-        0 8px 24px rgba(0, 0, 0, .25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
     }
 
     iframe.proj-hero {
       width: 100%;
-
       aspect-ratio: 16 / 9;
-
       min-height: 300px;
     }
 
     video.proj-hero {
       width: 100%;
-
       max-height: 65vh;
-
       object-fit: contain;
     }
 
     img.proj-hero {
       width: 100%;
-
       max-height: 65vh;
-
       object-fit: contain;
     }
-
-    /* =====================================================
-       INFORMACIÓN DEL MODAL
-       ===================================================== */
 
     .modal-info {
       min-width: 0;
@@ -621,46 +462,30 @@
 
     .project-meta {
       margin-bottom: 16px;
-
       display: flex;
-
       flex-wrap: wrap;
-
       gap: 8px;
     }
 
     .meta-item {
       display: inline-block;
-
       padding: 5px 9px;
-
       border-radius: 20px;
-
       background: var(--soft);
-
       font-size: 12px;
-
       color: var(--muted);
     }
 
     .proj-sub {
       color: var(--muted);
-
       margin-top: 6px;
-
       line-height: 1.7;
-
       font-size: 14px;
     }
-
   </style>
 </head>
 
 <body>
-
-  <!-- =====================================================
-       HERO
-       ===================================================== -->
 
   <header class="hero">
 
@@ -681,24 +506,13 @@
       >
 
       <div class="info">
-
-        <h1>
-          Edición (Foto y Video)
-        </h1>
-
-        <p>
-          Color, ritmo, motion y narrativa visual.
-        </p>
-
+        <h1>Edición (Foto y Video)</h1>
+        <p>Color, ritmo, motion y narrativa visual.</p>
       </div>
 
     </div>
 
   </header>
-
-  <!-- =====================================================
-       CONTENIDO
-       ===================================================== -->
 
   <main>
 
@@ -746,10 +560,6 @@
 
   </main>
 
-  <!-- =====================================================
-       MODAL
-       ===================================================== -->
-
   <div
     id="modal"
     class="modal"
@@ -793,31 +603,17 @@
 
   <script>
 
-    /* =====================================================
-       TEMA AUTOMÁTICO
-       ===================================================== */
-
     function setMode() {
-
-      const hour =
-        new Date().getHours();
+      const hour = new Date().getHours();
 
       document.body.className =
-        (
-          hour >= 7 &&
-          hour < 19
-        )
+        (hour >= 7 && hour < 19)
           ? "light"
           : "dark";
-
     }
 
     setMode();
 
-
-    /* =====================================================
-       ELEMENTOS
-       ===================================================== */
 
     const GRID =
       document.getElementById("grid");
@@ -839,33 +635,20 @@
 
 
     let projects = [];
-
     let visibleProjects = [];
 
 
-    /* =====================================================
-       ESCAPAR HTML
-       ===================================================== */
-
     function escapeHTML(value = "") {
-
       return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-
     }
 
 
-    /* =====================================================
-       PLACEHOLDER
-       ===================================================== */
-
-    function placeholder(
-      title = "Proyecto"
-    ) {
+    function placeholder(title = "Proyecto") {
 
       const safeTitle =
         String(title)
@@ -873,22 +656,18 @@
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;");
 
-
       const svg = `
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="800"
           height="450"
         >
-
           <defs>
-
             <linearGradient
               id="gradient"
               x1="0"
               x2="1"
             >
-
               <stop
                 offset="0%"
                 stop-color="#1c2230"
@@ -898,9 +677,7 @@
                 offset="100%"
                 stop-color="#0f1a24"
               />
-
             </linearGradient>
-
           </defs>
 
           <rect
@@ -921,26 +698,17 @@
           >
             ${safeTitle}
           </text>
-
         </svg>
       `;
-
 
       return (
         "data:image/svg+xml," +
         encodeURIComponent(svg)
       );
-
     }
 
 
-    /* =====================================================
-       OBTENER ID DE YOUTUBE
-       ===================================================== */
-
-    function getYouTubeID(
-      url = ""
-    ) {
+    function getYouTubeID(url = "") {
 
       try {
 
@@ -948,20 +716,19 @@
           return "";
         }
 
-
         const parsedURL =
           new URL(url);
-
 
         const hostname =
           parsedURL.hostname
             .replace(/^www\./, "");
 
 
-        /* youtube.com/watch?v=... */
-
         if (
-          hostname === "youtube.com" &&
+          (
+            hostname === "youtube.com" ||
+            hostname === "m.youtube.com"
+          ) &&
           parsedURL.pathname === "/watch"
         ) {
 
@@ -971,11 +738,8 @@
               .get("v")
             || ""
           );
-
         }
 
-
-        /* youtu.be/ID */
 
         if (
           hostname === "youtu.be"
@@ -987,11 +751,8 @@
               .split("/")[0]
             || ""
           );
-
         }
 
-
-        /* youtube.com/shorts/ID */
 
         if (
           hostname === "youtube.com" &&
@@ -1005,11 +766,8 @@
               .split("/")[2]
             || ""
           );
-
         }
 
-
-        /* youtube.com/embed/ID */
 
         if (
           hostname === "youtube.com" &&
@@ -1023,47 +781,20 @@
               .split("/")[2]
             || ""
           );
-
         }
 
-
-        /* m.youtube.com */
-
-        if (
-          hostname === "m.youtube.com" &&
-          parsedURL.pathname === "/watch"
-        ) {
-
-          return (
-            parsedURL
-              .searchParams
-              .get("v")
-            || ""
-          );
-
-        }
-
-      }
-
-      catch (error) {
+      } catch (error) {
 
         console.error(
           "Error leyendo URL de YouTube:",
           url,
           error
         );
-
       }
 
-
       return "";
-
     }
 
-
-    /* =====================================================
-       MINIATURAS DE YOUTUBE
-       ===================================================== */
 
     function getYouTubeThumbnail(
       url = ""
@@ -1072,24 +803,15 @@
       const id =
         getYouTubeID(url);
 
-
       if (!id) {
         return "";
       }
-
-
-      /*
-        Primero probamos maxresdefault.
-        Si no existe, el HTML cambia
-        automáticamente a hqdefault.
-      */
 
       return (
         "https://i.ytimg.com/vi/" +
         id +
         "/maxresdefault.jpg"
       );
-
     }
 
 
@@ -1100,24 +822,17 @@
       const id =
         getYouTubeID(url);
 
-
       if (!id) {
         return "";
       }
-
 
       return (
         "https://i.ytimg.com/vi/" +
         id +
         "/hqdefault.jpg"
       );
-
     }
 
-
-    /* =====================================================
-       RENDER
-       ===================================================== */
 
     function render(list) {
 
@@ -1148,13 +863,11 @@
           .map(
             (project, index) => {
 
-
               const title =
                 escapeHTML(
                   project.title ||
                   "Proyecto"
                 );
-
 
               const description =
                 escapeHTML(
@@ -1162,26 +875,19 @@
                   ""
                 );
 
-
               const category =
                 escapeHTML(
                   project.categoria ||
                   "Edición"
                 );
 
-
               const youtubeID =
                 getYouTubeID(
                   project.video || ""
                 );
 
-
               let cardMedia = "";
 
-
-              /* ============================================
-                 YOUTUBE
-                 ============================================ */
 
               if (youtubeID) {
 
@@ -1190,12 +896,10 @@
                     project.video
                   );
 
-
                 const fallback =
                   getYouTubeThumbnailFallback(
                     project.video
                   );
-
 
                 cardMedia = `
                   <img
@@ -1212,14 +916,7 @@
                   >
                 `;
 
-              }
-
-
-              /* ============================================
-                 COVER PROPIO
-                 ============================================ */
-
-              else if (
+              } else if (
                 project.cover
               ) {
 
@@ -1239,14 +936,7 @@
                   >
                 `;
 
-              }
-
-
-              /* ============================================
-                 VIDEO LOCAL
-                 ============================================ */
-
-              else if (
+              } else if (
                 project.video &&
                 /\.(mp4|webm|mov)$/i.test(
                   project.video
@@ -1265,14 +955,7 @@
                   ></video>
                 `;
 
-              }
-
-
-              /* ============================================
-                 SIN MEDIA
-                 ============================================ */
-
-              else {
+              } else {
 
                 cardMedia = `
                   <img
@@ -1283,7 +966,6 @@
                     alt="${title}"
                   >
                 `;
-
               }
 
 
@@ -1322,16 +1004,10 @@
 
                 </article>
               `;
-
             }
           )
           .join("");
 
-
-      /* ===================================================
-         FALLBACK YOUTUBE
-         maxres -> hq -> placeholder
-         =================================================== */
 
       GRID
         .querySelectorAll(
@@ -1340,14 +1016,11 @@
         .forEach(
           image => {
 
-
             let fallbackStep = 0;
-
 
             image.addEventListener(
               "error",
               () => {
-
 
                 if (
                   fallbackStep === 0 &&
@@ -1355,13 +1028,9 @@
                 ) {
 
                   fallbackStep = 1;
-
-                  image.src =
-                    image.dataset.hq;
-
+                  image.src = image.dataset.hq;
                   return;
                 }
-
 
                 if (
                   fallbackStep === 1 &&
@@ -1369,10 +1038,8 @@
                 ) {
 
                   fallbackStep = 2;
-
                   image.src =
                     image.dataset.placeholder;
-
                 }
 
               }
@@ -1381,10 +1048,6 @@
           }
         );
 
-
-      /* ===================================================
-         COVER LOCAL FALLBACK
-         =================================================== */
 
       GRID
         .querySelectorAll(
@@ -1403,7 +1066,6 @@
 
                   image.src =
                     image.dataset.placeholder;
-
                 }
 
               },
@@ -1416,10 +1078,6 @@
         );
 
 
-      /* ===================================================
-         VIDEO LOCAL COMO FRAME
-         =================================================== */
-
       GRID
         .querySelectorAll(
           ".static-video"
@@ -1427,13 +1085,10 @@
         .forEach(
           video => {
 
-
             const setFrame =
               () => {
 
-
                 try {
-
 
                   if (
                     Number.isFinite(
@@ -1442,32 +1097,22 @@
                     video.duration > 0
                   ) {
 
-
                     video.currentTime =
                       Math.min(
                         3,
                         video.duration / 2
                       );
-
                   }
-
 
                   video.pause();
 
-
-                }
-
-                catch (error) {
-
+                } catch (error) {
 
                   console.error(
                     "No se pudo usar frame de video:",
                     error
                   );
-
-
                 }
-
 
               };
 
@@ -1478,9 +1123,7 @@
 
               setFrame();
 
-            }
-
-            else {
+            } else {
 
               video.addEventListener(
                 "loadedmetadata",
@@ -1489,30 +1132,21 @@
                   once: true
                 }
               );
-
             }
-
 
           }
         );
-
     }
 
-
-    /* =====================================================
-       BUSCADOR
-       ===================================================== */
 
     Q.addEventListener(
       "input",
       () => {
 
-
         const search =
           Q.value
             .trim()
             .toLowerCase();
-
 
         if (!search) {
 
@@ -1523,11 +1157,9 @@
           return;
         }
 
-
         const result =
           projects.filter(
             project => {
-
 
               const searchable =
                 [
@@ -1540,64 +1172,41 @@
                   .join(" ")
                   .toLowerCase();
 
-
-              return (
-                searchable.includes(
-                  search
-                )
+              return searchable.includes(
+                search
               );
-
-
             }
           );
 
-
-        render(
-          result
-        );
-
-
+        render(result);
       }
     );
 
-
-    /* =====================================================
-       ABRIR MODAL
-       ===================================================== */
 
     function openModalFor(
       project
     ) {
 
-
       if (!project) {
         return;
       }
 
-
       MODAL_TITLE.textContent =
         project.title ||
         "Proyecto";
-
 
       const videoURL =
         String(
           project.video || ""
         );
 
-
       const youtubeID =
         getYouTubeID(
           videoURL
         );
 
-
       let mediaHTML = "";
 
-
-      /* ===================================================
-         1. YOUTUBE
-         =================================================== */
 
       if (youtubeID) {
 
@@ -1625,14 +1234,7 @@
           ></iframe>
         `;
 
-      }
-
-
-      /* ===================================================
-         2. VIDEO LOCAL
-         =================================================== */
-
-      else if (
+      } else if (
         /\.(mp4|webm|mov)$/i.test(
           videoURL
         )
@@ -1650,14 +1252,7 @@
           ></video>
         `;
 
-      }
-
-
-      /* ===================================================
-         3. SIN VIDEO -> COVER
-         =================================================== */
-
-      else if (
+      } else if (
         project.cover
       ) {
 
@@ -1674,14 +1269,7 @@
           >
         `;
 
-      }
-
-
-      /* ===================================================
-         4. PLACEHOLDER
-         =================================================== */
-
-      else {
+      } else {
 
         mediaHTML = `
           <img
@@ -1696,22 +1284,8 @@
             )}"
           >
         `;
-
       }
 
-
-      /* ===================================================
-         IMPORTANTE:
-         
-         Solo mostramos gallery si NO existe
-         ningún video.
-
-         Esto evita:
-         portada + YouTube
-         o
-         galería + YouTube
-         duplicados.
-         =================================================== */
 
       const hasVideo =
         Boolean(
@@ -1730,10 +1304,8 @@
         project.gallery.length
       ) {
 
-
         project.gallery.forEach(
           image => {
-
 
             mediaHTML += `
               <img
@@ -1749,17 +1321,10 @@
               >
             `;
 
-
           }
         );
-
-
       }
 
-
-      /* ===================================================
-         METADATOS
-         =================================================== */
 
       let metaHTML = "";
 
@@ -1775,7 +1340,6 @@
             )}
           </span>
         `;
-
       }
 
 
@@ -1790,13 +1354,8 @@
             )}
           </span>
         `;
-
       }
 
-
-      /* ===================================================
-         CONTENIDO MODAL
-         =================================================== */
 
       MODAL_CONTENT.innerHTML = `
 
@@ -1806,7 +1365,6 @@
 
         </div>
 
-
         <div class="modal-info">
 
           <div class="project-meta">
@@ -1815,11 +1373,9 @@
 
           </div>
 
-
           <h3>
             Descripción
           </h3>
-
 
           <p class="proj-sub">
 
@@ -1838,28 +1394,19 @@
         "open"
       );
 
-
       MODAL.setAttribute(
         "aria-hidden",
         "false"
       );
 
-
       document.body.style.overflow =
         "hidden";
 
-
       CLOSE_BTN.focus();
-
     }
 
 
-    /* =====================================================
-       CERRAR MODAL
-       ===================================================== */
-
     function closeModal() {
-
 
       MODAL
         .querySelectorAll(
@@ -1873,75 +1420,51 @@
           }
         );
 
-
-      /*
-        Eliminar contenido detiene también
-        el iframe de YouTube.
-      */
-
       MODAL_CONTENT.innerHTML =
         "";
-
 
       MODAL.classList.remove(
         "open"
       );
-
 
       MODAL.setAttribute(
         "aria-hidden",
         "true"
       );
 
-
       document.body.style.overflow =
         "";
-
     }
 
-
-    /* =====================================================
-       CLICK EN VER PROYECTO
-       ===================================================== */
 
     GRID.addEventListener(
       "click",
       event => {
-
 
         const button =
           event.target.closest(
             "[data-i]"
           );
 
-
         if (!button) {
           return;
         }
 
-
         event.preventDefault();
-
 
         const index =
           Number(
             button.dataset.i
           );
 
-
         openModalFor(
           visibleProjects[
             index
           ]
         );
-
       }
     );
 
-
-    /* =====================================================
-       BOTÓN CERRAR
-       ===================================================== */
 
     CLOSE_BTN.addEventListener(
       "click",
@@ -1949,35 +1472,23 @@
     );
 
 
-    /* =====================================================
-       CLICK FUERA
-       ===================================================== */
-
     MODAL.addEventListener(
       "click",
       event => {
-
 
         if (
           event.target === MODAL
         ) {
 
           closeModal();
-
         }
-
       }
     );
 
 
-    /* =====================================================
-       ESC
-       ===================================================== */
-
     document.addEventListener(
       "keydown",
       event => {
-
 
         if (
           event.key === "Escape" &&
@@ -1987,28 +1498,14 @@
         ) {
 
           closeModal();
-
         }
-
       }
     );
 
 
-    /* =====================================================
-       CARGAR MANIFEST
-       ===================================================== */
-
     async function load() {
 
-
       try {
-
-
-        /*
-          El ?v=Date.now evita que durante
-          las pruebas el navegador use una
-          versión vieja del manifest.json.
-        */
 
         const response =
           await fetch(
@@ -2019,23 +1516,17 @@
             }
           );
 
-
-        if (
-          !response.ok
-        ) {
+        if (!response.ok) {
 
           throw new Error(
             `Error HTTP: ${
               response.status
             }`
           );
-
         }
-
 
         const data =
           await response.json();
-
 
         projects =
           Array.isArray(
@@ -2044,31 +1535,18 @@
             ? data.projects
             : [];
 
-
-        console.log(
-          "Proyectos cargados:",
-          projects
-        );
-
-
         render(
           projects
         );
 
-
-      }
-
-      catch (error) {
-
+      } catch (error) {
 
         console.error(
           "Error cargando Edicion/manifest.json:",
           error
         );
 
-
         projects = [];
-
 
         GRID.innerHTML = `
           <p
@@ -2082,15 +1560,9 @@
             No fue posible cargar los proyectos.
           </p>
         `;
-
       }
-
     }
 
-
-    /* =====================================================
-       INICIAR
-       ===================================================== */
 
     load();
 
