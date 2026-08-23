@@ -1,0 +1,5001 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Marca de ropa — MoncadaArt</title>
+
+  <meta
+    name="description"
+    content="Previal y Nela, marcas de ropa deportiva desarrolladas por Christian Moncada. Branding, prendas, conceptos visuales y colecciones."
+  >
+
+  <meta
+    name="theme-color"
+    content="#f6efe5"
+  >
+
+
+  <!-- =====================================================
+       TEMA INICIAL
+       ===================================================== -->
+
+  <script>
+
+    (function () {
+
+      const savedTheme =
+        sessionStorage.getItem("moncada-theme");
+
+      const hour =
+        new Date().getHours();
+
+      const automaticTheme =
+        hour >= 7 && hour < 19
+          ? "light"
+          : "dark";
+
+      document.documentElement.setAttribute(
+        "data-theme",
+        savedTheme || automaticTheme
+      );
+
+    })();
+
+  </script>
+
+
+  <!-- =====================================================
+       FUENTES
+       ===================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    /* =====================================================
+       MONCADAART — MARCA DE ROPA
+       PREVIAL + NELA
+       ===================================================== */
+
+
+    /* =====================================================
+       VARIABLES
+       ===================================================== */
+
+    :root {
+
+      --orange: #e8792e;
+      --orange-dark: #cc6121;
+
+      --monky-blue: #315d78;
+
+      /* PREVIAL */
+      --previal: #665f57;
+      --previal-dark: #403b36;
+      --previal-soft: #e7e0d7;
+
+      /* NELA */
+      --nela: #b66f67;
+      --nela-dark: #8f5049;
+      --nela-soft: #f1deda;
+
+      --max-width: 1420px;
+
+      --radius-sm: 18px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+
+    }
+
+
+    /* =====================================================
+       LIGHT
+       ===================================================== */
+
+    html[data-theme="light"] {
+
+      --page-bg: #f6efe5;
+
+      --surface: #fffaf3;
+      --surface-2: #f2e6d7;
+      --surface-3: #ead9c5;
+
+      --ink: #2a201a;
+
+      --text-soft: #695c53;
+
+      --border:
+        rgba(119,80,51,.18);
+
+      --soft-border:
+        rgba(119,80,51,.10);
+
+      --shadow:
+        0 12px 30px
+        rgba(80,52,31,.08);
+
+      --shadow-hover:
+        0 20px 46px
+        rgba(80,52,31,.16);
+
+    }
+
+
+    /* =====================================================
+       DARK
+       ===================================================== */
+
+    html[data-theme="dark"] {
+
+      --page-bg: #10100e;
+
+      --surface: #1c1a17;
+      --surface-2: #24211c;
+      --surface-3: #2b2721;
+
+      --ink: #fff5e7;
+
+      --text-soft: #c5b8ad;
+
+      --border:
+        rgba(225,153,75,.20);
+
+      --soft-border:
+        rgba(225,153,75,.10);
+
+      --shadow:
+        0 12px 32px
+        rgba(0,0,0,.28);
+
+      --shadow-hover:
+        0 22px 48px
+        rgba(0,0,0,.44);
+
+    }
+
+
+    /* =====================================================
+       RESET
+       ===================================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--page-bg);
+
+      font-family:
+        "Poppins",
+        sans-serif;
+
+      line-height: 1.6;
+
+      transition:
+        background-color .4s ease,
+        color .4s ease;
+
+    }
+
+
+    html[data-theme="light"] body {
+
+      background:
+
+        radial-gradient(
+          circle at 7% 15%,
+          rgba(232,121,46,.055),
+          transparent 25%
+        ),
+
+        radial-gradient(
+          circle at 92% 45%,
+          rgba(182,111,103,.045),
+          transparent 25%
+        ),
+
+        var(--page-bg);
+
+    }
+
+
+    img {
+      max-width: 100%;
+    }
+
+
+    a {
+      color: inherit;
+    }
+
+
+    button,
+    input {
+      font: inherit;
+    }
+
+
+    ::selection {
+
+      color: #fff;
+
+      background:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
+       HERO
+       ===================================================== */
+
+    .hero {
+
+      position: relative;
+
+      min-height: 390px;
+
+      overflow: hidden;
+
+      isolation: isolate;
+
+      display: flex;
+
+      align-items: flex-end;
+
+      border-radius:
+        0 0 34px 34px;
+
+    }
+
+
+    .hero-cover {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: -3;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      object-position:
+        center 46%;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-cover {
+
+      filter:
+        brightness(.90)
+        saturate(.90);
+
+    }
+
+
+    html[data-theme="dark"]
+    .hero-cover {
+
+      filter:
+        brightness(.43)
+        saturate(.75);
+
+    }
+
+
+    /* =====================================================
+       HERO OVERLAY
+       ===================================================== */
+
+    .hero-overlay {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: -2;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-overlay {
+
+      background:
+
+        linear-gradient(
+          90deg,
+          rgba(246,239,229,.98) 0%,
+          rgba(246,239,229,.92) 24%,
+          rgba(246,239,229,.53) 48%,
+          rgba(246,239,229,.10) 70%
+        ),
+
+        linear-gradient(
+          to top,
+          var(--page-bg),
+          transparent 42%
+        );
+
+    }
+
+
+    html[data-theme="dark"]
+    .hero-overlay {
+
+      background:
+
+        linear-gradient(
+          90deg,
+          rgba(13,12,10,.94) 0%,
+          rgba(13,12,10,.78) 25%,
+          rgba(13,12,10,.43) 50%,
+          rgba(13,12,10,.18) 75%
+        ),
+
+        linear-gradient(
+          to top,
+          var(--page-bg),
+          transparent 44%
+        );
+
+    }
+
+
+    /* =====================================================
+       TOPBAR
+       ===================================================== */
+
+    .topbar {
+
+      position: absolute;
+
+      z-index: 20;
+
+      top: 0;
+      left: 50%;
+
+      transform:
+        translateX(-50%);
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      height: 84px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 24px;
+
+    }
+
+
+    /* =====================================================
+       BRAND MONCADAART
+       ===================================================== */
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      margin-right: auto;
+
+      text-decoration: none;
+
+    }
+
+
+    .brand-avatar {
+
+      width: 50px;
+      height: 50px;
+
+      object-fit: cover;
+
+      border-radius: 50%;
+
+      border:
+        2px solid
+        rgba(216,137,66,.45);
+
+      box-shadow:
+        0 5px 14px
+        rgba(42,26,16,.12);
+
+    }
+
+
+    .brand-name {
+
+      font-family:
+        "Pacifico",
+        cursive;
+
+      font-size: 24px;
+
+      white-space: nowrap;
+
+    }
+
+
+    /* =====================================================
+       NAV
+       ===================================================== */
+
+    .nav-links {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 30px;
+
+    }
+
+
+    .nav-links a {
+
+      position: relative;
+
+      padding:
+        29px 0 18px;
+
+      color:
+        var(--ink);
+
+      text-decoration: none;
+
+      font-size: 14px;
+
+      font-weight: 500;
+
+    }
+
+
+    .nav-links a::after {
+
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: 11px;
+
+      width: 0;
+      height: 2px;
+
+      transform:
+        translateX(-50%);
+
+      background:
+        var(--orange);
+
+      border-radius: 999px;
+
+      transition:
+        width .22s ease;
+
+    }
+
+
+    .nav-links a:hover {
+
+      color:
+        var(--orange);
+
+    }
+
+
+    .nav-links a:hover::after {
+
+      width: 27px;
+
+    }
+
+
+    /* =====================================================
+       SOCIAL
+       ===================================================== */
+
+    .social-nav {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 13px;
+
+    }
+
+
+    .social-nav a {
+
+      width: 30px;
+      height: 30px;
+
+      display: grid;
+
+      place-items: center;
+
+      color:
+        var(--ink);
+
+      text-decoration: none;
+
+      transition:
+        color .2s ease,
+        transform .2s ease;
+
+    }
+
+
+    .social-nav a:hover {
+
+      color:
+        var(--orange);
+
+      transform:
+        translateY(-2px);
+
+    }
+
+
+    .social-nav svg {
+
+      width: 20px;
+      height: 20px;
+
+      fill: none;
+
+      stroke:
+        currentColor;
+
+      stroke-width: 1.8;
+
+    }
+
+
+    .social-nav svg path {
+
+      fill:
+        currentColor;
+
+      stroke: none;
+
+    }
+
+
+    .behance {
+
+      font-size: 18px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       THEME
+       ===================================================== */
+
+    .theme-toggle {
+
+      min-width: 90px;
+
+      height: 40px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      padding:
+        0 13px;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 16px
+        rgba(0,0,0,.06);
+
+    }
+
+
+    .theme-toggle:hover {
+
+      border-color:
+        var(--orange);
+
+      transform:
+        translateY(-2px);
+
+    }
+
+
+    .theme-icon {
+      font-size: 17px;
+    }
+
+
+    .theme-text {
+
+      font-size: 11px;
+
+      font-weight: 600;
+
+    }
+
+
+    /* =====================================================
+       MOBILE MENU
+       ===================================================== */
+
+    .menu-toggle {
+
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 10px;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        12px;
+
+      cursor: pointer;
+
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 5px;
+
+    }
+
+
+    .menu-toggle span {
+
+      width: 19px;
+      height: 2px;
+
+      background:
+        currentColor;
+
+      border-radius:
+        999px;
+
+      transition:
+        .25s ease;
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(1) {
+
+      transform:
+        translateY(7px)
+        rotate(45deg);
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(2) {
+      opacity: 0;
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(3) {
+
+      transform:
+        translateY(-7px)
+        rotate(-45deg);
+
+    }
+
+
+    /* =====================================================
+       HERO CONTENT
+       ===================================================== */
+
+    .hero-content {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        130px 0 62px;
+
+    }
+
+
+    .breadcrumb {
+
+      margin:
+        0 0 8px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.8px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .hero-content h1 {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          54px,
+          5.8vw,
+          84px
+        );
+
+      font-weight: 400;
+
+      line-height: .97;
+
+      letter-spacing:
+        -1.7px;
+
+    }
+
+
+    .hero-description {
+
+      max-width: 660px;
+
+      margin:
+        19px 0 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 14px;
+
+      line-height: 1.8;
+
+    }
+
+
+    .hero-tools {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 7px;
+
+      margin-top: 19px;
+
+    }
+
+
+    .hero-tools span {
+
+      padding:
+        6px 11px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        rgba(255,255,255,.05);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      font-size: 9px;
+
+      font-weight: 600;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-tools span {
+
+      background:
+        rgba(255,250,243,.66);
+
+    }
+
+
+    /* =====================================================
+       CONTAINER
+       ===================================================== */
+
+    .container {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+    }
+
+
+    /* =====================================================
+       CONCEPTO
+       ===================================================== */
+
+    .concept-section {
+
+      padding:
+        68px 0 68px;
+
+    }
+
+
+    .section-title {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 28px;
+
+    }
+
+
+    .section-title span {
+
+      color:
+        var(--orange);
+
+    }
+
+
+    .section-title h2 {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          28px,
+          2.5vw,
+          36px
+        );
+
+      font-weight: 400;
+
+    }
+
+
+    /* =====================================================
+       CONCEPT CARD
+       ===================================================== */
+
+    .concept-card {
+
+      position: relative;
+
+      overflow: hidden;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0,.9fr)
+        1px
+        minmax(0,1.35fr);
+
+      gap:
+        clamp(
+          34px,
+          4.5vw,
+          70px
+        );
+
+      padding:
+        clamp(
+          34px,
+          4vw,
+          52px
+        )
+        clamp(
+          30px,
+          4.5vw,
+          58px
+        );
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--soft-border);
+
+      border-radius:
+        28px;
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    .concept-card::before {
+
+      content: "";
+
+      position: absolute;
+
+      top: -170px;
+      left: -120px;
+
+      width: 300px;
+      height: 300px;
+
+      border-radius: 50%;
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(232,121,46,.11),
+          transparent 70%
+        );
+
+    }
+
+
+    .concept-card::after {
+
+      content: "";
+
+      position: absolute;
+
+      right: -150px;
+      bottom: -180px;
+
+      width: 320px;
+      height: 320px;
+
+      border-radius: 50%;
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(182,111,103,.10),
+          transparent 70%
+        );
+
+    }
+
+
+    html[data-theme="light"]
+    .concept-card {
+
+      background:
+
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.45),
+          transparent 44%
+        ),
+
+        #fffaf3;
+
+    }
+
+
+    /* =====================================================
+       CONCEPT LEFT
+       ===================================================== */
+
+    .concept-intro {
+
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+
+    .concept-kicker {
+
+      margin-bottom: 17px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.6px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .concept-heading {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          39px,
+          4vw,
+          58px
+        );
+
+      font-weight: 400;
+
+      line-height: 1.08;
+
+    }
+
+
+    .concept-heading strong {
+
+      color:
+        var(--orange);
+
+      font-weight: 400;
+
+    }
+
+
+    .concept-caption {
+
+      margin:
+        23px 0 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11px;
+
+    }
+
+
+    /* =====================================================
+       DIVIDER
+       ===================================================== */
+
+    .concept-divider {
+
+      position: relative;
+
+      z-index: 2;
+
+      width: 1px;
+
+      min-height: 205px;
+
+      background:
+
+        linear-gradient(
+          to bottom,
+          transparent,
+          rgba(232,121,46,.47) 18%,
+          rgba(232,121,46,.47) 82%,
+          transparent
+        );
+
+    }
+
+
+    /* =====================================================
+       CONCEPT RIGHT
+       ===================================================== */
+
+    .concept-info {
+
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+
+    .concept-description {
+
+      max-width: 730px;
+
+      margin:
+        0 0 27px;
+
+      color:
+        var(--text-soft);
+
+      font-size:
+        clamp(
+          14px,
+          1.25vw,
+          16px
+        );
+
+      line-height: 1.9;
+
+    }
+
+
+    .concept-tags {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 9px;
+
+    }
+
+
+    .concept-tags span {
+
+      min-height: 32px;
+
+      display:
+        inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        6px 13px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      font-size: 10px;
+
+      font-weight: 600;
+
+    }
+
+
+    /* =====================================================
+       DOS MARCAS
+       ===================================================== */
+
+    .brands-section {
+
+      padding:
+        5px 0 72px;
+
+    }
+
+
+    .brands-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0,1fr));
+
+      gap: 22px;
+
+    }
+
+
+    /* =====================================================
+       BRAND CARD GENERAL
+       ===================================================== */
+
+    .clothing-brand {
+
+      position: relative;
+
+      overflow: hidden;
+
+      min-height: 330px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: space-between;
+
+      padding:
+        34px 36px;
+
+      border:
+        1px solid
+        var(--soft-border);
+
+      border-radius:
+        28px;
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    .clothing-brand::after {
+
+      content: "";
+
+      position: absolute;
+
+      width: 240px;
+      height: 240px;
+
+      right: -100px;
+      bottom: -110px;
+
+      border-radius: 50%;
+
+      opacity: .6;
+
+    }
+
+
+    /* =====================================================
+       PREVIAL
+       ===================================================== */
+
+    .brand-previal {
+
+      background:
+
+        linear-gradient(
+          140deg,
+          rgba(102,95,87,.06),
+          transparent 55%
+        ),
+
+        var(--surface);
+
+    }
+
+
+    .brand-previal::after {
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(102,95,87,.18),
+          transparent 70%
+        );
+
+    }
+
+
+    /* =====================================================
+       NELA
+       ===================================================== */
+
+    .brand-nela {
+
+      background:
+
+        linear-gradient(
+          140deg,
+          rgba(182,111,103,.08),
+          transparent 55%
+        ),
+
+        var(--surface);
+
+    }
+
+
+    .brand-nela::after {
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(182,111,103,.20),
+          transparent 70%
+        );
+
+    }
+
+
+    /* =====================================================
+       BRAND CONTENT
+       ===================================================== */
+
+    .brand-number {
+
+      position: relative;
+
+      z-index: 2;
+
+      display: block;
+
+      margin-bottom: 25px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.7px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .brand-logo-text {
+
+      position: relative;
+
+      z-index: 2;
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          45px,
+          5vw,
+          72px
+        );
+
+      font-weight: 400;
+
+      line-height: 1;
+
+    }
+
+
+    .brand-previal
+    .brand-logo-text {
+
+      color:
+        var(--previal);
+
+    }
+
+
+    html[data-theme="dark"]
+    .brand-previal
+    .brand-logo-text {
+
+      color:
+        #d9d0c4;
+
+    }
+
+
+    .brand-nela
+    .brand-logo-text {
+
+      color:
+        var(--nela);
+
+    }
+
+
+    html[data-theme="dark"]
+    .brand-nela
+    .brand-logo-text {
+
+      color:
+        #e7aaa3;
+
+    }
+
+
+    .brand-type {
+
+      position: relative;
+
+      z-index: 2;
+
+      display: block;
+
+      margin-top: 8px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 10px;
+
+      font-weight: 600;
+
+      letter-spacing:
+        1.3px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .brand-copy {
+
+      position: relative;
+
+      z-index: 2;
+
+      max-width: 520px;
+
+      margin:
+        28px 0 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 13px;
+
+      line-height: 1.8;
+
+    }
+
+
+    /* =====================================================
+       BRAND QUOTE
+       ===================================================== */
+
+    .brand-quote {
+
+      position: relative;
+
+      z-index: 2;
+
+      margin-top: 26px;
+
+      padding-top: 19px;
+
+      border-top:
+        1px solid
+        var(--soft-border);
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size: 20px;
+
+      line-height: 1.3;
+
+    }
+
+
+    .brand-previal
+    .brand-quote {
+
+      color:
+        var(--previal);
+
+    }
+
+
+    html[data-theme="dark"]
+    .brand-previal
+    .brand-quote {
+
+      color:
+        #d6cabe;
+
+    }
+
+
+    .brand-nela
+    .brand-quote {
+
+      color:
+        var(--nela);
+
+    }
+
+
+    html[data-theme="dark"]
+    .brand-nela
+    .brand-quote {
+
+      color:
+        #e7aaa3;
+
+    }
+
+
+    /* =====================================================
+       PROYECTOS
+       ===================================================== */
+
+    .projects {
+
+      padding:
+        5px 0 82px;
+
+    }
+
+
+    .projects-head {
+
+      display: flex;
+
+      align-items:
+        flex-end;
+
+      justify-content:
+        space-between;
+
+      gap: 30px;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    .projects-kicker {
+
+      display: block;
+
+      margin-bottom: 3px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.5px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .projects-title {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          32px,
+          3vw,
+          42px
+        );
+
+      font-weight: 400;
+
+    }
+
+
+    /* =====================================================
+       TOOLBAR
+       ===================================================== */
+
+    .toolbar {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 11px;
+
+    }
+
+
+    .brand-filters {
+
+      display: flex;
+
+      gap: 6px;
+
+    }
+
+
+    .filter-btn {
+
+      min-height: 39px;
+
+      padding:
+        6px 13px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      cursor: pointer;
+
+      font-size: 10px;
+
+      font-weight: 600;
+
+    }
+
+
+    .filter-btn:hover {
+
+      color:
+        var(--ink);
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    .filter-btn.active {
+
+      color: #fff;
+
+      background:
+        var(--orange);
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    .search {
+
+      width: 275px;
+      height: 42px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      padding:
+        0 14px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+    }
+
+
+    .search input {
+
+      width: 100%;
+
+      color:
+        var(--ink);
+
+      background:
+        transparent;
+
+      border: 0;
+
+      outline: none;
+
+      font-size: 11px;
+
+    }
+
+
+    /* =====================================================
+       GRID
+       ===================================================== */
+
+    .grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap:
+        24px 22px;
+
+    }
+
+
+    /* =====================================================
+       PROJECT CARD
+       ===================================================== */
+
+    .project-card {
+
+      min-width: 0;
+
+      overflow: hidden;
+
+      display: flex;
+
+      flex-direction: column;
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--soft-border);
+
+      border-radius:
+        22px;
+
+      box-shadow:
+        var(--shadow);
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
+    }
+
+
+    .project-card:hover {
+
+      transform:
+        translateY(-5px);
+
+      box-shadow:
+        var(--shadow-hover);
+
+    }
+
+
+    .project-card.previal:hover {
+
+      border-color:
+        rgba(102,95,87,.40);
+
+    }
+
+
+    .project-card.nela:hover {
+
+      border-color:
+        rgba(182,111,103,.45);
+
+    }
+
+
+    /* =====================================================
+       POSTER
+       ===================================================== */
+
+    .poster-wrap {
+
+      overflow: hidden;
+
+      cursor: pointer;
+
+      background:
+        #161616;
+
+    }
+
+
+    .poster {
+
+      display: block;
+
+      width: 100%;
+
+      aspect-ratio:
+        4 / 3;
+
+      object-fit: cover;
+
+      transition:
+        transform .5s ease;
+
+    }
+
+
+    .project-card:hover
+    .poster {
+
+      transform:
+        scale(1.035);
+
+    }
+
+
+    /* =====================================================
+       CARD CONTENT
+       ===================================================== */
+
+    .card-content {
+
+      flex: 1;
+
+      display: flex;
+
+      flex-direction: column;
+
+      padding:
+        17px 18px 19px;
+
+    }
+
+
+    .brand-pill {
+
+      align-self:
+        flex-start;
+
+      margin-bottom: 10px;
+
+      padding:
+        5px 10px;
+
+      border-radius:
+        999px;
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        .5px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .brand-pill.previal {
+
+      color:
+        var(--previal-dark);
+
+      background:
+        var(--previal-soft);
+
+      border:
+        1px solid
+        rgba(102,95,87,.15);
+
+    }
+
+
+    .brand-pill.nela {
+
+      color:
+        var(--nela-dark);
+
+      background:
+        var(--nela-soft);
+
+      border:
+        1px solid
+        rgba(182,111,103,.16);
+
+    }
+
+
+    html[data-theme="dark"]
+    .brand-pill.previal {
+
+      color:
+        #d7cec3;
+
+      background:
+        rgba(165,153,140,.10);
+
+    }
+
+
+    html[data-theme="dark"]
+    .brand-pill.nela {
+
+      color:
+        #e6aaa2;
+
+      background:
+        rgba(182,111,103,.10);
+
+    }
+
+
+    .project-title {
+
+      margin:
+        0 0 8px;
+
+      font-size: 17px;
+
+      line-height: 1.38;
+
+    }
+
+
+    .project-desc {
+
+      margin:
+        0 0 17px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11.5px;
+
+      line-height: 1.7;
+
+      display:
+        -webkit-box;
+
+      -webkit-line-clamp:
+        3;
+
+      -webkit-box-orient:
+        vertical;
+
+      overflow: hidden;
+
+    }
+
+
+    .view-project {
+
+      align-self:
+        flex-start;
+
+      margin-top: auto;
+
+      padding: 0;
+
+      color:
+        var(--orange);
+
+      background:
+        transparent;
+
+      border: 0;
+
+      cursor: pointer;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+    }
+
+
+    .view-project span {
+
+      display:
+        inline-block;
+
+      transition:
+        transform .2s ease;
+
+    }
+
+
+    .view-project:hover span {
+
+      transform:
+        translateX(4px);
+
+    }
+
+
+    /* =====================================================
+       EMPTY
+       ===================================================== */
+
+    .empty {
+
+      grid-column:
+        1 / -1;
+
+      padding:
+        60px 20px;
+
+      color:
+        var(--text-soft);
+
+      text-align: center;
+
+      background:
+        var(--surface);
+
+      border:
+        1px dashed
+        var(--border);
+
+      border-radius:
+        20px;
+
+    }
+
+
+    /* =====================================================
+       MODAL
+       ===================================================== */
+
+    .modal {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 100;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      background:
+        rgba(6,6,5,.76);
+
+      backdrop-filter:
+        blur(9px);
+
+    }
+
+
+    .modal.open {
+      display: flex;
+    }
+
+
+    .modal-box {
+
+      width:
+        min(
+          1080px,
+          94vw
+        );
+
+      max-height:
+        90vh;
+
+      overflow: auto;
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        27px;
+
+      box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.5);
+
+    }
+
+
+    .modal-head {
+
+      position: sticky;
+
+      z-index: 5;
+
+      top: 0;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content:
+        space-between;
+
+      gap: 20px;
+
+      padding:
+        17px 20px;
+
+      background:
+        var(--surface);
+
+      border-bottom:
+        1px solid
+        var(--soft-border);
+
+    }
+
+
+    .modal-label {
+
+      display: block;
+
+      margin-bottom: 1px;
+
+      color:
+        var(--orange);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .modal-title {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size: 22px;
+
+      font-weight: 400;
+
+    }
+
+
+    .close {
+
+      width: 40px;
+      height: 40px;
+
+      display: grid;
+
+      place-items: center;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 50%;
+
+      cursor: pointer;
+
+    }
+
+
+    .close:hover {
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
+       MODAL BODY
+       ===================================================== */
+
+    .modal-body {
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0,1.2fr)
+        minmax(280px,.8fr);
+
+      gap: 32px;
+
+      padding: 25px;
+
+    }
+
+
+    .modal-media {
+
+      min-width: 0;
+
+    }
+
+
+    .shot {
+
+      display: block;
+
+      width: 100%;
+
+      max-height: 62vh;
+
+      margin-bottom: 12px;
+
+      object-fit: contain;
+
+      background:
+        #151515;
+
+      border-radius:
+        18px;
+
+    }
+
+
+    iframe.shot {
+
+      min-height: 330px;
+
+      border: 0;
+
+    }
+
+
+    .modal-info {
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+
+    .modal-brand {
+
+      align-self:
+        flex-start;
+
+      margin-bottom: 14px;
+
+      padding:
+        6px 11px;
+
+      border-radius:
+        999px;
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        .5px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .modal-description {
+
+      margin:
+        0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 13px;
+
+      line-height: 1.85;
+
+    }
+
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .footer {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        22px 0 35px;
+
+      color:
+        var(--text-soft);
+
+      text-align: center;
+
+      border-top:
+        1px solid
+        var(--soft-border);
+
+    }
+
+
+    .footer p {
+
+      margin: 0;
+
+      font-size: 11px;
+
+    }
+
+
+    .footer a {
+
+      color:
+        var(--orange);
+
+      text-decoration: none;
+
+    }
+
+
+    /* =====================================================
+       TABLET
+       ===================================================== */
+
+    @media
+    (max-width:1050px) {
+
+      .grid {
+
+        grid-template-columns:
+          repeat(2,minmax(0,1fr));
+
+      }
+
+
+      .projects-head {
+
+        align-items:
+          flex-start;
+
+        flex-direction:
+          column;
+
+      }
+
+    }
+
+
+    @media
+    (max-width:900px) {
+
+      .social-nav {
+        display: none;
+      }
+
+
+      .menu-toggle {
+        display: flex;
+      }
+
+
+      .nav-links {
+
+        position: absolute;
+
+        top: 70px;
+        right: 0;
+
+        width:
+          min(
+            270px,
+            calc(100vw - 30px)
+          );
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 0;
+
+        padding: 8px;
+
+        opacity: 0;
+
+        visibility:
+          hidden;
+
+        transform:
+          translateY(-8px);
+
+        background:
+          var(--surface);
+
+        border:
+          1px solid
+          var(--border);
+
+        border-radius:
+          17px;
+
+        box-shadow:
+          var(--shadow-hover);
+
+      }
+
+
+      .nav-links.open {
+
+        opacity: 1;
+
+        visibility:
+          visible;
+
+        transform:
+          translateY(0);
+
+      }
+
+
+      .nav-links a {
+
+        padding:
+          12px 14px;
+
+      }
+
+
+      .nav-links a::after {
+        display: none;
+      }
+
+
+      .concept-card {
+
+        grid-template-columns:
+          minmax(0,.85fr)
+          1px
+          minmax(0,1.15fr);
+
+        gap: 30px;
+
+        padding:
+          36px 30px;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media
+    (max-width:640px) {
+
+
+      .hero {
+
+        min-height:
+          490px;
+
+        border-radius:
+          0 0 24px 24px;
+
+      }
+
+
+      .hero-cover {
+
+        object-position:
+          57% center;
+
+      }
+
+
+      html[data-theme="light"]
+      .hero-overlay {
+
+        background:
+
+          linear-gradient(
+            to bottom,
+            rgba(246,239,229,.16),
+            rgba(246,239,229,.16) 32%,
+            rgba(246,239,229,.84) 70%,
+            var(--page-bg) 100%
+          );
+
+      }
+
+
+      html[data-theme="dark"]
+      .hero-overlay {
+
+        background:
+
+          linear-gradient(
+            to bottom,
+            rgba(10,10,9,.21),
+            rgba(10,10,9,.28) 33%,
+            rgba(10,10,9,.83) 71%,
+            var(--page-bg) 100%
+          );
+
+      }
+
+
+      .topbar {
+
+        width:
+          calc(100% - 26px);
+
+        height: 70px;
+
+        gap: 8px;
+
+      }
+
+
+      .brand {
+        gap: 8px;
+      }
+
+
+      .brand-avatar {
+
+        width: 40px;
+        height: 40px;
+
+      }
+
+
+      .brand-name {
+
+        font-size: 17px;
+
+      }
+
+
+      .theme-toggle {
+
+        min-width: 42px;
+
+        width: 42px;
+        height: 42px;
+
+        padding: 0;
+
+      }
+
+
+      .theme-text {
+        display: none;
+      }
+
+
+      .hero-content {
+
+        width:
+          calc(100% - 34px);
+
+        padding:
+          245px 0 43px;
+
+      }
+
+
+      .breadcrumb {
+        font-size: 8px;
+      }
+
+
+      .hero-content h1 {
+
+        font-size:
+          clamp(
+            48px,
+            14vw,
+            65px
+          );
+
+      }
+
+
+      .hero-description {
+
+        max-width: 345px;
+
+        margin-top: 14px;
+
+        font-size: 11.5px;
+
+      }
+
+
+      .hero-tools {
+
+        margin-top: 15px;
+
+      }
+
+
+      .hero-tools span {
+
+        padding:
+          5px 9px;
+
+        font-size: 8px;
+
+      }
+
+
+      .container {
+
+        width:
+          calc(100% - 30px);
+
+      }
+
+
+      /* CONCEPTO */
+
+      .concept-section {
+
+        padding:
+          50px 0 48px;
+
+      }
+
+
+      .section-title {
+
+        margin-bottom:
+          21px;
+
+      }
+
+
+      .section-title h2 {
+
+        font-size:
+          27px;
+
+      }
+
+
+      .concept-card {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 0;
+
+        padding:
+          28px 22px 25px;
+
+        border-radius:
+          22px;
+
+      }
+
+
+      .concept-intro {
+
+        padding-bottom:
+          25px;
+
+      }
+
+
+      .concept-kicker {
+
+        font-size:
+          8.5px;
+
+      }
+
+
+      .concept-heading {
+
+        font-size:
+          clamp(
+            35px,
+            11vw,
+            45px
+          );
+
+      }
+
+
+      .concept-caption {
+
+        margin-top:
+          17px;
+
+        font-size:
+          10px;
+
+      }
+
+
+      .concept-divider {
+
+        width: 100%;
+
+        height: 1px;
+
+        min-height: 0;
+
+        margin:
+          0 0 24px;
+
+        background:
+
+          linear-gradient(
+            to right,
+            rgba(232,121,46,.56),
+            rgba(232,121,46,.16),
+            transparent
+          );
+
+      }
+
+
+      .concept-description {
+
+        margin-bottom:
+          22px;
+
+        font-size:
+          12px;
+
+      }
+
+
+      .concept-tags {
+
+        gap: 7px;
+
+      }
+
+
+      .concept-tags span {
+
+        min-height:
+          29px;
+
+        padding:
+          5px 10px;
+
+        font-size:
+          9px;
+
+      }
+
+
+      /* MARCAS */
+
+      .brands-section {
+
+        padding:
+          0 0 53px;
+
+      }
+
+
+      .brands-grid {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 16px;
+
+      }
+
+
+      .clothing-brand {
+
+        min-height:
+          290px;
+
+        padding:
+          27px 23px;
+
+        border-radius:
+          22px;
+
+      }
+
+
+      .brand-logo-text {
+
+        font-size:
+          51px;
+
+      }
+
+
+      .brand-copy {
+
+        font-size:
+          11.5px;
+
+      }
+
+
+      .brand-quote {
+
+        font-size:
+          18px;
+
+      }
+
+
+      /* PROYECTOS */
+
+      .projects {
+
+        padding:
+          0 0 65px;
+
+      }
+
+
+      .projects-head {
+
+        margin-bottom:
+          21px;
+
+      }
+
+
+      .projects-title {
+
+        font-size:
+          31px;
+
+      }
+
+
+      .toolbar {
+
+        width: 100%;
+
+        flex-direction:
+          column;
+
+        align-items:
+          stretch;
+
+      }
+
+
+      .brand-filters {
+
+        width: 100%;
+
+      }
+
+
+      .filter-btn {
+
+        flex: 1;
+
+      }
+
+
+      .search {
+
+        width: 100%;
+
+      }
+
+
+      .grid {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 18px;
+
+      }
+
+
+      .modal {
+
+        padding: 10px;
+
+      }
+
+
+      .modal-box {
+
+        width: 100%;
+
+        max-height:
+          94vh;
+
+      }
+
+
+      .modal-body {
+
+        grid-template-columns:
+          1fr;
+
+        padding: 15px;
+
+      }
+
+
+      iframe.shot {
+
+        min-height: 220px;
+
+      }
+
+
+      .footer {
+
+        width:
+          calc(100% - 30px);
+
+      }
+
+    }
+
+
+    /* =====================================================
+       ACCESIBILIDAD
+       ===================================================== */
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+
+      outline:
+        3px solid
+        var(--orange);
+
+      outline-offset: 3px;
+
+    }
+
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- =====================================================
+       HERO
+       ===================================================== -->
+
+  <header class="hero">
+
+
+    <img
+      class="hero-cover"
+      src="assets/img/portada.jpeg"
+      alt=""
+    >
+
+
+    <div
+      class="hero-overlay"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- ===================================================
+         NAVEGACIÓN
+         =================================================== -->
+
+    <nav
+      class="topbar"
+      aria-label="Navegación principal"
+    >
+
+
+      <a
+        class="brand"
+        href="index.html"
+      >
+
+        <img
+          class="brand-avatar"
+          src="assets/img/perfil.jpeg"
+          alt=""
+        >
+
+        <span class="brand-name">
+          MoncadaArt
+        </span>
+
+      </a>
+
+
+      <div
+        class="nav-links"
+        id="mainNav"
+      >
+
+        <a href="index.html">
+          Inicio
+        </a>
+
+        <a href="index.html#projects">
+          Proyectos
+        </a>
+
+        <a href="index.html#about">
+          Sobre mí
+        </a>
+
+        <a href="index.html#contacto">
+          Contacto
+        </a>
+
+      </div>
+
+
+      <div class="social-nav">
+
+
+        <a
+          href="#"
+          aria-label="Instagram"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="5"
+            ></rect>
+
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+            ></circle>
+
+            <circle
+              cx="17.5"
+              cy="6.5"
+              r="1"
+            ></circle>
+
+          </svg>
+
+        </a>
+
+
+        <a
+          href="#"
+          class="behance"
+          aria-label="Behance"
+        >
+          Bē
+        </a>
+
+
+        <a
+          href="https://github.com/Christianmon0108"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M12 3a9 9 0 0 0-2.85 17.54c.45.08.62-.2.62-.43v-1.68c-2.52.55-3.05-1.07-3.05-1.07-.41-1.05-1-1.33-1-1.33-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.1.98 2.62.75.08-.58.31-.98.57-1.2-2.01-.23-4.13-1-4.13-4.47 0-.99.35-1.79.93-2.42-.09-.23-.4-1.15.09-2.39 0 0 .76-.24 2.48.92A8.6 8.6 0 0 1 12 8.28a8.6 8.6 0 0 1 2.26.3c1.72-1.16 2.48-.92 2.48-.92.49 1.24.18 2.16.09 2.39.58.63.93 1.43.93 2.42 0 3.48-2.12 4.24-4.14 4.47.33.28.61.83.61 1.67v2.48c0 .24.16.52.63.43A9 9 0 0 0 12 3Z"
+            ></path>
+
+          </svg>
+
+        </a>
+
+      </div>
+
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+      >
+
+        <span
+          class="theme-icon"
+          id="themeIcon"
+        >
+          ☾
+        </span>
+
+        <span
+          class="theme-text"
+          id="themeText"
+        >
+          Oscuro
+        </span>
+
+      </button>
+
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+
+    </nav>
+
+
+    <!-- ===================================================
+         HERO CONTENT
+         =================================================== -->
+
+    <div class="hero-content">
+
+
+      <p class="breadcrumb">
+        Portafolio / Marca de ropa
+      </p>
+
+
+      <h1>
+        Marca de
+        <br>
+        ropa
+      </h1>
+
+
+      <p class="hero-description">
+        Desarrollo identidades y conceptos para ropa deportiva,
+        explorando desde propuestas elegantes y minimalistas
+        hasta prendas con personalidad, humor y mensajes que
+        conectan con quien las usa.
+      </p>
+
+
+      <div class="hero-tools">
+
+        <span>
+          Branding
+        </span>
+
+        <span>
+          Diseño de prendas
+        </span>
+
+        <span>
+          Identidad visual
+        </span>
+
+        <span>
+          Sportswear
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+  </header>
+
+
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
+
+  <main class="container">
+
+
+    <!-- ===================================================
+         CONCEPTO
+         =================================================== -->
+
+    <section class="concept-section">
+
+
+      <div class="section-title">
+
+        <span>
+          ✦
+        </span>
+
+        <h2>
+          Concepto
+        </h2>
+
+      </div>
+
+
+      <div class="concept-card">
+
+
+        <!-- IZQUIERDA -->
+
+        <div class="concept-intro">
+
+
+          <span class="concept-kicker">
+            Identidad · Moda · Personalidad
+          </span>
+
+
+          <h3 class="concept-heading">
+
+            Una idea,
+            <br>
+
+            dos formas de
+
+            <strong>
+              vestirla.
+            </strong>
+
+          </h3>
+
+
+          <p class="concept-caption">
+            Dos marcas deportivas con personalidades distintas.
+          </p>
+
+
+        </div>
+
+
+        <!-- DIVISOR -->
+
+        <div
+          class="concept-divider"
+          aria-hidden="true"
+        ></div>
+
+
+        <!-- DERECHA -->
+
+        <div class="concept-info">
+
+
+          <p class="concept-description">
+
+            Este proyecto explora dos maneras distintas de entender
+            la ropa deportiva. Previal busca una estética elegante,
+            limpia y sofisticada, mientras que Nela utiliza diseño,
+            humor y frases cotidianas para crear prendas más casuales,
+            expresivas y cercanas.
+
+          </p>
+
+
+          <div class="concept-tags">
+
+            <span>
+              Sportswear
+            </span>
+
+            <span>
+              Branding
+            </span>
+
+            <span>
+              Diseño gráfico
+            </span>
+
+            <span>
+              Diseño textil
+            </span>
+
+            <span>
+              Identidad de marca
+            </span>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+    <!-- ===================================================
+         DOS MARCAS
+         =================================================== -->
+
+    <section class="brands-section">
+
+
+      <div class="section-title">
+
+        <span>
+          ✦
+        </span>
+
+        <h2>
+          Las marcas
+        </h2>
+
+      </div>
+
+
+      <div class="brands-grid">
+
+
+        <!-- =================================================
+             PREVIAL
+             ================================================= -->
+
+        <article class="clothing-brand brand-previal">
+
+
+          <div>
+
+            <span class="brand-number">
+              01 · Performance / Elegance
+            </span>
+
+
+            <h3 class="brand-logo-text">
+              Previal
+            </h3>
+
+
+            <span class="brand-type">
+              Sportswear · Elegante
+            </span>
+
+
+            <p class="brand-copy">
+
+              Una marca deportiva de estética limpia, elegante
+              y contemporánea. Previal busca prendas funcionales
+              que puedan sentirse deportivas sin perder una
+              presencia sobria y sofisticada.
+
+            </p>
+
+          </div>
+
+
+          <div class="brand-quote">
+            Rendimiento con presencia.
+          </div>
+
+
+        </article>
+
+
+        <!-- =================================================
+             NELA
+             ================================================= -->
+
+        <article class="clothing-brand brand-nela">
+
+
+          <div>
+
+            <span class="brand-number">
+              02 · Sport / Personality
+            </span>
+
+
+            <h3 class="brand-logo-text">
+              Nela
+            </h3>
+
+
+            <span class="brand-type">
+              Sportswear · Divertido
+            </span>
+
+
+            <p class="brand-copy">
+
+              Una marca deportiva con una personalidad más libre,
+              divertida y social. Nela mezcla ropa para entrenar
+              con diseños, frases y situaciones que cualquier
+              persona que va al gym puede reconocer.
+
+            </p>
+
+          </div>
+
+
+          <div class="brand-quote">
+            “Vine a entrenar, pero me quedé al chisme.”
+          </div>
+
+
+        </article>
+
+
+      </div>
+
+
+    </section>
+
+
+    <!-- ===================================================
+         PROYECTOS
+         =================================================== -->
+
+    <section class="projects">
+
+
+      <div class="projects-head">
+
+
+        <div>
+
+          <span class="projects-kicker">
+            Colecciones
+          </span>
+
+          <h2 class="projects-title">
+            Diseños y prendas
+          </h2>
+
+        </div>
+
+
+        <!-- =================================================
+             FILTROS
+             ================================================= -->
+
+        <div class="toolbar">
+
+
+          <div
+            class="brand-filters"
+            aria-label="Filtrar por marca"
+          >
+
+            <button
+              class="filter-btn active"
+              type="button"
+              data-brand="todos"
+            >
+              Todos
+            </button>
+
+
+            <button
+              class="filter-btn"
+              type="button"
+              data-brand="previal"
+            >
+              Previal
+            </button>
+
+
+            <button
+              class="filter-btn"
+              type="button"
+              data-brand="nela"
+            >
+              Nela
+            </button>
+
+
+          </div>
+
+
+          <!-- BUSCADOR -->
+
+          <label
+            class="search"
+            for="q"
+          >
+
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="currentColor"
+                stroke-width="2"
+              ></circle>
+
+              <path
+                d="M20 20L16.5 16.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              ></path>
+
+            </svg>
+
+
+            <input
+              id="q"
+              type="search"
+              placeholder="Buscar diseño..."
+              autocomplete="off"
+            >
+
+          </label>
+
+
+        </div>
+
+
+      </div>
+
+
+      <div
+        id="grid"
+        class="grid"
+      ></div>
+
+
+    </section>
+
+
+  </main>
+
+
+  <!-- =====================================================
+       MODAL
+       ===================================================== -->
+
+  <div
+    id="modal"
+    class="modal"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+  >
+
+
+    <div class="modal-box">
+
+
+      <div class="modal-head">
+
+
+        <div>
+
+          <span class="modal-label">
+            Diseño de marca
+          </span>
+
+          <h2
+            class="modal-title"
+            id="modalTitle"
+          >
+            Proyecto
+          </h2>
+
+        </div>
+
+
+        <button
+          class="close"
+          id="modalClose"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ✕
+        </button>
+
+
+      </div>
+
+
+      <div class="modal-body">
+
+
+        <div
+          class="modal-media"
+          id="modalMedia"
+        ></div>
+
+
+        <div class="modal-info">
+
+
+          <span
+            class="modal-brand"
+            id="modalBrand"
+          >
+            Marca
+          </span>
+
+
+          <p
+            class="modal-description"
+            id="modalDescription"
+          >
+            Sin descripción.
+          </p>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="footer">
+
+    <p>
+
+      ©
+      <span id="currentYear"></span>
+      MoncadaArt ·
+
+      <a href="index.html">
+        Volver al inicio
+      </a>
+
+    </p>
+
+  </footer>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+       ===================================================== -->
+
+  <script>
+
+
+    /* =====================================================
+       TEMA
+       ===================================================== */
+
+    const themeToggle =
+      document.getElementById(
+        "themeToggle"
+      );
+
+    const themeIcon =
+      document.getElementById(
+        "themeIcon"
+      );
+
+    const themeText =
+      document.getElementById(
+        "themeText"
+      );
+
+
+    function automaticTheme() {
+
+      const hour =
+        new Date().getHours();
+
+      return (
+        hour >= 7 &&
+        hour < 19
+      )
+        ? "light"
+        : "dark";
+
+    }
+
+
+    function updateThemeButton() {
+
+      const theme =
+        document.documentElement
+          .getAttribute(
+            "data-theme"
+          );
+
+
+      if (
+        theme === "dark"
+      ) {
+
+        themeIcon.textContent =
+          "☀";
+
+        themeText.textContent =
+          "Claro";
+
+      }
+
+      else {
+
+        themeIcon.textContent =
+          "☾";
+
+        themeText.textContent =
+          "Oscuro";
+
+      }
+
+    }
+
+
+    function applyTheme(
+      theme
+    ) {
+
+      document.documentElement
+        .setAttribute(
+          "data-theme",
+          theme
+        );
+
+
+      const metaTheme =
+        document.querySelector(
+          'meta[name="theme-color"]'
+        );
+
+
+      if (
+        metaTheme
+      ) {
+
+        metaTheme.setAttribute(
+          "content",
+          theme === "dark"
+            ? "#10100e"
+            : "#f6efe5"
+        );
+
+      }
+
+
+      updateThemeButton();
+
+    }
+
+
+    applyTheme(
+
+      sessionStorage.getItem(
+        "moncada-theme"
+      )
+
+      ||
+
+      automaticTheme()
+
+    );
+
+
+    themeToggle.addEventListener(
+      "click",
+      () => {
+
+        const current =
+          document.documentElement
+            .getAttribute(
+              "data-theme"
+            );
+
+
+        const next =
+          current === "dark"
+            ? "light"
+            : "dark";
+
+
+        sessionStorage.setItem(
+          "moncada-theme",
+          next
+        );
+
+
+        applyTheme(
+          next
+        );
+
+      }
+    );
+
+
+    /* =====================================================
+       MENÚ MÓVIL
+       ===================================================== */
+
+    const menuToggle =
+      document.getElementById(
+        "menuToggle"
+      );
+
+    const mainNav =
+      document.getElementById(
+        "mainNav"
+      );
+
+
+    menuToggle.addEventListener(
+      "click",
+      () => {
+
+        const open =
+          mainNav.classList.toggle(
+            "open"
+          );
+
+
+        menuToggle.classList.toggle(
+          "active",
+          open
+        );
+
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          String(open)
+        );
+
+      }
+    );
+
+
+    mainNav
+      .querySelectorAll("a")
+      .forEach(
+        link => {
+
+          link.addEventListener(
+            "click",
+            () => {
+
+              mainNav.classList.remove(
+                "open"
+              );
+
+              menuToggle.classList.remove(
+                "active"
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    /* =====================================================
+       AÑO
+       ===================================================== */
+
+    document.getElementById(
+      "currentYear"
+    ).textContent =
+      new Date().getFullYear();
+
+
+    /* =====================================================
+       ELEMENTOS
+       ===================================================== */
+
+    const GRID =
+      document.getElementById(
+        "grid"
+      );
+
+
+    const SEARCH =
+      document.getElementById(
+        "q"
+      );
+
+
+    const FILTERS =
+      document.querySelectorAll(
+        ".filter-btn"
+      );
+
+
+    const MODAL =
+      document.getElementById(
+        "modal"
+      );
+
+
+    const MODAL_TITLE =
+      document.getElementById(
+        "modalTitle"
+      );
+
+
+    const MODAL_DESCRIPTION =
+      document.getElementById(
+        "modalDescription"
+      );
+
+
+    const MODAL_BRAND =
+      document.getElementById(
+        "modalBrand"
+      );
+
+
+    const MODAL_MEDIA =
+      document.getElementById(
+        "modalMedia"
+      );
+
+
+    const MODAL_CLOSE =
+      document.getElementById(
+        "modalClose"
+      );
+
+
+    let projects = [];
+
+    let activeBrand =
+      "todos";
+
+
+    /* =====================================================
+       ESCAPE
+       ===================================================== */
+
+    function escapeHTML(
+      value = ""
+    ) {
+
+      return String(value)
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =====================================================
+       NORMALIZAR MARCA
+       ===================================================== */
+
+    function normalizeBrand(
+      value = ""
+    ) {
+
+      const text =
+        String(value)
+          .trim()
+          .toLowerCase();
+
+
+      if (
+        text.includes(
+          "nela"
+        )
+      ) {
+
+        return "nela";
+
+      }
+
+
+      if (
+        text.includes(
+          "previal"
+        )
+      ) {
+
+        return "previal";
+
+      }
+
+
+      return "previal";
+
+    }
+
+
+    function getBrandName(
+      value
+    ) {
+
+      return value === "nela"
+        ? "Nela"
+        : "Previal";
+
+    }
+
+
+    /* =====================================================
+       PLACEHOLDER
+       ===================================================== */
+
+    function placeholder(
+      title,
+      brand
+    ) {
+
+      const safe =
+        escapeHTML(
+          title || "Diseño"
+        );
+
+
+      const color =
+        brand === "nela"
+          ? "#b66f67"
+          : "#665f57";
+
+
+      const svg = `
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1000"
+          height="750"
+        >
+
+          <rect
+            width="100%"
+            height="100%"
+            fill="#eee4d8"
+          />
+
+          <circle
+            cx="500"
+            cy="295"
+            r="120"
+            fill="${color}"
+            opacity=".15"
+          />
+
+          <text
+            x="50%"
+            y="48%"
+            text-anchor="middle"
+            fill="${color}"
+            font-family="Arial"
+            font-size="45"
+            font-weight="bold"
+          >
+            ${
+              brand === "nela"
+                ? "NELA"
+                : "PREVIAL"
+            }
+          </text>
+
+          <text
+            x="50%"
+            y="60%"
+            text-anchor="middle"
+            fill="#68584d"
+            font-family="Arial"
+            font-size="25"
+          >
+            ${safe}
+          </text>
+
+        </svg>
+
+      `;
+
+
+      return (
+        "data:image/svg+xml," +
+        encodeURIComponent(svg)
+      );
+
+    }
+
+
+    /* =====================================================
+       FILTRAR
+       ===================================================== */
+
+    function applyFilters() {
+
+      const query =
+        (
+          SEARCH.value ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      const filtered =
+        projects.filter(
+          project => {
+
+
+            const matchesBrand =
+
+              activeBrand === "todos"
+
+              ||
+
+              project.brand ===
+              activeBrand;
+
+
+            const searchable =
+              [
+
+                project.title,
+                project.desc,
+                project.brandName,
+                project.categoria
+
+              ]
+
+              .filter(Boolean)
+
+              .join(" ")
+
+              .toLowerCase();
+
+
+            const matchesSearch =
+              searchable.includes(
+                query
+              );
+
+
+            return (
+              matchesBrand &&
+              matchesSearch
+            );
+
+          }
+        );
+
+
+      render(
+        filtered
+      );
+
+    }
+
+
+    /* =====================================================
+       RENDER
+       ===================================================== */
+
+    function render(
+      list
+    ) {
+
+      GRID.innerHTML =
+        "";
+
+
+      if (
+        !list.length
+      ) {
+
+        GRID.innerHTML = `
+
+          <div class="empty">
+
+            No encontré diseños
+            que coincidan con tu búsqueda.
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      list.forEach(
+        project => {
+
+
+          const card =
+            document.createElement(
+              "article"
+            );
+
+
+          card.className =
+            `project-card ${project.brand}`;
+
+
+          /* ===============================================
+             POSTER
+             =============================================== */
+
+          const posterWrap =
+            document.createElement(
+              "div"
+            );
+
+
+          posterWrap.className =
+            "poster-wrap";
+
+
+          const image =
+            document.createElement(
+              "img"
+            );
+
+
+          image.className =
+            "poster";
+
+
+          image.src =
+
+            project.cover
+
+            ||
+
+            placeholder(
+              project.title,
+              project.brand
+            );
+
+
+          image.alt =
+            project.title;
+
+
+          image.loading =
+            "lazy";
+
+
+          image.onerror =
+            () => {
+
+              image.onerror =
+                null;
+
+
+              image.src =
+                placeholder(
+                  project.title,
+                  project.brand
+                );
+
+            };
+
+
+          posterWrap.appendChild(
+            image
+          );
+
+
+          posterWrap.addEventListener(
+            "click",
+            () => {
+
+              openProject(
+                project
+              );
+
+            }
+          );
+
+
+          /* ===============================================
+             CONTENT
+             =============================================== */
+
+          const content =
+            document.createElement(
+              "div"
+            );
+
+
+          content.className =
+            "card-content";
+
+
+          content.innerHTML = `
+
+            <span
+              class="brand-pill ${project.brand}"
+            >
+              ${escapeHTML(
+                project.brandName
+              )}
+            </span>
+
+            <h3 class="project-title">
+
+              ${escapeHTML(
+                project.title
+              )}
+
+            </h3>
+
+            <p class="project-desc">
+
+              ${escapeHTML(
+                project.desc
+              )}
+
+            </p>
+
+          `;
+
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+
+          button.className =
+            "view-project";
+
+
+          button.type =
+            "button";
+
+
+          button.innerHTML =
+            `Ver diseño <span>→</span>`;
+
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              openProject(
+                project
+              );
+
+            }
+          );
+
+
+          content.appendChild(
+            button
+          );
+
+
+          card.appendChild(
+            posterWrap
+          );
+
+
+          card.appendChild(
+            content
+          );
+
+
+          GRID.appendChild(
+            card
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       FILTROS DE MARCA
+       ===================================================== */
+
+    FILTERS.forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+
+            FILTERS.forEach(
+              item => {
+
+                item.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+
+            button.classList.add(
+              "active"
+            );
+
+
+            activeBrand =
+              button.dataset.brand;
+
+
+            applyFilters();
+
+          }
+        );
+
+      }
+    );
+
+
+    SEARCH.addEventListener(
+      "input",
+      applyFilters
+    );
+
+
+    /* =====================================================
+       MODAL
+       ===================================================== */
+
+    function openProject(
+      project
+    ) {
+
+      MODAL_TITLE.textContent =
+        project.title;
+
+
+      MODAL_DESCRIPTION.textContent =
+        project.desc ||
+        "Sin descripción.";
+
+
+      MODAL_BRAND.textContent =
+        project.brandName;
+
+
+      MODAL_BRAND.className =
+        `modal-brand brand-pill ${project.brand}`;
+
+
+      MODAL_MEDIA.innerHTML =
+        "";
+
+
+      const media =
+        [];
+
+
+      if (
+        project.cover
+      ) {
+
+        media.push({
+          type: "image",
+          src: project.cover
+        });
+
+      }
+
+
+      (
+        project.gallery ||
+        []
+      ).forEach(
+        src => {
+
+          if (
+            src
+          ) {
+
+            media.push({
+              type: "image",
+              src: src
+            });
+
+          }
+
+        }
+      );
+
+
+      if (
+        !media.length
+      ) {
+
+        media.push({
+
+          type:
+            "image",
+
+          src:
+            placeholder(
+              project.title,
+              project.brand
+            )
+
+        });
+
+      }
+
+
+      media.forEach(
+        item => {
+
+
+          const image =
+            document.createElement(
+              "img"
+            );
+
+
+          image.className =
+            "shot";
+
+
+          image.src =
+            item.src;
+
+
+          image.alt =
+            project.title;
+
+
+          image.loading =
+            "lazy";
+
+
+          image.onerror =
+            () => {
+
+              image.onerror =
+                null;
+
+
+              image.src =
+                placeholder(
+                  project.title,
+                  project.brand
+                );
+
+            };
+
+
+          MODAL_MEDIA.appendChild(
+            image
+          );
+
+        }
+      );
+
+
+      MODAL.classList.add(
+        "open"
+      );
+
+
+      MODAL.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      document.body.style.overflow =
+        "hidden";
+
+
+      MODAL_CLOSE.focus();
+
+    }
+
+
+    function closeModal() {
+
+      MODAL_MEDIA.innerHTML =
+        "";
+
+
+      MODAL.classList.remove(
+        "open"
+      );
+
+
+      MODAL.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      document.body.style.overflow =
+        "";
+
+    }
+
+
+    MODAL_CLOSE.addEventListener(
+      "click",
+      closeModal
+    );
+
+
+    MODAL.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          MODAL
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+
+          closeModal();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       LOAD MANIFEST
+       ===================================================== */
+
+    async function loadProjects() {
+
+      try {
+
+        const response =
+          await fetch(
+
+            `Marca/manifest.json?v=${Date.now()}`,
+
+            {
+              cache: "no-store"
+            }
+
+          );
+
+
+        if (
+          !response.ok
+        ) {
+
+          throw new Error(
+            `HTTP ${response.status}`
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        projects =
+          Array.isArray(
+            data.projects
+          )
+
+            ? data.projects.map(
+                project => {
+
+
+                  const brand =
+                    normalizeBrand(
+
+                      project.marca
+
+                      ||
+
+                      project.brand
+
+                      ||
+
+                      project.categoria
+
+                      ||
+
+                      "Previal"
+
+                    );
+
+
+                  return {
+
+                    title:
+                      project.title ||
+                      "Diseño",
+
+                    desc:
+                      project.desc ||
+                      "",
+
+                    cover:
+                      project.cover ||
+                      "",
+
+                    gallery:
+                      Array.isArray(
+                        project.gallery
+                      )
+                        ? project.gallery
+                        : [],
+
+                    categoria:
+                      project.categoria ||
+                      "",
+
+                    brand:
+                      brand,
+
+                    brandName:
+                      getBrandName(
+                        brand
+                      )
+
+                  };
+
+                }
+              )
+
+            : [];
+
+
+        applyFilters();
+
+      }
+
+      catch (
+        error
+      ) {
+
+        console.error(
+          "Error cargando Marca/manifest.json:",
+          error
+        );
+
+
+        projects =
+          [];
+
+
+        render([]);
+
+      }
+
+    }
+
+
+    loadProjects();
+
+
+  </script>
+
+
+</body>
+
+</html>
