@@ -1,13 +1,60 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Edición (Foto y Video) — MoncadaArt</title>
+  <title>Edición — MoncadaArt</title>
+
+  <meta
+    name="description"
+    content="Proyectos de edición, producción audiovisual, motion graphics, fotografía y narrativa visual de Christian Moncada."
+  >
+
+  <meta
+    name="theme-color"
+    content="#f6efe5"
+  >
+
+
+  <!-- =====================================================
+       TEMA INICIAL
+       ===================================================== -->
+
+  <script>
+
+    (function () {
+
+      const savedTheme =
+        sessionStorage.getItem("moncada-theme");
+
+      const hour =
+        new Date().getHours();
+
+      const automaticTheme =
+        hour >= 7 && hour < 19
+          ? "light"
+          : "dark";
+
+      document.documentElement.setAttribute(
+        "data-theme",
+        savedTheme || automaticTheme
+      );
+
+    })();
+
+  </script>
+
+
+  <!-- =====================================================
+       FUENTES
+       ===================================================== -->
 
   <link
     rel="preconnect"
@@ -21,544 +68,3364 @@
   >
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
   >
 
+
   <style>
+
+    /* =====================================================
+       MONCADAART — EDICIÓN
+       ===================================================== */
+
+
+    /* =====================================================
+       VARIABLES
+       ===================================================== */
+
     :root {
-      --radius: 16px;
-      --accent: #8ab4ff;
-      --accent2: #55ffe1;
+
+      --orange: #e8792e;
+      --orange-dark: #cc6121;
+
+      --monky-blue: #315d78;
+
+      --max-width: 1420px;
+
+      --radius-sm: 18px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+
     }
+
+
+    /* =====================================================
+       MODO CLARO
+       ===================================================== */
+
+    html[data-theme="light"] {
+
+      --page-bg: #f6efe5;
+
+      --surface: #fffaf3;
+      --surface-2: #f2e6d7;
+      --surface-3: #ead9c5;
+
+      --ink: #2a201a;
+
+      --text-soft: #695c53;
+
+      --border:
+        rgba(119, 80, 51, .18);
+
+      --soft-border:
+        rgba(119, 80, 51, .10);
+
+      --shadow:
+        0 12px 30px
+        rgba(80, 52, 31, .08);
+
+      --shadow-hover:
+        0 20px 46px
+        rgba(80, 52, 31, .16);
+
+    }
+
+
+    /* =====================================================
+       MODO OSCURO
+       ===================================================== */
+
+    html[data-theme="dark"] {
+
+      --page-bg: #10100e;
+
+      --surface: #1c1a17;
+      --surface-2: #24211c;
+      --surface-3: #2b2721;
+
+      --ink: #fff5e7;
+
+      --text-soft: #c5b8ad;
+
+      --border:
+        rgba(225, 153, 75, .20);
+
+      --soft-border:
+        rgba(225, 153, 75, .10);
+
+      --shadow:
+        0 12px 32px
+        rgba(0, 0, 0, .28);
+
+      --shadow-hover:
+        0 22px 48px
+        rgba(0, 0, 0, .44);
+
+    }
+
+
+    /* =====================================================
+       RESET
+       ===================================================== */
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Poppins, system-ui, sans-serif;
     }
+
+
+    html {
+      scroll-behavior: smooth;
+    }
+
 
     body {
-      transition: background .4s, color .4s;
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--page-bg);
+
+      font-family:
+        "Poppins",
+        sans-serif;
+
+      line-height: 1.6;
+
+      transition:
+        background-color .4s ease,
+        color .4s ease;
+
     }
 
-    body.dark {
-      --bg: #0b0e13;
-      --card: #11151c;
-      --soft: #1c2230;
-      --ink: #eaf0ff;
-      --muted: #b1b8cc;
 
-      background: var(--bg);
-      color: var(--ink);
+    html[data-theme="light"] body {
+
+      background:
+
+        radial-gradient(
+          circle at 7% 15%,
+          rgba(232,121,46,.06),
+          transparent 25%
+        ),
+
+        radial-gradient(
+          circle at 93% 46%,
+          rgba(49,93,120,.05),
+          transparent 27%
+        ),
+
+        var(--page-bg);
+
     }
 
-    body.light {
-      --bg: #f5f6fb;
-      --card: #ffffff;
-      --soft: #e9eef4;
-      --ink: #0f1222;
-      --muted: #5a6275;
 
-      background: var(--bg);
-      color: var(--ink);
+    img {
+      max-width: 100%;
     }
 
-    /* =========================
+
+    a {
+      color: inherit;
+    }
+
+
+    button,
+    input {
+      font: inherit;
+    }
+
+
+    ::selection {
+
+      color: #fff;
+
+      background:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
        HERO
-       ========================= */
+       ===================================================== */
 
-    header.hero {
+    .hero {
+
       position: relative;
-      min-height: 36vh;
-      display: grid;
-      place-items: end center;
+
+      min-height: 390px;
+
       overflow: hidden;
-      border-bottom: 1px solid rgba(255, 255, 255, .06);
+
+      isolation: isolate;
+
+      display: flex;
+
+      align-items: flex-end;
+
+      border-radius:
+        0 0 34px 34px;
+
     }
 
-    .hero .cover {
+
+    .hero-cover {
+
       position: absolute;
+
       inset: 0;
+
+      z-index: -3;
+
       width: 100%;
       height: 100%;
+
       object-fit: cover;
-      filter: brightness(.6);
+
+      object-position:
+        center 46%;
+
     }
 
-    .overlay {
+
+    html[data-theme="light"]
+    .hero-cover {
+
+      filter:
+        brightness(.90)
+        saturate(.90);
+
+    }
+
+
+    html[data-theme="dark"]
+    .hero-cover {
+
+      filter:
+        brightness(.43)
+        saturate(.75);
+
+    }
+
+
+    /* =====================================================
+       HERO OVERLAY
+       ===================================================== */
+
+    .hero-overlay {
+
       position: absolute;
+
       inset: 0;
+
+      z-index: -2;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-overlay {
+
       background:
+
         linear-gradient(
-          180deg,
-          rgba(0, 0, 0, .45),
-          rgba(11, 14, 19, .95)
+          90deg,
+          rgba(246,239,229,.98) 0%,
+          rgba(246,239,229,.92) 24%,
+          rgba(246,239,229,.53) 48%,
+          rgba(246,239,229,.10) 70%
+        ),
+
+        linear-gradient(
+          to top,
+          var(--page-bg),
+          transparent 42%
         );
+
     }
 
-    .perfil {
-      position: relative;
+
+    html[data-theme="dark"]
+    .hero-overlay {
+
+      background:
+
+        linear-gradient(
+          90deg,
+          rgba(13,12,10,.94) 0%,
+          rgba(13,12,10,.78) 25%,
+          rgba(13,12,10,.43) 50%,
+          rgba(13,12,10,.18) 75%
+        ),
+
+        linear-gradient(
+          to top,
+          var(--page-bg),
+          transparent 44%
+        );
+
+    }
+
+
+    /* =====================================================
+       TOPBAR
+       ===================================================== */
+
+    .topbar {
+
+      position: absolute;
+
+      z-index: 20;
+
+      top: 0;
+      left: 50%;
+
+      transform:
+        translateX(-50%);
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      height: 84px;
+
       display: flex;
-      gap: 14px;
+
       align-items: center;
-      margin: 16px;
-      padding: 12px 14px;
-      background: rgba(255, 255, 255, .08);
-      border: 1px solid rgba(255, 255, 255, .18);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+
+      gap: 24px;
+
     }
 
-    body.light .perfil {
-      background: rgba(255, 255, 255, .85);
-      border: 1px solid rgba(0, 0, 0, .1);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+
+    /* =====================================================
+       BRAND
+       ===================================================== */
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      margin-right: auto;
+
+      text-decoration: none;
+
     }
 
-    .avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
+
+    .brand-avatar {
+
+      width: 50px;
+      height: 50px;
+
       object-fit: cover;
-      border: 3px solid rgba(255, 255, 255, .2);
+
+      border-radius: 50%;
+
+      border:
+        2px solid
+        rgba(216,137,66,.45);
+
+      box-shadow:
+        0 5px 14px
+        rgba(42,26,16,.12);
+
     }
 
-    .info h1 {
+
+    .brand-name {
+
+      font-family:
+        "Pacifico",
+        cursive;
+
+      font-size: 24px;
+
+      white-space: nowrap;
+
+    }
+
+
+    /* =====================================================
+       NAV
+       ===================================================== */
+
+    .nav-links {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 30px;
+
+    }
+
+
+    .nav-links a {
+
+      position: relative;
+
+      padding:
+        29px 0 18px;
+
+      color:
+        var(--ink);
+
+      text-decoration: none;
+
+      font-size: 14px;
+
+      font-weight: 500;
+
+    }
+
+
+    .nav-links a::after {
+
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: 11px;
+
+      width: 0;
+      height: 2px;
+
+      transform:
+        translateX(-50%);
+
+      background:
+        var(--orange);
+
+      border-radius: 999px;
+
+      transition:
+        width .22s ease;
+
+    }
+
+
+    .nav-links a:hover {
+
+      color:
+        var(--orange);
+
+    }
+
+
+    .nav-links a:hover::after {
+
+      width: 27px;
+
+    }
+
+
+    /* =====================================================
+       REDES
+       ===================================================== */
+
+    .social-nav {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 13px;
+
+    }
+
+
+    .social-nav a {
+
+      width: 30px;
+      height: 30px;
+
+      display: grid;
+
+      place-items: center;
+
+      color:
+        var(--ink);
+
+      text-decoration: none;
+
+      transition:
+        color .2s ease,
+        transform .2s ease;
+
+    }
+
+
+    .social-nav a:hover {
+
+      color:
+        var(--orange);
+
+      transform:
+        translateY(-2px);
+
+    }
+
+
+    .social-nav svg {
+
+      width: 20px;
+      height: 20px;
+
+      fill: none;
+
+      stroke:
+        currentColor;
+
+      stroke-width: 1.8;
+
+    }
+
+
+    .social-nav svg path {
+
+      fill:
+        currentColor;
+
+      stroke: none;
+
+    }
+
+
+    .behance {
+
+      font-size: 18px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       THEME
+       ===================================================== */
+
+    .theme-toggle {
+
+      min-width: 90px;
+
+      height: 40px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      padding:
+        0 13px;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 16px
+        rgba(0,0,0,.06);
+
+      transition:
+        transform .2s ease,
+        border-color .2s ease;
+
+    }
+
+
+    .theme-toggle:hover {
+
+      transform:
+        translateY(-2px);
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    .theme-icon {
+      font-size: 17px;
+    }
+
+
+    .theme-text {
+
+      font-size: 11px;
+
+      font-weight: 600;
+
+    }
+
+
+    /* =====================================================
+       MENÚ MÓVIL
+       ===================================================== */
+
+    .menu-toggle {
+
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 10px;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        12px;
+
+      cursor: pointer;
+
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 5px;
+
+    }
+
+
+    .menu-toggle span {
+
+      width: 19px;
+      height: 2px;
+
+      background:
+        currentColor;
+
+      border-radius: 999px;
+
+      transition:
+        .25s ease;
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(1) {
+
+      transform:
+        translateY(7px)
+        rotate(45deg);
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(2) {
+
+      opacity: 0;
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(3) {
+
+      transform:
+        translateY(-7px)
+        rotate(-45deg);
+
+    }
+
+
+    /* =====================================================
+       HERO CONTENT
+       ===================================================== */
+
+    .hero-content {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        130px 0 62px;
+
+    }
+
+
+    .breadcrumb {
+
+      margin:
+        0 0 8px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.8px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .hero-content h1 {
+
+      max-width: 850px;
+
       margin: 0;
-      font-size: clamp(22px, 3.6vw, 38px);
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          54px,
+          5.8vw,
+          84px
+        );
+
+      font-weight: 400;
+
+      line-height: .97;
+
+      letter-spacing:
+        -1.7px;
+
     }
 
-    .info p {
-      margin: .2rem 0 0;
-      color: var(--muted);
+
+    .hero-description {
+
+      max-width: 620px;
+
+      margin:
+        19px 0 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 14px;
+
+      line-height: 1.8;
+
     }
 
-    /* =========================
-       MAIN
-       MÁS ANCHO
-       ========================= */
 
-    main {
-      width: min(1600px, 98vw);
-      margin: 26px auto;
-      padding: 0 16px;
+    .hero-tools {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 7px;
+
+      margin-top: 19px;
+
     }
 
-    /* =========================
-       BUSCADOR
-       ========================= */
+
+    .hero-tools span {
+
+      padding:
+        6px 11px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        rgba(255,255,255,.05);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      font-size: 9px;
+
+      font-weight: 600;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-tools span {
+
+      background:
+        rgba(255,250,243,.66);
+
+    }
+
+
+    /* =====================================================
+       CONTAINER
+       ===================================================== */
+
+    .container {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+    }
+
+
+    /* =====================================================
+       PROCESO CREATIVO
+       ===================================================== */
+
+    .process-section {
+
+      position: relative;
+
+      padding:
+        68px 0 68px;
+
+    }
+
+
+    .process-heading {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 28px;
+
+    }
+
+
+    .process-heading h2 {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          28px,
+          2.5vw,
+          36px
+        );
+
+      font-weight: 400;
+
+      line-height: 1;
+
+    }
+
+
+    .process-star {
+
+      color:
+        var(--orange);
+
+      font-size: 14px;
+
+    }
+
+
+    /* =====================================================
+       PROCESS CARD
+       ===================================================== */
+
+    .process-card {
+
+      position: relative;
+
+      overflow: hidden;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0,.9fr)
+        1px
+        minmax(0,1.35fr);
+
+      align-items: stretch;
+
+      gap:
+        clamp(
+          34px,
+          4.5vw,
+          70px
+        );
+
+      padding:
+        clamp(
+          34px,
+          4vw,
+          52px
+        )
+        clamp(
+          30px,
+          4.5vw,
+          58px
+        );
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--soft-border);
+
+      border-radius:
+        28px;
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    .process-card::before {
+
+      content: "";
+
+      position: absolute;
+
+      top: -170px;
+      left: -120px;
+
+      width: 300px;
+      height: 300px;
+
+      border-radius: 50%;
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(232,121,46,.12),
+          transparent 70%
+        );
+
+      pointer-events: none;
+
+    }
+
+
+    .process-card::after {
+
+      content: "";
+
+      position: absolute;
+
+      right: -140px;
+      bottom: -170px;
+
+      width: 300px;
+      height: 300px;
+
+      border-radius: 50%;
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(49,93,120,.09),
+          transparent 70%
+        );
+
+      pointer-events: none;
+
+    }
+
+
+    html[data-theme="light"]
+    .process-card {
+
+      background:
+
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.45),
+          transparent 44%
+        ),
+
+        #fffaf3;
+
+    }
+
+
+    html[data-theme="dark"]
+    .process-card {
+
+      background:
+
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.025),
+          transparent 45%
+        ),
+
+        var(--surface);
+
+    }
+
+
+    /* =====================================================
+       PROCESO IZQUIERDA
+       ===================================================== */
+
+    .process-intro {
+
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      align-items:
+        flex-start;
+
+    }
+
+
+    .process-kicker {
+
+      display: block;
+
+      margin-bottom: 17px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.6px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .process-title {
+
+      max-width: 520px;
+
+      margin: 0;
+
+      color:
+        var(--ink);
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          39px,
+          4vw,
+          58px
+        );
+
+      font-weight: 400;
+
+      line-height: 1.08;
+
+      letter-spacing:
+        -.6px;
+
+    }
+
+
+    .process-title strong {
+
+      color:
+        var(--orange);
+
+      font-weight: 400;
+
+    }
+
+
+    .process-caption {
+
+      margin:
+        23px 0 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11px;
+
+      font-weight: 500;
+
+    }
+
+
+    /* =====================================================
+       DIVISOR
+       ===================================================== */
+
+    .process-divider {
+
+      position: relative;
+
+      z-index: 2;
+
+      width: 1px;
+
+      min-height: 205px;
+
+      background:
+
+        linear-gradient(
+          to bottom,
+          transparent,
+          rgba(232,121,46,.47) 18%,
+          rgba(232,121,46,.47) 82%,
+          transparent
+        );
+
+    }
+
+
+    /* =====================================================
+       PROCESO DERECHA
+       ===================================================== */
+
+    .process-info {
+
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+
+    .process-description {
+
+      max-width: 720px;
+
+      margin:
+        0 0 27px;
+
+      color:
+        var(--text-soft);
+
+      font-size:
+        clamp(
+          14px,
+          1.25vw,
+          16px
+        );
+
+      line-height: 1.9;
+
+    }
+
+
+    .process-tags {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 9px;
+
+    }
+
+
+    .process-tags span {
+
+      min-height: 32px;
+
+      display:
+        inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        6px 13px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      font-size: 10px;
+
+      font-weight: 600;
+
+      transition:
+        transform .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+
+    }
+
+
+    html[data-theme="light"]
+    .process-tags span {
+
+      background:
+        rgba(244,232,217,.65);
+
+    }
+
+
+    html[data-theme="light"]
+    .process-tags span:nth-child(2),
+    html[data-theme="light"]
+    .process-tags span:nth-child(4) {
+
+      background:
+        rgba(220,232,238,.62);
+
+      border-color:
+        rgba(49,93,120,.15);
+
+    }
+
+
+    html[data-theme="dark"]
+    .process-tags span {
+
+      background:
+        rgba(255,255,255,.035);
+
+    }
+
+
+    .process-tags span:hover {
+
+      transform:
+        translateY(-2px);
+
+      color:
+        var(--ink);
+
+      border-color:
+        rgba(232,121,46,.48);
+
+    }
+
+
+    /* =====================================================
+       PROYECTOS
+       ===================================================== */
+
+    .projects {
+
+      padding:
+        10px 0 82px;
+
+    }
+
+
+    .projects-head {
+
+      display: flex;
+
+      align-items:
+        flex-end;
+
+      justify-content:
+        space-between;
+
+      gap: 30px;
+
+      margin-bottom: 28px;
+
+    }
+
+
+    .section-heading {
+      margin: 0;
+    }
+
+
+    .section-kicker {
+
+      display: block;
+
+      margin-bottom: 3px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.5px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .section-heading h2 {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          32px,
+          3vw,
+          42px
+        );
+
+      font-weight: 400;
+
+    }
+
+
+    /* =====================================================
+       TOOLBAR
+       ===================================================== */
 
     .toolbar {
+
       display: flex;
-      gap: 10px;
+
       align-items: center;
-      justify-content: space-between;
-      margin: 10px 0 18px;
+
+      gap: 15px;
+
     }
+
 
     .search {
+
+      width: 345px;
+      height: 46px;
+
       display: flex;
+
       align-items: center;
-      gap: 8px;
-      background: var(--soft);
-      border: 1px solid rgba(255, 255, 255, .08);
-      padding: 10px 12px;
-      border-radius: 12px;
-      min-width: 280px;
+
+      gap: 9px;
+
+      padding:
+        0 15px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      box-shadow:
+        0 5px 15px
+        rgba(50,30,17,.04);
+
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+
     }
 
-    body.light .search {
-      border: 1px solid #e7e9f3;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, .1);
+
+    .search:focus-within {
+
+      border-color:
+        rgba(232,121,46,.55);
+
+      box-shadow:
+        0 7px 20px
+        rgba(181,95,38,.10);
+
     }
+
 
     .search input {
-      all: unset;
+
       width: 100%;
+
+      color:
+        var(--ink);
+
+      background:
+        transparent;
+
+      border: 0;
+
+      outline: none;
+
+      font-size: 12px;
+
     }
 
-    /* =========================
+
+    .search input::placeholder {
+
+      color:
+        var(--text-soft);
+
+      opacity: .72;
+
+    }
+
+
+    .project-count {
+
+      white-space: nowrap;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11px;
+
+    }
+
+
+    /* =====================================================
        GRID
-       ========================= */
+       ===================================================== */
 
     .grid {
+
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-      align-items: stretch;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap:
+        24px 22px;
+
     }
 
-    @media (max-width: 950px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
 
-    @media (max-width: 560px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .toolbar {
-        width: 100%;
-      }
-
-      .search {
-        width: 100%;
-        min-width: 0;
-      }
-    }
-
-    /* =========================
-       TARJETAS
-       ========================= */
+    /* =====================================================
+       CARD
+       ===================================================== */
 
     .card {
+
       position: relative;
+
+      min-width: 0;
+
       overflow: hidden;
+
       display: flex;
+
       flex-direction: column;
-      height: 100%;
-      background: var(--card);
-      border: 1px solid rgba(255, 255, 255, .06);
-      border-radius: var(--radius);
-      transition: transform .18s ease, box-shadow .18s ease;
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--soft-border);
+
+      border-radius:
+        var(--radius-md);
+
+      box-shadow:
+        var(--shadow);
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
     }
+
+
+    html[data-theme="light"]
+    .card {
+
+      background:
+
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.30),
+          transparent 40%
+        ),
+
+        var(--surface);
+
+    }
+
 
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, .35);
+
+      transform:
+        translateY(-5px);
+
+      border-color:
+        rgba(232,121,46,.30);
+
+      box-shadow:
+        var(--shadow-hover);
+
     }
 
-    .poster {
-      display: block;
-      width: 100%;
-      height: 190px;
-      object-fit: cover;
-      object-position: center;
-      background: #0f1a24;
-      flex-shrink: 0;
+
+    /* =====================================================
+       MEDIA
+       ===================================================== */
+
+    .poster-wrap {
+
+      position: relative;
+
+      overflow: hidden;
+
+      background:
+        #161616;
+
+      cursor: pointer;
+
     }
+
+
+    .poster {
+
+      display: block;
+
+      width: 100%;
+
+      aspect-ratio:
+        16 / 9;
+
+      object-fit: cover;
+
+      object-position: center;
+
+      transition:
+        transform .5s ease;
+
+    }
+
 
     .static-video {
       pointer-events: none;
     }
 
-    .titleWrap {
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
+
+    .card:hover
+    .poster {
+
+      transform:
+        scale(1.035);
+
     }
 
-    /* =========================
-       CATEGORÍA
-       ========================= */
 
-    .category {
-      display: inline-block;
-      width: max-content;
-      max-width: 100%;
-      margin-bottom: 8px;
-      padding: 4px 8px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #0a0f16;
+    .poster-wrap::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      pointer-events: none;
+
       background:
+
         linear-gradient(
-          135deg,
-          var(--accent),
-          var(--accent2)
+          to top,
+          rgba(15,12,9,.22),
+          transparent 52%
         );
+
     }
 
-    /* =========================
-       TÍTULO
-       ========================= */
+
+    /* =====================================================
+       CARD CONTENT
+       ===================================================== */
+
+    .card-content {
+
+      flex: 1;
+
+      display: flex;
+
+      flex-direction: column;
+
+      padding:
+        17px 18px 19px;
+
+    }
+
+
+    .project-tag {
+
+      align-self:
+        flex-start;
+
+      display:
+        inline-flex;
+
+      margin-bottom: 11px;
+
+      padding:
+        5px 10px;
+
+      color:
+        #965321;
+
+      background:
+        rgba(232,121,46,.10);
+
+      border:
+        1px solid
+        rgba(232,121,46,.16);
+
+      border-radius:
+        999px;
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        .4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    html[data-theme="dark"]
+    .project-tag {
+
+      color:
+        #f3a86f;
+
+      background:
+        rgba(232,121,46,.09);
+
+    }
+
+
+    .project-company {
+
+      margin:
+        -4px 0 8px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 9px;
+
+      font-weight: 600;
+
+      letter-spacing:
+        .3px;
+
+      text-transform:
+        uppercase;
+
+    }
+
 
     .title {
-      font-weight: 800;
-      font-size: 15px;
-      line-height: 1.3;
-      margin: 0 0 7px;
-      min-height: 39px;
 
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      margin:
+        0 0 8px;
+
+      font-size: 17px;
+
+      line-height: 1.38;
+
     }
 
-    /* =========================
-       DESCRIPCIÓN
-       ========================= */
 
     .desc {
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.45;
-      margin: 0 0 12px;
-      min-height: 54px;
 
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      line-clamp: 3;
-      -webkit-box-orient: vertical;
+      margin:
+        0 0 17px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11.5px;
+
+      line-height: 1.7;
+
+      display:
+        -webkit-box;
+
+      -webkit-line-clamp:
+        3;
+
+      -webkit-box-orient:
+        vertical;
+
       overflow: hidden;
+
     }
 
-    /* =========================
-       BOTONES
-       ========================= */
 
-    .btns {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .view-project {
+
+      align-self:
+        flex-start;
+
       margin-top: auto;
-    }
 
-    .btn {
-      display: inline-block;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 0;
+
+      color:
+        var(--orange);
+
       background:
-        linear-gradient(
-          135deg,
-          var(--accent),
-          var(--accent2)
-        );
-      color: #0a0f16;
-      font-size: 13px;
-      font-weight: 800;
-      text-decoration: none;
+        transparent;
+
+      border: 0;
+
+      cursor: pointer;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
     }
 
-    /* =========================
+
+    .view-project span {
+
+      display:
+        inline-block;
+
+      transition:
+        transform .2s ease;
+
+    }
+
+
+    .view-project:hover
+    span {
+
+      transform:
+        translateX(4px);
+
+    }
+
+
+    /* =====================================================
+       EMPTY
+       ===================================================== */
+
+    .empty {
+
+      grid-column:
+        1 / -1;
+
+      padding:
+        60px 20px;
+
+      color:
+        var(--text-soft);
+
+      text-align:
+        center;
+
+      background:
+        var(--surface);
+
+      border:
+        1px dashed
+        var(--border);
+
+      border-radius:
+        20px;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =====================================================
        MODAL
-       ========================= */
+       ===================================================== */
 
     .modal {
+
       position: fixed;
+
       inset: 0;
+
+      z-index: 100;
+
       display: none;
-      place-items: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, .62);
-      backdrop-filter: blur(7px);
-      z-index: 50;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      background:
+        rgba(6,6,5,.76);
+
+      backdrop-filter:
+        blur(9px);
+
     }
+
 
     .modal.open {
-      display: grid;
-    }
-
-    .modal .box {
-      width: min(1000px, 94vw);
-      max-height: min(88vh, 1000px);
-      border-radius: 20px;
-      overflow: hidden;
-      background: var(--card);
-      border: 1px solid rgba(255, 255, 255, .12);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
       display: flex;
-      flex-direction: column;
     }
 
-    .proj-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 14px 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, .10);
-      position: sticky;
-      top: 0;
-      background: var(--card);
-      z-index: 2;
-    }
 
-    .proj-title {
-      margin: 0;
-      font-size: 21px;
-      font-weight: 800;
-    }
+    .modal-box {
 
-    .close-btn {
-      all: unset;
-      cursor: pointer;
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, .08);
-      border: 1px solid rgba(255, 255, 255, .16);
-      flex-shrink: 0;
-    }
+      width:
+        min(
+          1080px,
+          94vw
+        );
 
-    body.light .close-btn {
-      background: #edf0f5;
-      border-color: #dde1ea;
-    }
+      max-height:
+        90vh;
 
-    /* =========================
-       CONTENIDO DEL MODAL
-       ========================= */
-
-    .proj {
-      display: grid;
-      grid-template-columns:
-        minmax(0, 1.3fr)
-        minmax(240px, .7fr);
-
-      gap: 18px;
-      padding: 18px;
       overflow: auto;
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        27px;
+
+      box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.50);
+
     }
 
-    @media (max-width: 800px) {
-      .proj {
-        grid-template-columns: 1fr;
-      }
+
+    .modal-head {
+
+      position: sticky;
+
+      z-index: 5;
+
+      top: 0;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content:
+        space-between;
+
+      gap: 20px;
+
+      padding:
+        17px 20px;
+
+      background:
+        var(--surface);
+
+      border-bottom:
+        1px solid
+        var(--soft-border);
+
     }
+
+
+    .modal-label {
+
+      display: block;
+
+      margin-bottom: 1px;
+
+      color:
+        var(--orange);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .modal-title {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size: 22px;
+
+      font-weight: 400;
+
+    }
+
+
+    .close {
+
+      width: 40px;
+      height: 40px;
+
+      display: grid;
+
+      place-items: center;
+
+      flex:
+        0 0 auto;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 50%;
+
+      cursor: pointer;
+
+    }
+
+
+    .close:hover {
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
+       MODAL BODY
+       ===================================================== */
+
+    .modal-body {
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0,1.2fr)
+        minmax(280px,.8fr);
+
+      gap: 32px;
+
+      padding: 25px;
+
+    }
+
 
     .modal-media {
       min-width: 0;
     }
 
-    .proj-hero {
+
+    .shot {
+
       display: block;
+
       width: 100%;
-      background: #0f1a24;
+
+      max-height: 62vh;
+
+      margin-bottom: 12px;
+
+      object-fit: contain;
+
+      background:
+        #151515;
+
+      border-radius:
+        18px;
+
+    }
+
+
+    iframe.shot {
+
+      min-height: 330px;
+
       border: 0;
-      border-radius: 14px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+
     }
 
-    iframe.proj-hero {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      min-height: 300px;
-    }
-
-    video.proj-hero {
-      width: 100%;
-      max-height: 65vh;
-      object-fit: contain;
-    }
-
-    img.proj-hero {
-      width: 100%;
-      max-height: 65vh;
-      object-fit: contain;
-    }
 
     .modal-info {
-      min-width: 0;
-    }
 
-    .project-meta {
-      margin-bottom: 16px;
       display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+
+    .modal-info-kicker {
+
+      margin:
+        0 0 10px;
+
+      color:
+        var(--orange);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .modal-description {
+
+      margin:
+        0 0 18px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 13px;
+
+      line-height: 1.85;
+
+    }
+
+
+    .modal-tags {
+
+      display: flex;
+
       flex-wrap: wrap;
+
       gap: 8px;
+
     }
 
-    .meta-item {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 20px;
-      background: var(--soft);
-      font-size: 12px;
-      color: var(--muted);
+
+    .modal-tags span {
+
+      padding:
+        7px 11px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      font-size: 10px;
+
+      font-weight: 600;
+
     }
 
-    .proj-sub {
-      color: var(--muted);
-      margin-top: 6px;
-      line-height: 1.7;
-      font-size: 14px;
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .footer {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        22px 0 35px;
+
+      color:
+        var(--text-soft);
+
+      text-align: center;
+
+      border-top:
+        1px solid
+        var(--soft-border);
+
     }
+
+
+    .footer p {
+
+      margin: 0;
+
+      font-size: 11px;
+
+    }
+
+
+    .footer a {
+
+      color:
+        var(--orange);
+
+      text-decoration: none;
+
+    }
+
+
+    /* =====================================================
+       TABLET
+       ===================================================== */
+
+    @media
+    (max-width:1050px) {
+
+      .grid {
+
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          );
+
+      }
+
+    }
+
+
+    @media
+    (max-width:900px) {
+
+      .social-nav {
+        display: none;
+      }
+
+
+      .menu-toggle {
+        display: flex;
+      }
+
+
+      .nav-links {
+
+        position: absolute;
+
+        top: 70px;
+        right: 0;
+
+        width:
+          min(
+            270px,
+            calc(100vw - 30px)
+          );
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 0;
+
+        padding: 8px;
+
+        opacity: 0;
+
+        visibility:
+          hidden;
+
+        transform:
+          translateY(-8px);
+
+        background:
+          var(--surface);
+
+        border:
+          1px solid
+          var(--border);
+
+        border-radius:
+          17px;
+
+        box-shadow:
+          var(--shadow-hover);
+
+        transition:
+          .22s ease;
+
+      }
+
+
+      .nav-links.open {
+
+        opacity: 1;
+
+        visibility:
+          visible;
+
+        transform:
+          translateY(0);
+
+      }
+
+
+      .nav-links a {
+
+        padding:
+          12px 14px;
+
+      }
+
+
+      .nav-links a::after {
+        display: none;
+      }
+
+
+      .process-card {
+
+        grid-template-columns:
+          minmax(0,.85fr)
+          1px
+          minmax(0,1.15fr);
+
+        gap: 30px;
+
+        padding:
+          36px 30px;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media
+    (max-width:640px) {
+
+
+      .hero {
+
+        min-height:
+          500px;
+
+        border-radius:
+          0 0 24px 24px;
+
+      }
+
+
+      .hero-cover {
+
+        object-position:
+          57% center;
+
+      }
+
+
+      html[data-theme="light"]
+      .hero-overlay {
+
+        background:
+
+          linear-gradient(
+            to bottom,
+            rgba(246,239,229,.16),
+            rgba(246,239,229,.16) 32%,
+            rgba(246,239,229,.84) 70%,
+            var(--page-bg) 100%
+          );
+
+      }
+
+
+      html[data-theme="dark"]
+      .hero-overlay {
+
+        background:
+
+          linear-gradient(
+            to bottom,
+            rgba(10,10,9,.21),
+            rgba(10,10,9,.28) 33%,
+            rgba(10,10,9,.83) 71%,
+            var(--page-bg) 100%
+          );
+
+      }
+
+
+      .topbar {
+
+        width:
+          calc(100% - 26px);
+
+        height: 70px;
+
+        gap: 8px;
+
+      }
+
+
+      .brand {
+        gap: 8px;
+      }
+
+
+      .brand-avatar {
+
+        width: 40px;
+        height: 40px;
+
+      }
+
+
+      .brand-name {
+        font-size: 17px;
+      }
+
+
+      .theme-toggle {
+
+        min-width: 42px;
+
+        width: 42px;
+        height: 42px;
+
+        padding: 0;
+
+      }
+
+
+      .theme-text {
+        display: none;
+      }
+
+
+      .hero-content {
+
+        width:
+          calc(100% - 34px);
+
+        padding:
+          245px 0 43px;
+
+      }
+
+
+      .breadcrumb {
+        font-size: 8px;
+      }
+
+
+      .hero-content h1 {
+
+        font-size:
+          clamp(
+            46px,
+            13vw,
+            63px
+          );
+
+      }
+
+
+      .hero-description {
+
+        max-width: 340px;
+
+        margin-top:
+          14px;
+
+        font-size:
+          11.5px;
+
+        line-height:
+          1.7;
+
+      }
+
+
+      .hero-tools {
+        margin-top: 15px;
+      }
+
+
+      .hero-tools span {
+
+        padding:
+          5px 9px;
+
+        font-size: 8px;
+
+      }
+
+
+      .container {
+
+        width:
+          calc(100% - 30px);
+
+      }
+
+
+      /* PROCESS */
+
+      .process-section {
+
+        padding:
+          50px 0 48px;
+
+      }
+
+
+      .process-heading {
+
+        margin-bottom:
+          21px;
+
+      }
+
+
+      .process-heading h2 {
+
+        font-size:
+          27px;
+
+      }
+
+
+      .process-card {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 0;
+
+        padding:
+          28px 22px 25px;
+
+        border-radius:
+          22px;
+
+      }
+
+
+      .process-intro {
+
+        padding-bottom:
+          25px;
+
+      }
+
+
+      .process-kicker {
+
+        margin-bottom:
+          12px;
+
+        font-size:
+          8.5px;
+
+      }
+
+
+      .process-title {
+
+        max-width:
+          100%;
+
+        font-size:
+          clamp(
+            35px,
+            11vw,
+            45px
+          );
+
+        line-height:
+          1.06;
+
+      }
+
+
+      .process-caption {
+
+        margin-top:
+          17px;
+
+        font-size:
+          10px;
+
+      }
+
+
+      .process-divider {
+
+        width: 100%;
+
+        height: 1px;
+
+        min-height: 0;
+
+        margin:
+          0 0 24px;
+
+        background:
+
+          linear-gradient(
+            to right,
+            rgba(232,121,46,.56),
+            rgba(232,121,46,.16),
+            transparent
+          );
+
+      }
+
+
+      .process-description {
+
+        margin-bottom:
+          22px;
+
+        font-size:
+          12px;
+
+        line-height:
+          1.8;
+
+      }
+
+
+      .process-tags {
+        gap: 7px;
+      }
+
+
+      .process-tags span {
+
+        min-height:
+          29px;
+
+        padding:
+          5px 10px;
+
+        font-size:
+          9px;
+
+      }
+
+
+      /* PROJECTS */
+
+      .projects {
+
+        padding:
+          2px 0 65px;
+
+      }
+
+
+      .projects-head {
+
+        display: block;
+
+        margin-bottom:
+          22px;
+
+      }
+
+
+      .section-heading {
+
+        margin-bottom:
+          18px;
+
+      }
+
+
+      .section-heading h2 {
+
+        font-size:
+          31px;
+
+      }
+
+
+      .toolbar {
+
+        width: 100%;
+
+      }
+
+
+      .search {
+
+        flex: 1;
+
+        width: auto;
+
+        height: 43px;
+
+      }
+
+
+      .project-count {
+        display: none;
+      }
+
+
+      .grid {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 18px;
+
+      }
+
+
+      .card {
+
+        border-radius:
+          20px;
+
+      }
+
+
+      .card-content {
+
+        padding:
+          15px 16px 18px;
+
+      }
+
+
+      .title {
+
+        font-size:
+          17px;
+
+      }
+
+
+      .desc {
+
+        font-size:
+          11px;
+
+        -webkit-line-clamp:
+          4;
+
+      }
+
+
+      /* MODAL */
+
+      .modal {
+        padding: 10px;
+      }
+
+
+      .modal-box {
+
+        width: 100%;
+
+        max-height:
+          94vh;
+
+        border-radius:
+          22px;
+
+      }
+
+
+      .modal-head {
+
+        padding:
+          14px 15px;
+
+      }
+
+
+      .modal-title {
+
+        font-size:
+          19px;
+
+      }
+
+
+      .modal-body {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 19px;
+
+        padding: 15px;
+
+      }
+
+
+      iframe.shot {
+
+        min-height:
+          220px;
+
+      }
+
+
+      .modal-description {
+
+        font-size:
+          12px;
+
+      }
+
+
+      .footer {
+
+        width:
+          calc(100% - 30px);
+
+      }
+
+    }
+
+
+    @media
+    (max-width:420px) {
+
+      .brand-name {
+        font-size: 15px;
+      }
+
+
+      .hero-content h1 {
+
+        font-size:
+          46px;
+
+      }
+
+
+      .process-card {
+
+        padding:
+          25px 18px;
+
+      }
+
+
+      .process-title {
+
+        font-size:
+          36px;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       ACCESIBILIDAD
+       ===================================================== */
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+
+      outline:
+        3px solid
+        var(--orange);
+
+      outline-offset:
+        3px;
+
+    }
+
+
+    @media
+    (prefers-reduced-motion:reduce) {
+
+      *,
+      *::before,
+      *::after {
+
+        scroll-behavior:
+          auto !important;
+
+        animation-duration:
+          .01ms !important;
+
+        transition-duration:
+          .01ms !important;
+
+      }
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
+
+  <!-- =====================================================
+       PORTADA EDICIÓN
+       ===================================================== -->
+
   <header class="hero">
 
+
     <img
-      class="cover"
+      class="hero-cover"
       src="assets/img/portada.jpeg"
-      alt="Portada"
+      alt=""
     >
 
-    <div class="overlay"></div>
 
-    <div class="perfil">
+    <div
+      class="hero-overlay"
+      aria-hidden="true"
+    ></div>
 
-      <img
-        class="avatar"
-        src="assets/img/perfil.jpeg"
-        alt="Perfil"
+
+    <!-- ===================================================
+         NAV
+         =================================================== -->
+
+    <nav
+      class="topbar"
+      aria-label="Navegación principal"
+    >
+
+
+      <a
+        class="brand"
+        href="index.html"
       >
 
-      <div class="info">
-        <h1>Edición (Foto y Video)</h1>
-        <p>Color, ritmo, motion y narrativa visual.</p>
+        <img
+          class="brand-avatar"
+          src="assets/img/perfil.jpeg"
+          alt=""
+        >
+
+        <span class="brand-name">
+          MoncadaArt
+        </span>
+
+      </a>
+
+
+      <div
+        class="nav-links"
+        id="mainNav"
+      >
+
+        <a href="index.html">
+          Inicio
+        </a>
+
+        <a href="index.html#projects">
+          Proyectos
+        </a>
+
+        <a href="index.html#about">
+          Sobre mí
+        </a>
+
+        <a href="index.html#contacto">
+          Contacto
+        </a>
+
       </div>
 
+
+      <div class="social-nav">
+
+
+        <a
+          href="#"
+          aria-label="Instagram"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="5"
+            ></rect>
+
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+            ></circle>
+
+            <circle
+              cx="17.5"
+              cy="6.5"
+              r="1"
+            ></circle>
+
+          </svg>
+
+        </a>
+
+
+        <a
+          href="#"
+          class="behance"
+          aria-label="Behance"
+        >
+          Bē
+        </a>
+
+
+        <a
+          href="https://github.com/Christianmon0108"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M12 3a9 9 0 0 0-2.85 17.54c.45.08.62-.2.62-.43v-1.68c-2.52.55-3.05-1.07-3.05-1.07-.41-1.05-1-1.33-1-1.33-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.1.98 2.62.75.08-.58.31-.98.57-1.2-2.01-.23-4.13-1-4.13-4.47 0-.99.35-1.79.93-2.42-.09-.23-.4-1.15.09-2.39 0 0 .76-.24 2.48.92A8.6 8.6 0 0 1 12 8.28a8.6 8.6 0 0 1 2.26.3c1.72-1.16 2.48-.92 2.48-.92.49 1.24.18 2.16.09 2.39.58.63.93 1.43.93 2.42 0 3.48-2.12 4.24-4.14 4.47.33.28.61.83.61 1.67v2.48c0 .24.16.52.63.43A9 9 0 0 0 12 3Z"
+            ></path>
+
+          </svg>
+
+        </a>
+
+      </div>
+
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="Cambiar tema"
+      >
+
+        <span
+          class="theme-icon"
+          id="themeIcon"
+        >
+          ☾
+        </span>
+
+        <span
+          class="theme-text"
+          id="themeText"
+        >
+          Oscuro
+        </span>
+
+      </button>
+
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+
+    </nav>
+
+
+    <!-- ===================================================
+         HERO CONTENT
+         =================================================== -->
+
+    <div class="hero-content">
+
+
+      <p class="breadcrumb">
+        Portafolio / Edición
+      </p>
+
+
+      <h1>
+        Edición &amp;
+        <br>
+        Producción Audiovisual
+      </h1>
+
+
+      <p class="hero-description">
+        Color, ritmo, composición y movimiento para transformar
+        imágenes y video en piezas visuales con intención,
+        personalidad y narrativa.
+      </p>
+
+
+      <div class="hero-tools">
+
+        <span>
+          Edición de video
+        </span>
+
+        <span>
+          Fotografía
+        </span>
+
+        <span>
+          Motion Graphics
+        </span>
+
+        <span>
+          Color
+        </span>
+
+      </div>
+
+
     </div>
+
 
   </header>
 
-  <main>
 
-    <div class="toolbar">
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
 
-      <div class="search">
+  <main class="container">
 
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle
-            cx="11"
-            cy="11"
-            r="7"
-            stroke="currentColor"
-            stroke-width="2"
-          />
 
-          <path
-            d="M20 20L16.5 16.5"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-        </svg>
+    <!-- ===================================================
+         PROCESO CREATIVO
+         =================================================== -->
 
-        <input
-          id="q"
-          placeholder="Buscar proyecto, empresa o categoría..."
-          aria-label="Buscar proyectos"
-        >
+    <section class="process-section">
+
+
+      <div class="process-heading">
+
+        <span class="process-star">
+          ✦
+        </span>
+
+        <h2>
+          Proceso creativo
+        </h2>
 
       </div>
 
-    </div>
 
-    <section
-      id="grid"
-      class="grid"
-    ></section>
+      <div class="process-card">
+
+
+        <!-- IZQUIERDA -->
+
+        <div class="process-intro">
+
+          <span class="process-kicker">
+            Ritmo · Color · Movimiento
+          </span>
+
+
+          <h3 class="process-title">
+            Del material
+            <br>
+            a la <strong>historia.</strong>
+          </h3>
+
+
+          <p class="process-caption">
+            Cada corte tiene una intención.
+          </p>
+
+        </div>
+
+
+        <!-- DIVISOR -->
+
+        <div
+          class="process-divider"
+          aria-hidden="true"
+        ></div>
+
+
+        <!-- DERECHA -->
+
+        <div class="process-info">
+
+
+          <p class="process-description">
+            Trabajo el ritmo, la composición, el color y el movimiento
+            para transformar material visual en piezas capaces de
+            comunicar una idea. Aquí encontrarás proyectos de edición
+            de video, fotografía, motion graphics y contenido creado
+            para distintos formatos y medios digitales.
+          </p>
+
+
+          <div class="process-tags">
+
+            <span>
+              Montaje
+            </span>
+
+            <span>
+              Color
+            </span>
+
+            <span>
+              Motion Graphics
+            </span>
+
+            <span>
+              Fotografía
+            </span>
+
+            <span>
+              Narrativa visual
+            </span>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+    <!-- ===================================================
+         PROYECTOS
+         =================================================== -->
+
+    <section class="projects">
+
+
+      <div class="projects-head">
+
+
+        <div class="section-heading">
+
+          <span class="section-kicker">
+            Galería
+          </span>
+
+          <h2>
+            Proyectos de edición
+          </h2>
+
+        </div>
+
+
+        <div class="toolbar">
+
+
+          <label
+            class="search"
+            for="q"
+          >
+
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="currentColor"
+                stroke-width="2"
+              ></circle>
+
+              <path
+                d="M20 20L16.5 16.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              ></path>
+
+            </svg>
+
+
+            <input
+              id="q"
+              type="search"
+              placeholder="Buscar proyecto, empresa o categoría..."
+              autocomplete="off"
+            >
+
+          </label>
+
+
+          <span
+            class="project-count"
+            id="projectCount"
+          >
+            0 proyectos
+          </span>
+
+
+        </div>
+
+
+      </div>
+
+
+      <div
+        id="grid"
+        class="grid"
+      ></div>
+
+
+    </section>
+
 
   </main>
+
+
+  <!-- =====================================================
+       MODAL
+       ===================================================== -->
 
   <div
     id="modal"
@@ -568,778 +3435,1122 @@
     aria-modal="true"
   >
 
-    <div
-      class="box"
-      id="modalBox"
-    >
 
-      <div class="proj-head">
+    <div class="modal-box">
 
-        <h2
-          class="proj-title"
-          id="projTitle"
-        >
-          Proyecto
-        </h2>
+
+      <div class="modal-head">
+
+
+        <div>
+
+          <span class="modal-label">
+            Proyecto audiovisual
+          </span>
+
+          <h2
+            class="modal-title"
+            id="modalTitle"
+          >
+            Proyecto
+          </h2>
+
+        </div>
+
 
         <button
-          class="close-btn"
-          id="closeBtn"
+          class="close"
+          id="modalClose"
+          type="button"
           aria-label="Cerrar"
         >
           ✕
         </button>
 
+
       </div>
 
-      <div
-        class="proj"
-        id="modalContent"
-      ></div>
+
+      <div class="modal-body">
+
+
+        <div
+          class="modal-media"
+          id="modalMedia"
+        ></div>
+
+
+        <div class="modal-info">
+
+
+          <p class="modal-info-kicker">
+            Edición
+          </p>
+
+
+          <p
+            class="modal-description"
+            id="modalDescription"
+          >
+            Sin descripción.
+          </p>
+
+
+          <div
+            class="modal-tags"
+            id="modalTags"
+          ></div>
+
+
+        </div>
+
+
+      </div>
+
 
     </div>
 
+
   </div>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="footer">
+
+    <p>
+
+      ©
+      <span id="currentYear"></span>
+      MoncadaArt ·
+
+      <a href="index.html">
+        Volver al inicio
+      </a>
+
+    </p>
+
+  </footer>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+       ===================================================== -->
 
   <script>
 
-    function setMode() {
-      const hour = new Date().getHours();
 
-      document.body.className =
-        (hour >= 7 && hour < 19)
-          ? "light"
-          : "dark";
+    /* =====================================================
+       TEMA
+       ===================================================== */
+
+    const themeToggle =
+      document.getElementById(
+        "themeToggle"
+      );
+
+    const themeIcon =
+      document.getElementById(
+        "themeIcon"
+      );
+
+    const themeText =
+      document.getElementById(
+        "themeText"
+      );
+
+
+    function automaticTheme() {
+
+      const hour =
+        new Date().getHours();
+
+      return (
+        hour >= 7 &&
+        hour < 19
+      )
+        ? "light"
+        : "dark";
+
     }
 
-    setMode();
 
+    function updateThemeButton() {
+
+      const theme =
+        document.documentElement
+          .getAttribute(
+            "data-theme"
+          );
+
+
+      if (theme === "dark") {
+
+        themeIcon.textContent =
+          "☀";
+
+        themeText.textContent =
+          "Claro";
+
+      } else {
+
+        themeIcon.textContent =
+          "☾";
+
+        themeText.textContent =
+          "Oscuro";
+
+      }
+
+    }
+
+
+    function applyTheme(theme) {
+
+      document.documentElement
+        .setAttribute(
+          "data-theme",
+          theme
+        );
+
+
+      const metaTheme =
+        document.querySelector(
+          'meta[name="theme-color"]'
+        );
+
+
+      if (metaTheme) {
+
+        metaTheme.setAttribute(
+          "content",
+          theme === "dark"
+            ? "#10100e"
+            : "#f6efe5"
+        );
+
+      }
+
+
+      updateThemeButton();
+
+    }
+
+
+    applyTheme(
+
+      sessionStorage.getItem(
+        "moncada-theme"
+      )
+
+      ||
+
+      automaticTheme()
+
+    );
+
+
+    themeToggle.addEventListener(
+      "click",
+      () => {
+
+        const current =
+          document.documentElement
+            .getAttribute(
+              "data-theme"
+            );
+
+
+        const next =
+          current === "dark"
+            ? "light"
+            : "dark";
+
+
+        sessionStorage.setItem(
+          "moncada-theme",
+          next
+        );
+
+
+        applyTheme(next);
+
+      }
+    );
+
+
+    /* =====================================================
+       MENÚ
+       ===================================================== */
+
+    const menuToggle =
+      document.getElementById(
+        "menuToggle"
+      );
+
+    const mainNav =
+      document.getElementById(
+        "mainNav"
+      );
+
+
+    menuToggle.addEventListener(
+      "click",
+      () => {
+
+        const open =
+          mainNav.classList.toggle(
+            "open"
+          );
+
+
+        menuToggle.classList.toggle(
+          "active",
+          open
+        );
+
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          String(open)
+        );
+
+      }
+    );
+
+
+    mainNav
+      .querySelectorAll("a")
+      .forEach(link => {
+
+        link.addEventListener(
+          "click",
+          () => {
+
+            mainNav.classList.remove(
+              "open"
+            );
+
+            menuToggle.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+      });
+
+
+    /* =====================================================
+       AÑO
+       ===================================================== */
+
+    document.getElementById(
+      "currentYear"
+    ).textContent =
+      new Date().getFullYear();
+
+
+    /* =====================================================
+       ELEMENTOS
+       ===================================================== */
 
     const GRID =
-      document.getElementById("grid");
+      document.getElementById(
+        "grid"
+      );
 
-    const Q =
-      document.getElementById("q");
+    const SEARCH =
+      document.getElementById(
+        "q"
+      );
+
+    const COUNT =
+      document.getElementById(
+        "projectCount"
+      );
+
 
     const MODAL =
-      document.getElementById("modal");
+      document.getElementById(
+        "modal"
+      );
 
     const MODAL_TITLE =
-      document.getElementById("projTitle");
+      document.getElementById(
+        "modalTitle"
+      );
 
-    const MODAL_CONTENT =
-      document.getElementById("modalContent");
+    const MODAL_DESCRIPTION =
+      document.getElementById(
+        "modalDescription"
+      );
 
-    const CLOSE_BTN =
-      document.getElementById("closeBtn");
+    const MODAL_MEDIA =
+      document.getElementById(
+        "modalMedia"
+      );
+
+    const MODAL_TAGS =
+      document.getElementById(
+        "modalTags"
+      );
+
+    const MODAL_CLOSE =
+      document.getElementById(
+        "modalClose"
+      );
 
 
     let projects = [];
-    let visibleProjects = [];
 
 
-    function escapeHTML(value = "") {
+    /* =====================================================
+       ESCAPE
+       ===================================================== */
+
+    function escapeHTML(
+      value = ""
+    ) {
+
       return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
     }
 
 
-    function placeholder(title = "Proyecto") {
+    /* =====================================================
+       PLACEHOLDER
+       ===================================================== */
 
-      const safeTitle =
-        String(title)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+    function placeholder(
+      title = "Proyecto"
+    ) {
+
+      const safe =
+        escapeHTML(
+          title
+        );
+
 
       const svg = `
+
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="800"
-          height="450"
+          width="1000"
+          height="563"
         >
-          <defs>
-            <linearGradient
-              id="gradient"
-              x1="0"
-              x2="1"
-            >
-              <stop
-                offset="0%"
-                stop-color="#1c2230"
-              />
-
-              <stop
-                offset="100%"
-                stop-color="#0f1a24"
-              />
-            </linearGradient>
-          </defs>
 
           <rect
             width="100%"
             height="100%"
-            fill="url(#gradient)"
+            fill="#e9ded1"
           />
 
           <text
             x="50%"
             y="50%"
-            fill="#87a7ff"
             text-anchor="middle"
             dominant-baseline="middle"
-            font-family="Poppins"
-            font-size="25"
-            font-weight="bold"
+            fill="#7d6251"
+            font-family="Arial"
+            font-size="30"
           >
-            ${safeTitle}
+            ${safe}
           </text>
+
         </svg>
+
       `;
+
 
       return (
         "data:image/svg+xml," +
         encodeURIComponent(svg)
       );
+
     }
 
 
-    function getYouTubeID(url = "") {
+    /* =====================================================
+       YOUTUBE
+       ===================================================== */
+
+    function getYouTubeID(
+      url = ""
+    ) {
+
+      if (!url) {
+
+        return "";
+
+      }
+
 
       try {
 
-        if (!url) {
-          return "";
-        }
-
-        const parsedURL =
-          new URL(url);
-
-        const hostname =
-          parsedURL.hostname
-            .replace(/^www\./, "");
-
-
-        if (
-          (
-            hostname === "youtube.com" ||
-            hostname === "m.youtube.com"
-          ) &&
-          parsedURL.pathname === "/watch"
-        ) {
-
-          return (
-            parsedURL
-              .searchParams
-              .get("v")
-            || ""
+        const parsed =
+          new URL(
+            url,
+            window.location.href
           );
-        }
+
+
+        const host =
+          parsed.hostname
+            .replace(
+              /^www\./,
+              ""
+            );
 
 
         if (
-          hostname === "youtu.be"
+          host === "youtu.be"
         ) {
 
           return (
-            parsedURL.pathname
-              .replace("/", "")
+            parsed.pathname
+              .replace(
+                /^\/+/,
+                ""
+              )
               .split("/")[0]
             || ""
           );
+
         }
 
 
         if (
-          hostname === "youtube.com" &&
-          parsedURL.pathname.startsWith(
-            "/shorts/"
+          host.includes(
+            "youtube.com"
           )
         ) {
 
-          return (
-            parsedURL.pathname
-              .split("/")[2]
-            || ""
-          );
+
+          if (
+            parsed.pathname ===
+            "/watch"
+          ) {
+
+            return (
+              parsed.searchParams
+                .get("v")
+              || ""
+            );
+
+          }
+
+
+          if (
+            parsed.pathname
+              .startsWith(
+                "/shorts/"
+              )
+          ) {
+
+            return (
+              parsed.pathname
+                .split("/")[2]
+              || ""
+            );
+
+          }
+
+
+          if (
+            parsed.pathname
+              .startsWith(
+                "/embed/"
+              )
+          ) {
+
+            return (
+              parsed.pathname
+                .split("/")[2]
+              || ""
+            );
+
+          }
+
         }
 
-
-        if (
-          hostname === "youtube.com" &&
-          parsedURL.pathname.startsWith(
-            "/embed/"
-          )
-        ) {
-
-          return (
-            parsedURL.pathname
-              .split("/")[2]
-            || ""
-          );
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Error leyendo URL de YouTube:",
-          url,
-          error
-        );
       }
 
+      catch {
+
+        return "";
+
+      }
+
+
       return "";
+
     }
 
 
     function getYouTubeThumbnail(
-      url = ""
+      url
     ) {
 
       const id =
         getYouTubeID(url);
 
-      if (!id) {
-        return "";
-      }
 
-      return (
-        "https://i.ytimg.com/vi/" +
-        id +
-        "/maxresdefault.jpg"
-      );
+      return id
+
+        ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
+
+        : "";
+
     }
 
 
-    function getYouTubeThumbnailFallback(
-      url = ""
+    function getYouTubeFallback(
+      url
     ) {
 
       const id =
         getYouTubeID(url);
 
-      if (!id) {
-        return "";
-      }
 
-      return (
-        "https://i.ytimg.com/vi/" +
-        id +
-        "/hqdefault.jpg"
-      );
+      return id
+
+        ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+
+        : "";
+
     }
 
 
-    function render(list) {
+    /* =====================================================
+       RENDER
+       ===================================================== */
 
-      visibleProjects = list;
+    function render(
+      list
+    ) {
+
+      GRID.innerHTML = "";
+
+
+      COUNT.textContent =
+
+        list.length === 1
+
+          ? "1 proyecto"
+
+          : `${list.length} proyectos`;
 
 
       if (!list.length) {
 
         GRID.innerHTML = `
-          <p
-            style="
-              color:var(--muted);
-              text-align:center;
-              grid-column:1/-1;
-              padding:30px;
-            "
-          >
-            No se encontraron proyectos.
-          </p>
+
+          <div class="empty">
+            No encontré proyectos
+            que coincidan con tu búsqueda.
+          </div>
+
         `;
 
         return;
+
       }
 
 
-      GRID.innerHTML =
-        list
-          .map(
-            (project, index) => {
-
-              const title =
-                escapeHTML(
-                  project.title ||
-                  "Proyecto"
-                );
-
-              const description =
-                escapeHTML(
-                  project.desc ||
-                  ""
-                );
-
-              const category =
-                escapeHTML(
-                  project.categoria ||
-                  "Edición"
-                );
-
-              const youtubeID =
-                getYouTubeID(
-                  project.video || ""
-                );
-
-              let cardMedia = "";
+      list.forEach(
+        project => {
 
 
-              if (youtubeID) {
+          const card =
+            document.createElement(
+              "article"
+            );
 
-                const thumbnail =
-                  getYouTubeThumbnail(
-                    project.video
-                  );
 
-                const fallback =
-                  getYouTubeThumbnailFallback(
-                    project.video
-                  );
+          card.className =
+            "card";
 
-                cardMedia = `
-                  <img
-                    class="poster youtube-thumb"
-                    src="${escapeHTML(thumbnail)}"
-                    alt="${title}"
-                    loading="lazy"
-                    data-hq="${escapeHTML(fallback)}"
-                    data-placeholder="${escapeHTML(
-                      placeholder(
-                        project.title
-                      )
-                    )}"
-                  >
-                `;
 
-              } else if (
-                project.cover
-              ) {
+          /* ===============================================
+             MEDIA
+             =============================================== */
 
-                cardMedia = `
-                  <img
-                    class="poster normal-cover"
-                    src="${escapeHTML(
-                      project.cover
-                    )}"
-                    alt="${title}"
-                    loading="lazy"
-                    data-placeholder="${escapeHTML(
-                      placeholder(
-                        project.title
-                      )
-                    )}"
-                  >
-                `;
+          const posterWrap =
+            document.createElement(
+              "div"
+            );
 
-              } else if (
-                project.video &&
-                /\.(mp4|webm|mov)$/i.test(
-                  project.video
-                )
-              ) {
 
-                cardMedia = `
-                  <video
-                    class="poster static-video"
-                    src="${escapeHTML(
-                      project.video
-                    )}"
-                    muted
-                    playsinline
-                    preload="metadata"
-                  ></video>
-                `;
+          posterWrap.className =
+            "poster-wrap";
 
-              } else {
 
-                cardMedia = `
-                  <img
-                    class="poster"
-                    src="${placeholder(
+          const youtubeID =
+            getYouTubeID(
+              project.video
+            );
+
+
+          let media;
+
+
+          if (
+            youtubeID
+          ) {
+
+            media =
+              document.createElement(
+                "img"
+              );
+
+
+            media.className =
+              "poster";
+
+
+            media.src =
+              getYouTubeThumbnail(
+                project.video
+              );
+
+
+            media.dataset.fallback =
+              getYouTubeFallback(
+                project.video
+              );
+
+
+            media.onerror =
+              () => {
+
+                if (
+                  media.dataset.fallback
+                ) {
+
+                  const fallback =
+                    media.dataset.fallback;
+
+
+                  media.dataset.fallback =
+                    "";
+
+
+                  media.src =
+                    fallback;
+
+                }
+
+                else {
+
+                  media.onerror =
+                    null;
+
+
+                  media.src =
+                    placeholder(
                       project.title
-                    )}"
-                    alt="${title}"
-                  >
-                `;
-              }
+                    );
 
-
-              return `
-                <article class="card">
-
-                  ${cardMedia}
-
-                  <div class="titleWrap">
-
-                    <span class="category">
-                      ${category}
-                    </span>
-
-                    <h3 class="title">
-                      ${title}
-                    </h3>
-
-                    <p class="desc">
-                      ${description}
-                    </p>
-
-                    <div class="btns">
-
-                      <a
-                        href="#"
-                        class="btn"
-                        data-i="${index}"
-                      >
-                        Ver proyecto
-                      </a>
-
-                    </div>
-
-                  </div>
-
-                </article>
-              `;
-            }
-          )
-          .join("");
-
-
-      GRID
-        .querySelectorAll(
-          ".youtube-thumb"
-        )
-        .forEach(
-          image => {
-
-            let fallbackStep = 0;
-
-            image.addEventListener(
-              "error",
-              () => {
-
-                if (
-                  fallbackStep === 0 &&
-                  image.dataset.hq
-                ) {
-
-                  fallbackStep = 1;
-                  image.src = image.dataset.hq;
-                  return;
                 }
 
-                if (
-                  fallbackStep === 1 &&
-                  image.dataset.placeholder
-                ) {
-
-                  fallbackStep = 2;
-                  image.src =
-                    image.dataset.placeholder;
-                }
-
-              }
-            );
+              };
 
           }
-        );
+
+          else if (
+            project.cover
+          ) {
+
+            media =
+              document.createElement(
+                "img"
+              );
 
 
-      GRID
-        .querySelectorAll(
-          ".normal-cover"
-        )
-        .forEach(
-          image => {
+            media.className =
+              "poster";
 
-            image.addEventListener(
-              "error",
+
+            media.src =
+              project.cover;
+
+
+            media.onerror =
               () => {
 
-                if (
-                  image.dataset.placeholder
-                ) {
+                media.onerror =
+                  null;
 
-                  image.src =
-                    image.dataset.placeholder;
-                }
 
-              },
-              {
-                once: true
-              }
-            );
+                media.src =
+                  placeholder(
+                    project.title
+                  );
+
+              };
 
           }
-        );
+
+          else if (
+            project.video &&
+            /\.(mp4|webm|mov)$/i.test(
+              project.video
+            )
+          ) {
+
+            media =
+              document.createElement(
+                "video"
+              );
 
 
-      GRID
-        .querySelectorAll(
-          ".static-video"
-        )
-        .forEach(
-          video => {
+            media.className =
+              "poster static-video";
 
-            const setFrame =
+
+            media.src =
+              project.video;
+
+
+            media.muted =
+              true;
+
+
+            media.playsInline =
+              true;
+
+
+            media.preload =
+              "metadata";
+
+
+            const loadFrame =
               () => {
 
                 try {
 
                   if (
                     Number.isFinite(
-                      video.duration
+                      media.duration
                     ) &&
-                    video.duration > 0
+                    media.duration > 0
                   ) {
 
-                    video.currentTime =
+                    media.currentTime =
                       Math.min(
                         3,
-                        video.duration / 2
+                        media.duration / 2
                       );
+
                   }
 
-                  video.pause();
+                  media.pause();
 
-                } catch (error) {
-
-                  console.error(
-                    "No se pudo usar frame de video:",
-                    error
-                  );
                 }
+
+                catch {}
 
               };
 
 
-            if (
-              video.readyState >= 1
-            ) {
-
-              setFrame();
-
-            } else {
-
-              video.addEventListener(
-                "loadedmetadata",
-                setFrame,
-                {
-                  once: true
-                }
-              );
-            }
+            media.addEventListener(
+              "loadedmetadata",
+              loadFrame,
+              {
+                once: true
+              }
+            );
 
           }
-        );
+
+          else {
+
+            media =
+              document.createElement(
+                "img"
+              );
+
+
+            media.className =
+              "poster";
+
+
+            media.src =
+              placeholder(
+                project.title
+              );
+
+          }
+
+
+          media.alt =
+            project.title || "Proyecto";
+
+
+          if (
+            media.tagName === "IMG"
+          ) {
+
+            media.loading =
+              "lazy";
+
+          }
+
+
+          posterWrap.appendChild(
+            media
+          );
+
+
+          posterWrap.addEventListener(
+            "click",
+            () => {
+
+              openViewer(
+                project
+              );
+
+            }
+          );
+
+
+          /* ===============================================
+             CONTENT
+             =============================================== */
+
+          const content =
+            document.createElement(
+              "div"
+            );
+
+
+          content.className =
+            "card-content";
+
+
+          content.innerHTML = `
+
+            <span class="project-tag">
+              ${escapeHTML(
+                project.categoria ||
+                "Edición"
+              )}
+            </span>
+
+            ${
+              project.empresa
+
+                ? `
+                  <p class="project-company">
+                    ${escapeHTML(
+                      project.empresa
+                    )}
+                  </p>
+                `
+
+                : ""
+            }
+
+            <h3 class="title">
+              ${escapeHTML(
+                project.title ||
+                "Proyecto"
+              )}
+            </h3>
+
+            <p class="desc">
+              ${escapeHTML(
+                project.desc ||
+                ""
+              )}
+            </p>
+
+          `;
+
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+
+          button.className =
+            "view-project";
+
+
+          button.type =
+            "button";
+
+
+          button.innerHTML =
+            `Ver proyecto <span>→</span>`;
+
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              openViewer(
+                project
+              );
+
+            }
+          );
+
+
+          content.appendChild(
+            button
+          );
+
+
+          card.appendChild(
+            posterWrap
+          );
+
+
+          card.appendChild(
+            content
+          );
+
+
+          GRID.appendChild(
+            card
+          );
+
+        }
+      );
+
     }
 
 
-    Q.addEventListener(
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
+    function applyFilter() {
+
+      const query =
+        (
+          SEARCH.value ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      const filtered =
+        projects.filter(
+          project => {
+
+
+            const content =
+              [
+
+                project.title,
+                project.desc,
+                project.categoria,
+                project.empresa
+
+              ]
+
+              .filter(Boolean)
+
+              .join(" ")
+
+              .toLowerCase();
+
+
+            return content.includes(
+              query
+            );
+
+          }
+        );
+
+
+      render(
+        filtered
+      );
+
+    }
+
+
+    SEARCH.addEventListener(
       "input",
-      () => {
-
-        const search =
-          Q.value
-            .trim()
-            .toLowerCase();
-
-        if (!search) {
-
-          render(
-            projects
-          );
-
-          return;
-        }
-
-        const result =
-          projects.filter(
-            project => {
-
-              const searchable =
-                [
-                  project.title,
-                  project.desc,
-                  project.categoria,
-                  project.empresa
-                ]
-                  .filter(Boolean)
-                  .join(" ")
-                  .toLowerCase();
-
-              return searchable.includes(
-                search
-              );
-            }
-          );
-
-        render(result);
-      }
+      applyFilter
     );
 
 
-    function openModalFor(
+    /* =====================================================
+       MODAL
+       ===================================================== */
+
+    function openViewer(
       project
     ) {
-
-      if (!project) {
-        return;
-      }
 
       MODAL_TITLE.textContent =
         project.title ||
         "Proyecto";
 
-      const videoURL =
-        String(
-          project.video || ""
-        );
 
-      const youtubeID =
-        getYouTubeID(
-          videoURL
-        );
-
-      let mediaHTML = "";
+      MODAL_DESCRIPTION.textContent =
+        project.desc ||
+        "Sin descripción.";
 
 
-      if (youtubeID) {
+      /* TAGS */
 
-        mediaHTML = `
-          <iframe
-            class="proj-hero"
-            src="https://www.youtube.com/embed/${escapeHTML(
-              youtubeID
-            )}?rel=0"
-            title="${escapeHTML(
-              project.title ||
-              "Proyecto"
-            )}"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture;
-              web-share
-            "
-            allowfullscreen
-          ></iframe>
-        `;
-
-      } else if (
-        /\.(mp4|webm|mov)$/i.test(
-          videoURL
-        )
-      ) {
-
-        mediaHTML = `
-          <video
-            class="proj-hero"
-            src="${escapeHTML(
-              videoURL
-            )}"
-            controls
-            preload="metadata"
-            playsinline
-          ></video>
-        `;
-
-      } else if (
-        project.cover
-      ) {
-
-        mediaHTML = `
-          <img
-            class="proj-hero"
-            src="${escapeHTML(
-              project.cover
-            )}"
-            alt="${escapeHTML(
-              project.title ||
-              "Proyecto"
-            )}"
-          >
-        `;
-
-      } else {
-
-        mediaHTML = `
-          <img
-            class="proj-hero"
-            src="${placeholder(
-              project.title ||
-              "Proyecto"
-            )}"
-            alt="${escapeHTML(
-              project.title ||
-              "Proyecto"
-            )}"
-          >
-        `;
-      }
-
-
-      const hasVideo =
-        Boolean(
-          youtubeID ||
-          /\.(mp4|webm|mov)$/i.test(
-            videoURL
-          )
-        );
-
-
-      if (
-        !hasVideo &&
-        Array.isArray(
-          project.gallery
-        ) &&
-        project.gallery.length
-      ) {
-
-        project.gallery.forEach(
-          image => {
-
-            mediaHTML += `
-              <img
-                class="proj-hero"
-                src="${escapeHTML(
-                  image
-                )}"
-                alt="Vista de ${escapeHTML(
-                  project.title ||
-                  "Proyecto"
-                )}"
-                style="margin-top:10px;"
-              >
-            `;
-
-          }
-        );
-      }
-
-
-      let metaHTML = "";
+      MODAL_TAGS.innerHTML =
+        "";
 
 
       if (
         project.categoria
       ) {
 
-        metaHTML += `
-          <span class="meta-item">
-            ${escapeHTML(
-              project.categoria
-            )}
-          </span>
-        `;
+        const tag =
+          document.createElement(
+            "span"
+          );
+
+
+        tag.textContent =
+          project.categoria;
+
+
+        MODAL_TAGS.appendChild(
+          tag
+        );
+
       }
 
 
@@ -1347,66 +4558,220 @@
         project.empresa
       ) {
 
-        metaHTML += `
-          <span class="meta-item">
-            ${escapeHTML(
-              project.empresa
-            )}
-          </span>
-        `;
+        const company =
+          document.createElement(
+            "span"
+          );
+
+
+        company.textContent =
+          project.empresa;
+
+
+        MODAL_TAGS.appendChild(
+          company
+        );
+
       }
 
 
-      MODAL_CONTENT.innerHTML = `
+      /* MEDIA */
 
-        <div class="modal-media">
+      MODAL_MEDIA.innerHTML =
+        "";
 
-          ${mediaHTML}
 
-        </div>
+      const youtubeID =
+        getYouTubeID(
+          project.video
+        );
 
-        <div class="modal-info">
 
-          <div class="project-meta">
+      if (
+        youtubeID
+      ) {
 
-            ${metaHTML}
+        const iframe =
+          document.createElement(
+            "iframe"
+          );
 
-          </div>
 
-          <h3>
-            Descripción
-          </h3>
+        iframe.className =
+          "shot";
 
-          <p class="proj-sub">
 
-            ${escapeHTML(
-              project.desc ||
-              "Sin descripción."
-            )}
+        iframe.src =
+          `https://www.youtube.com/embed/${youtubeID}?rel=0`;
 
-          </p>
 
-        </div>
-      `;
+        iframe.allow =
+          "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+
+
+        iframe.allowFullscreen =
+          true;
+
+
+        MODAL_MEDIA.appendChild(
+          iframe
+        );
+
+      }
+
+      else if (
+        project.video &&
+        /\.(mp4|webm|mov)$/i.test(
+          project.video
+        )
+      ) {
+
+        const video =
+          document.createElement(
+            "video"
+          );
+
+
+        video.className =
+          "shot";
+
+
+        video.src =
+          project.video;
+
+
+        video.controls =
+          true;
+
+
+        video.playsInline =
+          true;
+
+
+        MODAL_MEDIA.appendChild(
+          video
+        );
+
+      }
+
+      else {
+
+        if (
+          project.cover
+        ) {
+
+          const cover =
+            document.createElement(
+              "img"
+            );
+
+
+          cover.className =
+            "shot";
+
+
+          cover.src =
+            project.cover;
+
+
+          cover.alt =
+            project.title;
+
+
+          MODAL_MEDIA.appendChild(
+            cover
+          );
+
+        }
+
+
+        (
+          project.gallery ||
+          []
+        ).forEach(
+          src => {
+
+
+            const image =
+              document.createElement(
+                "img"
+              );
+
+
+            image.className =
+              "shot";
+
+
+            image.src =
+              src;
+
+
+            image.alt =
+              project.title;
+
+
+            MODAL_MEDIA.appendChild(
+              image
+            );
+
+          }
+        );
+
+
+        if (
+          !project.cover &&
+          !(
+            project.gallery ||
+            []
+          ).length
+        ) {
+
+          const placeholderImage =
+            document.createElement(
+              "img"
+            );
+
+
+          placeholderImage.className =
+            "shot";
+
+
+          placeholderImage.src =
+            placeholder(
+              project.title
+            );
+
+
+          MODAL_MEDIA.appendChild(
+            placeholderImage
+          );
+
+        }
+
+      }
 
 
       MODAL.classList.add(
         "open"
       );
 
+
       MODAL.setAttribute(
         "aria-hidden",
         "false"
       );
 
+
       document.body.style.overflow =
         "hidden";
 
-      CLOSE_BTN.focus();
+
+      MODAL_CLOSE.focus();
+
     }
 
 
-    function closeModal() {
+    function closeViewer() {
 
       MODAL
         .querySelectorAll(
@@ -1420,55 +4785,31 @@
           }
         );
 
-      MODAL_CONTENT.innerHTML =
+
+      MODAL_MEDIA.innerHTML =
         "";
+
 
       MODAL.classList.remove(
         "open"
       );
+
 
       MODAL.setAttribute(
         "aria-hidden",
         "true"
       );
 
+
       document.body.style.overflow =
         "";
+
     }
 
 
-    GRID.addEventListener(
+    MODAL_CLOSE.addEventListener(
       "click",
-      event => {
-
-        const button =
-          event.target.closest(
-            "[data-i]"
-          );
-
-        if (!button) {
-          return;
-        }
-
-        event.preventDefault();
-
-        const index =
-          Number(
-            button.dataset.i
-          );
-
-        openModalFor(
-          visibleProjects[
-            index
-          ]
-        );
-      }
-    );
-
-
-    CLOSE_BTN.addEventListener(
-      "click",
-      closeModal
+      closeViewer
     );
 
 
@@ -1477,11 +4818,14 @@
       event => {
 
         if (
-          event.target === MODAL
+          event.target ===
+          MODAL
         ) {
 
-          closeModal();
+          closeViewer();
+
         }
+
       }
     );
 
@@ -1491,82 +4835,126 @@
       event => {
 
         if (
-          event.key === "Escape" &&
-          MODAL.classList.contains(
-            "open"
-          )
+          event.key ===
+          "Escape"
         ) {
 
-          closeModal();
+          closeViewer();
+
         }
+
       }
     );
 
 
-    async function load() {
+    /* =====================================================
+       LOAD
+       ===================================================== */
+
+    async function loadProjects() {
 
       try {
 
         const response =
           await fetch(
-            "Edicion/manifest.json?v=" +
-            Date.now(),
+
+            `Edicion/manifest.json?v=${Date.now()}`,
+
             {
-              cache: "no-store"
+              cache:
+                "no-store"
             }
+
           );
 
-        if (!response.ok) {
+
+        if (
+          !response.ok
+        ) {
 
           throw new Error(
-            `Error HTTP: ${
-              response.status
-            }`
+            `HTTP ${response.status}`
           );
+
         }
+
 
         const data =
           await response.json();
+
 
         projects =
           Array.isArray(
             data.projects
           )
-            ? data.projects
+
+            ? data.projects.map(
+                project => ({
+
+                  title:
+                    project.title ||
+                    "Proyecto",
+
+                  desc:
+                    project.desc ||
+                    "",
+
+                  cover:
+                    project.cover ||
+                    "",
+
+                  video:
+                    project.video ||
+                    "",
+
+                  categoria:
+                    project.categoria ||
+                    "Edición",
+
+                  empresa:
+                    project.empresa ||
+                    "",
+
+                  gallery:
+                    Array.isArray(
+                      project.gallery
+                    )
+                      ? project.gallery
+                      : []
+
+                })
+              )
+
             : [];
 
-        render(
-          projects
-        );
 
-      } catch (error) {
+        applyFilter();
+
+      }
+
+      catch (error) {
 
         console.error(
           "Error cargando Edicion/manifest.json:",
           error
         );
 
+
         projects = [];
 
-        GRID.innerHTML = `
-          <p
-            style="
-              color:var(--muted);
-              text-align:center;
-              grid-column:1/-1;
-              padding:30px;
-            "
-          >
-            No fue posible cargar los proyectos.
-          </p>
-        `;
+
+        render([]);
+
       }
+
     }
 
 
-    load();
+    loadProjects();
+
 
   </script>
+
 
 </body>
 </html>
