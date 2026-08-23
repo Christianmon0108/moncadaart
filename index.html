@@ -1,25 +1,52 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
-
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
-  />
+  >
 
   <title>MoncadaArt — Portafolio</title>
 
   <meta
     name="description"
     content="Portafolio de Christian Moncada: modelado 3D, programación, edición, marca de ropa, inteligencia artificial y videojuegos."
-  />
+  >
 
   <meta
     name="theme-color"
     content="#fffaf4"
-  />
+  >
+
+
+  <!-- =====================================================
+       TEMA INICIAL
+       Se ejecuta antes del CSS para evitar parpadeos
+       ===================================================== -->
+
+  <script>
+    (function () {
+
+      const manualTheme =
+        sessionStorage.getItem("moncada-theme");
+
+      const hour =
+        new Date().getHours();
+
+      const automaticTheme =
+        hour >= 7 && hour < 19
+          ? "light"
+          : "dark";
+
+      document.documentElement.setAttribute(
+        "data-theme",
+        manualTheme || automaticTheme
+      );
+
+    })();
+  </script>
 
 
   <!-- =====================================================
@@ -29,30 +56,28 @@
   <link
     rel="preconnect"
     href="https://fonts.googleapis.com"
-  />
+  >
 
   <link
     rel="preconnect"
     href="https://fonts.gstatic.com"
     crossorigin
-  />
+  >
 
   <link
-    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
-  />
+  >
 
 
   <!-- =====================================================
        CSS
-       IMPORTANTE:
-       ?v= fuerza al navegador a cargar la versión nueva
        ===================================================== -->
 
   <link
     rel="stylesheet"
-    href="style.css?v=20260822-2"
-  />
+    href="style.css?v=20260823-1"
+  >
 
 </head>
 
@@ -70,16 +95,12 @@
   >
 
 
-    <!-- Imagen principal -->
-
     <img
       src="assets/img/portada.jpeg"
       alt="Ilustración principal de MoncadaArt"
       class="hero-cover"
-    />
+    >
 
-
-    <!-- Overlay día / noche -->
 
     <div
       class="hero-overlay"
@@ -103,41 +124,20 @@
       <a
         class="brand"
         href="#inicio"
-        aria-label="MoncadaArt, volver al inicio"
+        aria-label="MoncadaArt - Inicio"
       >
 
         <img
           src="assets/img/perfil.jpeg"
           alt=""
           class="brand-avatar"
-        />
+        >
 
         <span>
           MoncadaArt
         </span>
 
       </a>
-
-
-
-      <!-- =================================================
-           MENÚ MÓVIL
-           ================================================= -->
-
-      <button
-        class="menu-toggle"
-        id="menuToggle"
-        type="button"
-        aria-label="Abrir menú"
-        aria-expanded="false"
-        aria-controls="mainNav"
-      >
-
-        <span></span>
-        <span></span>
-        <span></span>
-
-      </button>
 
 
 
@@ -174,13 +174,10 @@
 
 
       <!-- =================================================
-           REDES SOCIALES
+           REDES
            ================================================= -->
 
-      <div
-        class="social-nav"
-        aria-label="Redes sociales"
-      >
+      <div class="social-nav">
 
 
         <!-- Instagram -->
@@ -188,7 +185,6 @@
         <a
           href="#"
           aria-label="Instagram"
-          title="Instagram"
         >
 
           <svg
@@ -227,8 +223,7 @@
         <a
           href="#"
           aria-label="Behance"
-          title="Behance"
-          class="text-social"
+          class="behance-link"
         >
           Bē
         </a>
@@ -242,7 +237,6 @@
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub"
-          title="GitHub"
         >
 
           <svg
@@ -258,8 +252,59 @@
 
         </a>
 
-
       </div>
+
+
+
+      <!-- =================================================
+           BOTÓN CLARO / OSCURO
+           ================================================= -->
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="Cambiar tema"
+        title="Cambiar modo claro u oscuro"
+      >
+
+        <span
+          class="theme-icon"
+          id="themeIcon"
+          aria-hidden="true"
+        >
+          ☀
+        </span>
+
+        <span
+          class="theme-text"
+          id="themeText"
+        >
+          Claro
+        </span>
+
+      </button>
+
+
+
+      <!-- =================================================
+           MENÚ MÓVIL
+           ================================================= -->
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
 
     </nav>
 
@@ -279,7 +324,7 @@
 
       <h1>
         Christian
-        <br />
+        <br>
         Moncada
       </h1>
 
@@ -296,8 +341,6 @@
 
 
 
-      <!-- BOTONES -->
-
       <div class="hero-actions">
 
 
@@ -308,7 +351,7 @@
 
           Ver proyectos
 
-          <span aria-hidden="true">
+          <span>
             ↓
           </span>
 
@@ -347,20 +390,16 @@
     <section
       class="section about"
       id="about"
-      aria-labelledby="aboutTitle"
     >
 
 
       <div class="section-heading">
 
-        <span
-          class="section-mark"
-          aria-hidden="true"
-        >
+        <span class="section-mark">
           ✦
         </span>
 
-        <h2 id="aboutTitle">
+        <h2>
           Sobre mí
         </h2>
 
@@ -370,11 +409,9 @@
       <p>
 
         Hola, soy Christian Moncada, un artista y desarrollador
-        digital de Querétaro.
-
-        Combino modelado 3D, animación, diseño, texturizado y
-        programación para crear experiencias visuales completas
-        que unen arte y tecnología.
+        digital de Querétaro. Combino modelado 3D, animación,
+        diseño, texturizado y programación para crear experiencias
+        visuales completas que unen arte y tecnología.
 
       </p>
 
@@ -384,26 +421,22 @@
 
 
     <!-- ===================================================
-         ÁREAS EN LAS QUE TRABAJO
+         ÁREAS
          =================================================== -->
 
     <section
       class="section areas"
       id="areas"
-      aria-labelledby="areasTitle"
     >
 
 
       <div class="section-heading">
 
-        <span
-          class="section-mark"
-          aria-hidden="true"
-        >
+        <span class="section-mark">
           ✦
         </span>
 
-        <h2 id="areasTitle">
+        <h2>
           Áreas en las que trabajo
         </h2>
 
@@ -413,8 +446,6 @@
 
       <div class="areas-grid">
 
-
-        <!-- MODELADO 3D -->
 
         <a
           class="area-button"
@@ -432,9 +463,6 @@
         </a>
 
 
-
-        <!-- PROGRAMACIÓN -->
-
         <a
           class="area-button"
           href="programacion.html"
@@ -450,9 +478,6 @@
 
         </a>
 
-
-
-        <!-- EDICIÓN -->
 
         <a
           class="area-button"
@@ -470,9 +495,6 @@
         </a>
 
 
-
-        <!-- MARCA DE ROPA -->
-
         <a
           class="area-button"
           href="marca.html"
@@ -489,9 +511,6 @@
         </a>
 
 
-
-        <!-- INTELIGENCIA ARTIFICIAL -->
-
         <a
           class="area-button"
           href="ia.html"
@@ -507,9 +526,6 @@
 
         </a>
 
-
-
-        <!-- JUEGOS -->
 
         <a
           class="area-button"
@@ -535,13 +551,12 @@
 
 
     <!-- ===================================================
-         PROYECTOS ROTATIVOS
+         PROYECTOS
          =================================================== -->
 
     <section
       class="section projects"
       id="projects"
-      aria-labelledby="projectsTitle"
     >
 
 
@@ -553,22 +568,15 @@
 
           <div class="section-heading">
 
-
-            <span
-              class="section-mark"
-              aria-hidden="true"
-            >
+            <span class="section-mark">
               ✦
             </span>
 
-
-            <h2 id="projectsTitle">
+            <h2>
               Proyectos
             </h2>
 
-
           </div>
-
 
 
           <p class="projects-note">
@@ -576,10 +584,7 @@
             Este espacio cambia cada cierto tiempo.
             Siempre hay algo nuevo por descubrir.
 
-            <span
-              class="rotate-symbol"
-              aria-hidden="true"
-            >
+            <span class="rotate-symbol">
               ↻
             </span>
 
@@ -592,16 +597,9 @@
       </div>
 
 
-
-      <!--
-        script.js carga aquí automáticamente
-        los 6 proyectos
-      -->
-
       <div
         id="project-grid"
         class="project-grid"
-        aria-live="polite"
       ></div>
 
 
@@ -610,20 +608,19 @@
 
 
     <!-- ===================================================
-         BANNER CONTACTO
+         CONTACTO
          =================================================== -->
 
     <section
       class="contact-banner"
       id="contacto"
-      aria-labelledby="contactTitle"
     >
 
 
       <div class="contact-copy">
 
 
-        <h2 id="contactTitle">
+        <h2>
           ¿Tienes una idea?
         </h2>
 
@@ -631,26 +628,29 @@
         <p>
 
           Convirtámosla en algo visual,
-          interactivo
-
-          <br class="desktop-break" />
-
-          o completamente nuevo.
+          interactivo o completamente nuevo.
 
         </p>
 
 
 
-        <!--
-          Después podemos colocar aquí
-          tu correo real, WhatsApp o redes.
-        -->
-
         <a
-          href="mailto:tu-correo@ejemplo.com"
+          href="https://wa.me/524428752035?text=Hola%20Christian%2C%20vi%20tu%20portafolio%20MoncadaArt%20y%20me%20gustaría%20platicar%20contigo."
           class="btn btn-primary contact-button"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           Hablemos
+        </a>
+
+
+        <a
+          href="https://wa.me/524428752035"
+          class="contact-number"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          442 875 2035
         </a>
 
 
@@ -673,7 +673,6 @@
     <p>
 
       ©
-
       <span id="currentYear"></span>
 
       MoncadaArt · Creado con pasión y creatividad
@@ -685,22 +684,25 @@
 
 
   <!-- =====================================================
-       SCRIPT PRINCIPAL
-       IMPORTANTE:
-       también lleva versión para evitar caché vieja
+       SCRIPT PROYECTOS
        ===================================================== -->
 
   <script
-    src="script.js?v=20260822-2"
+    src="script.js?v=20260823-1"
   ></script>
 
 
 
   <!-- =====================================================
-       AÑO AUTOMÁTICO
+       CONTROLES DE INTERFAZ
        ===================================================== -->
 
   <script>
+
+
+    /* =====================================================
+       AÑO
+       ===================================================== */
 
     const currentYear =
       document.getElementById(
@@ -715,15 +717,181 @@
 
     }
 
-  </script>
+
+
+    /* =====================================================
+       TEMA
+       ===================================================== */
+
+    const themeToggle =
+      document.getElementById(
+        "themeToggle"
+      );
+
+
+    const themeIcon =
+      document.getElementById(
+        "themeIcon"
+      );
+
+
+    const themeText =
+      document.getElementById(
+        "themeText"
+      );
 
 
 
-  <!-- =====================================================
+    function getAutomaticTheme() {
+
+      const hour =
+        new Date().getHours();
+
+
+      return (
+        hour >= 7 &&
+        hour < 19
+      )
+        ? "light"
+        : "dark";
+
+    }
+
+
+
+    function updateThemeButton() {
+
+      const theme =
+        document.documentElement
+          .getAttribute(
+            "data-theme"
+          );
+
+
+      if (theme === "dark") {
+
+        themeIcon.textContent =
+          "☀";
+
+        themeText.textContent =
+          "Claro";
+
+        themeToggle.setAttribute(
+          "aria-label",
+          "Activar modo claro"
+        );
+
+      }
+
+      else {
+
+        themeIcon.textContent =
+          "☾";
+
+        themeText.textContent =
+          "Oscuro";
+
+        themeToggle.setAttribute(
+          "aria-label",
+          "Activar modo oscuro"
+        );
+
+      }
+
+    }
+
+
+
+    function applyTheme(theme) {
+
+      document.documentElement
+        .setAttribute(
+          "data-theme",
+          theme
+        );
+
+
+      const metaTheme =
+        document.querySelector(
+          'meta[name="theme-color"]'
+        );
+
+
+      if (metaTheme) {
+
+        metaTheme.setAttribute(
+
+          "content",
+
+          theme === "dark"
+            ? "#11110f"
+            : "#fffaf4"
+
+        );
+
+      }
+
+
+      updateThemeButton();
+
+    }
+
+
+
+    /* Estado inicial */
+
+    const savedTheme =
+      sessionStorage.getItem(
+        "moncada-theme"
+      );
+
+
+    applyTheme(
+      savedTheme ||
+      getAutomaticTheme()
+    );
+
+
+
+    /* Botón */
+
+    themeToggle.addEventListener(
+      "click",
+      () => {
+
+
+        const current =
+          document.documentElement
+            .getAttribute(
+              "data-theme"
+            );
+
+
+        const newTheme =
+          current === "dark"
+            ? "light"
+            : "dark";
+
+
+        sessionStorage.setItem(
+          "moncada-theme",
+          newTheme
+        );
+
+
+        applyTheme(
+          newTheme
+        );
+
+
+      }
+    );
+
+
+
+    /* =====================================================
        MENÚ MÓVIL
-       ===================================================== -->
-
-  <script>
+       ===================================================== */
 
     const menuToggle =
       document.getElementById(
@@ -737,170 +905,69 @@
       );
 
 
-    if (
-      menuToggle &&
-      mainNav
-    ) {
+    menuToggle.addEventListener(
+      "click",
+      () => {
 
 
-      menuToggle.addEventListener(
-        "click",
-        () => {
-
-
-          const isOpen =
-            mainNav.classList.toggle(
-              "open"
-            );
-
-
-          menuToggle.classList.toggle(
-            "active",
-            isOpen
+        const open =
+          mainNav.classList.toggle(
+            "open"
           );
 
 
-          menuToggle.setAttribute(
-            "aria-expanded",
-            String(isOpen)
-          );
-
-
-        }
-      );
-
-
-
-      mainNav
-        .querySelectorAll("a")
-        .forEach(link => {
-
-
-          link.addEventListener(
-            "click",
-            () => {
-
-
-              mainNav.classList.remove(
-                "open"
-              );
-
-
-              menuToggle.classList.remove(
-                "active"
-              );
-
-
-              menuToggle.setAttribute(
-                "aria-expanded",
-                "false"
-              );
-
-
-            }
-          );
-
-
-        });
-
-
-    }
-
-  </script>
-
-
-
-  <!-- =====================================================
-       MODO DÍA / NOCHE AUTOMÁTICO
-
-       Día:
-       07:00 a 18:59
-
-       Noche:
-       19:00 a 06:59
-       ===================================================== -->
-
-  <script>
-
-
-    function applyAutomaticTheme() {
-
-
-      const hour =
-        new Date().getHours();
-
-
-      const isDay =
-        hour >= 7 &&
-        hour < 19;
-
-
-      const theme =
-        isDay
-          ? "light"
-          : "dark";
-
-
-      document.documentElement.setAttribute(
-        "data-theme",
-        theme
-      );
-
-
-
-      /* Barra del navegador móvil */
-
-      const metaTheme =
-        document.querySelector(
-          'meta[name="theme-color"]'
+        menuToggle.classList.toggle(
+          "active",
+          open
         );
 
 
-      if (metaTheme) {
-
-
-        metaTheme.setAttribute(
-
-          "content",
-
-          isDay
-            ? "#fffaf4"
-            : "#11110f"
-
+        menuToggle.setAttribute(
+          "aria-expanded",
+          String(open)
         );
 
 
       }
-
-
-    }
-
-
-
-    /* Ejecutar al abrir */
-
-    applyAutomaticTheme();
-
-
-
-    /*
-      Revisar cada minuto.
-
-      Así si la página permanece abierta
-      durante el cambio de horario,
-      pasa automáticamente entre
-      día y noche.
-    */
-
-    setInterval(
-      applyAutomaticTheme,
-      60 * 1000
     );
+
+
+
+    mainNav
+      .querySelectorAll("a")
+      .forEach(link => {
+
+
+        link.addEventListener(
+          "click",
+          () => {
+
+
+            mainNav.classList.remove(
+              "open"
+            );
+
+
+            menuToggle.classList.remove(
+              "active"
+            );
+
+
+            menuToggle.setAttribute(
+              "aria-expanded",
+              "false"
+            );
+
+
+          }
+        );
+
+
+      });
 
 
   </script>
 
 
 </body>
-
 </html>
