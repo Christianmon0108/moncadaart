@@ -13,7 +13,7 @@
 
   <meta
     name="description"
-    content="Portafolio de Christian Moncada: modelado 3D, programación, edición, marca de ropa, inteligencia artificial y videojuegos."
+    content="Portafolio de Christian Moncada: diseño multimedia, producción audiovisual, modelado 3D, programación, edición, inteligencia artificial y videojuegos."
   >
 
   <meta
@@ -24,11 +24,6 @@
 
   <!-- =====================================================
        TEMA INICIAL
-       Día: 07:00 - 18:59
-       Noche: 19:00 - 06:59
-
-       Si el usuario pulsa el botón de tema,
-       se conserva durante esa sesión.
        ===================================================== -->
 
   <script>
@@ -81,7 +76,7 @@
 
   <link
     rel="stylesheet"
-    href="style.css?v=20260822-creative-day-1"
+    href="style.css?v=20260823-about-1"
   >
 
 </head>
@@ -91,7 +86,7 @@
 
 
   <!-- =====================================================
-       HERO
+       PORTADA
        ===================================================== -->
 
   <header
@@ -99,19 +94,16 @@
     id="inicio"
   >
 
-
     <img
       src="assets/img/portada.jpeg"
-      alt="Ilustración de Monky trabajando en su estudio"
+      alt="Ilustración principal de MoncadaArt"
       class="hero-cover"
     >
-
 
     <div
       class="hero-overlay"
       aria-hidden="true"
     ></div>
-
 
 
     <!-- ===================================================
@@ -145,7 +137,6 @@
       </a>
 
 
-
       <!-- LINKS -->
 
       <div
@@ -175,14 +166,12 @@
       </div>
 
 
-
       <!-- REDES -->
 
       <div
         class="social-nav"
         aria-label="Redes sociales"
       >
-
 
         <!-- Instagram -->
 
@@ -222,7 +211,6 @@
         </a>
 
 
-
         <!-- Behance -->
 
         <a
@@ -233,7 +221,6 @@
         >
           Bē
         </a>
-
 
 
         <!-- GitHub -->
@@ -262,8 +249,7 @@
       </div>
 
 
-
-      <!-- BOTÓN TEMA -->
+      <!-- TEMA -->
 
       <button
         class="theme-toggle"
@@ -291,7 +277,6 @@
       </button>
 
 
-
       <!-- MENÚ MÓVIL -->
 
       <button
@@ -309,22 +294,18 @@
 
       </button>
 
-
     </nav>
 
 
-
     <!-- ===================================================
-         CONTENIDO HERO
+         TEXTO PORTADA
          =================================================== -->
 
     <div class="hero-content">
 
-
       <p class="eyebrow">
         Hola, soy
       </p>
-
 
       <h1>
         Christian
@@ -332,11 +313,9 @@
         Moncada
       </h1>
 
-
       <p class="hero-role">
         Artista Digital · Modelador 3D · Diseñador Visual
       </p>
-
 
       <p class="hero-copy">
         Combino arte y tecnología para crear
@@ -344,9 +323,7 @@
       </p>
 
 
-
       <div class="hero-actions">
-
 
         <a
           href="#projects"
@@ -356,7 +333,6 @@
           <span>↓</span>
         </a>
 
-
         <a
           href="#contacto"
           class="btn btn-secondary"
@@ -364,15 +340,11 @@
           Contactarme
         </a>
 
-
       </div>
-
 
     </div>
 
-
   </header>
-
 
 
   <!-- =====================================================
@@ -382,18 +354,17 @@
   <main class="container">
 
 
-
     <!-- ===================================================
          SOBRE MÍ
          =================================================== -->
 
     <section
-      class="section about"
+      class="section about-section"
       id="about"
+      aria-labelledby="aboutTitle"
     >
 
-
-      <div class="section-heading">
+      <div class="section-heading about-heading">
 
         <span
           class="section-mark"
@@ -402,34 +373,102 @@
           ✦
         </span>
 
-        <h2>
+        <h2 id="aboutTitle">
           Sobre mí
         </h2>
 
       </div>
 
 
-      <p>
-        Hola, soy Christian Moncada, un artista y desarrollador
-        digital de Querétaro. Combino modelado 3D, animación,
-        diseño, texturizado y programación para crear experiencias
-        visuales completas que unen arte y tecnología.
-      </p>
+      <div class="about-grid">
 
+
+        <!-- IZQUIERDA -->
+
+        <div class="about-intro">
+
+          <span class="about-kicker">
+            Diseño · Movimiento · Tecnología
+          </span>
+
+          <p class="about-statement">
+            Creo contenido visual donde
+            <strong>
+              diseño, movimiento y tecnología
+            </strong>
+            trabajan juntos.
+          </p>
+
+          <span class="about-signature">
+            — Christian Moncada
+          </span>
+
+        </div>
+
+
+        <!-- DIVISIÓN -->
+
+        <div
+          class="about-divider"
+          aria-hidden="true"
+        ></div>
+
+
+        <!-- DERECHA -->
+
+        <div class="about-info">
+
+          <p class="about-description">
+            Soy Christian Moncada, diseñador multimedia y productor
+            audiovisual de Querétaro. Combino diseño, edición de video,
+            motion graphics y 3D para crear contenido visual para marcas,
+            campañas y medios digitales, integrando creatividad,
+            tecnología e inteligencia artificial.
+          </p>
+
+
+          <div
+            class="about-tags"
+            aria-label="Especialidades"
+          >
+
+            <span>
+              Diseño Multimedia
+            </span>
+
+            <span>
+              Producción Audiovisual
+            </span>
+
+            <span>
+              Motion Graphics
+            </span>
+
+            <span>
+              3D
+            </span>
+
+            <span>
+              Inteligencia Artificial
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </section>
 
 
-
     <!-- ===================================================
-         ÁREAS
+         ÁREAS EN LAS QUE TRABAJO
          =================================================== -->
 
     <section
       class="section areas"
       id="areas"
     >
-
 
       <div class="section-heading">
 
@@ -445,7 +484,6 @@
         </h2>
 
       </div>
-
 
 
       <div class="areas-grid">
@@ -467,7 +505,6 @@
         </a>
 
 
-
         <a
           class="area-button area-code"
           href="programacion.html"
@@ -482,7 +519,6 @@
           </span>
 
         </a>
-
 
 
         <a
@@ -501,7 +537,6 @@
         </a>
 
 
-
         <a
           class="area-button area-clothes"
           href="marca.html"
@@ -518,7 +553,6 @@
         </a>
 
 
-
         <a
           class="area-button area-ai"
           href="ia.html"
@@ -533,7 +567,6 @@
           </span>
 
         </a>
-
 
 
         <a
@@ -554,9 +587,7 @@
 
       </div>
 
-
     </section>
-
 
 
     <!-- ===================================================
@@ -568,12 +599,9 @@
       id="projects"
     >
 
-
       <div class="projects-head">
 
-
         <div>
-
 
           <div class="section-heading">
 
@@ -601,11 +629,10 @@
             >
               ↻
             </span>
+
           </p>
 
-
         </div>
-
 
       </div>
 
@@ -616,9 +643,7 @@
         aria-live="polite"
       ></div>
 
-
     </section>
-
 
 
     <!-- ===================================================
@@ -630,14 +655,11 @@
       id="contacto"
     >
 
-
       <div class="contact-copy">
-
 
         <h2>
           ¿Tienes una idea?
         </h2>
-
 
         <p>
           Convirtámosla en algo visual,
@@ -654,15 +676,11 @@
           Hablemos
         </a>
 
-
       </div>
-
 
     </section>
 
-
   </main>
-
 
 
   <!-- =====================================================
@@ -680,15 +698,13 @@
   </footer>
 
 
-
   <!-- =====================================================
-       PROYECTOS
+       PROYECTOS JS
        ===================================================== -->
 
   <script
-    src="script.js?v=20260822-creative-day-1"
+    src="script.js?v=20260823-about-1"
   ></script>
-
 
 
   <!-- =====================================================
@@ -697,18 +713,17 @@
 
   <script>
 
-    /* =====================================================
-       AÑO
-       ===================================================== */
+    /* AÑO */
 
     const currentYear =
       document.getElementById("currentYear");
 
     if (currentYear) {
+
       currentYear.textContent =
         new Date().getFullYear();
-    }
 
+    }
 
 
     /* =====================================================
@@ -834,6 +849,7 @@
                 "data-theme"
               );
 
+
           const next =
             current === "dark"
               ? "light"
@@ -852,7 +868,6 @@
       );
 
     }
-
 
 
     /* =====================================================
@@ -912,9 +927,11 @@
                 "open"
               );
 
+
               menuToggle.classList.remove(
                 "active"
               );
+
 
               menuToggle.setAttribute(
                 "aria-expanded",
