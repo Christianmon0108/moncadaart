@@ -1,14 +1,22 @@
 /* =========================================================
-   MONCADAART
-   HOME V3
+   MONCADAART — HOME V4
+   Día = estudio creativo cálido
+   Noche = estudio creativo nocturno
    ========================================================= */
 
 
+/* =========================================================
+   VARIABLES GENERALES
+   ========================================================= */
+
 :root{
 
-  --accent:#f27c2d;
-  --accent-hover:#dc671d;
-  --accent-soft:#f5a566;
+  --orange:#e8792e;
+  --orange-dark:#cc6121;
+  --orange-soft:#f2a268;
+
+  --monky-blue:#244f6d;
+  --monky-blue-soft:#dce8ee;
 
   --max-width:1420px;
 
@@ -21,47 +29,43 @@
 }
 
 
-
 /* =========================================================
-   MODO CLARO
+   MODO DÍA
    ========================================================= */
 
 html[data-theme="light"]{
 
-  --page-bg:#fffaf4;
+  /* Fondo tipo papel / estudio */
 
-  --surface:#ffffff;
+  --page-bg:#f6efe5;
 
-  --surface-alt:#fff5e9;
+  --surface:#fffaf3;
+  --surface-2:#f3e8da;
+  --surface-3:#eadbc9;
 
-  --ink:#251b16;
+  --ink:#2a201a;
 
-  --text-soft:#695c54;
+  --text-soft:#6b5e54;
 
   --border:
-    rgba(148,91,47,.16);
+    rgba(121,82,53,.17);
 
-  --area-bg:
-    linear-gradient(
-      145deg,
-      #ffffff,
-      #fff5e9
-    );
+  --soft-border:
+    rgba(121,82,53,.10);
 
-  --card-shadow:
-    0 10px 28px
-    rgba(91,57,31,.09);
+  --shadow:
+    0 10px 30px
+    rgba(96,64,39,.08);
 
-  --card-shadow-hover:
-    0 18px 40px
-    rgba(91,57,31,.15);
+  --shadow-hover:
+    0 18px 42px
+    rgba(96,64,39,.15);
 
 }
 
 
-
 /* =========================================================
-   MODO OSCURO
+   MODO NOCHE
    ========================================================= */
 
 html[data-theme="dark"]{
@@ -69,33 +73,28 @@ html[data-theme="dark"]{
   --page-bg:#10100e;
 
   --surface:#1c1a17;
+  --surface-2:#24211c;
+  --surface-3:#2b261f;
 
-  --surface-alt:#23201c;
+  --ink:#fff5e7;
 
-  --ink:#fff6ea;
-
-  --text-soft:#c7b9ae;
+  --text-soft:#c5b8ad;
 
   --border:
-    rgba(226,153,67,.20);
+    rgba(225,153,75,.20);
 
-  --area-bg:
-    linear-gradient(
-      145deg,
-      #23201c,
-      #1b1916
-    );
+  --soft-border:
+    rgba(225,153,75,.10);
 
-  --card-shadow:
-    0 12px 30px
+  --shadow:
+    0 12px 32px
     rgba(0,0,0,.28);
 
-  --card-shadow-hover:
-    0 20px 44px
+  --shadow-hover:
+    0 20px 48px
     rgba(0,0,0,.42);
 
 }
-
 
 
 /* =========================================================
@@ -108,19 +107,14 @@ html[data-theme="dark"]{
 
 
 html{
-
   scroll-behavior:smooth;
-
   scroll-padding-top:90px;
-
 }
 
 
 html,
 body{
-
   min-height:100%;
-
 }
 
 
@@ -132,17 +126,45 @@ body{
     "Poppins",
     sans-serif;
 
+  color:var(--ink);
+
   background:
     var(--page-bg);
-
-  color:
-    var(--ink);
 
   line-height:1.6;
 
   transition:
     background-color .4s ease,
     color .4s ease;
+
+}
+
+
+/* Fondo creativo modo día */
+
+html[data-theme="light"] body{
+
+  background:
+
+    radial-gradient(
+      circle at 8% 12%,
+      rgba(232,121,46,.07),
+      transparent 28%
+    ),
+
+    radial-gradient(
+      circle at 92% 38%,
+      rgba(36,79,109,.055),
+      transparent 28%
+    ),
+
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.22),
+      transparent 35%
+    ),
+
+    var(--page-bg);
 
 }
 
@@ -162,6 +184,11 @@ button{
 }
 
 
+::selection{
+  background:var(--orange);
+  color:#fff;
+}
+
 
 /* =========================================================
    HERO
@@ -171,14 +198,13 @@ button{
 
   position:relative;
 
-  min-height:580px;
+  min-height:570px;
 
   overflow:hidden;
 
   isolation:isolate;
 
   display:flex;
-
   align-items:center;
 
   border-radius:
@@ -187,9 +213,8 @@ button{
 }
 
 
-
 /* =========================================================
-   PORTADA
+   HERO IMAGE
    ========================================================= */
 
 .hero-cover{
@@ -202,14 +227,13 @@ button{
   height:100%;
 
   object-fit:cover;
-
   object-position:center;
 
   z-index:-3;
 
   transition:
-    filter .4s ease,
-    transform 8s ease;
+    transform 8s ease,
+    filter .4s ease;
 
 }
 
@@ -219,7 +243,8 @@ html[data-theme="light"]
 
   filter:
     brightness(1.02)
-    saturate(.92);
+    saturate(.96)
+    contrast(1.01);
 
 }
 
@@ -228,8 +253,8 @@ html[data-theme="dark"]
 .hero-cover{
 
   filter:
-    brightness(.52)
-    saturate(.80);
+    brightness(.53)
+    saturate(.83);
 
 }
 
@@ -237,14 +262,14 @@ html[data-theme="dark"]
 .hero:hover
 .hero-cover{
 
-  transform:scale(1.02);
+  transform:
+    scale(1.018);
 
 }
 
 
-
 /* =========================================================
-   OVERLAY
+   HERO OVERLAY
    ========================================================= */
 
 .hero-overlay{
@@ -258,40 +283,44 @@ html[data-theme="dark"]
 }
 
 
+/* Día:
+   crema solo donde está el texto,
+   imagen conserva color a la derecha */
+
 html[data-theme="light"]
 .hero-overlay{
 
   background:
+
     linear-gradient(
       90deg,
-      rgba(255,249,241,.96),
-      rgba(255,249,241,.76) 30%,
-      rgba(255,249,241,.15) 59%,
-      rgba(255,249,241,.03)
+      rgba(246,239,229,.97) 0%,
+      rgba(246,239,229,.91) 18%,
+      rgba(246,239,229,.63) 34%,
+      rgba(246,239,229,.16) 53%,
+      rgba(246,239,229,.02) 72%
     );
 
 }
 
+
+/* Noche */
 
 html[data-theme="dark"]
 .hero-overlay{
 
   background:
+
     linear-gradient(
       90deg,
-      rgba(12,12,11,.89),
-      rgba(12,12,11,.70) 31%,
-      rgba(12,12,11,.28) 60%,
-      rgba(12,12,11,.15)
+      rgba(12,12,11,.92) 0%,
+      rgba(12,12,11,.76) 25%,
+      rgba(12,12,11,.36) 51%,
+      rgba(12,12,11,.15) 78%
     );
 
 }
 
-
-
-/* =========================================================
-   DEGRADADO FINAL HERO
-   ========================================================= */
 
 .hero::after{
 
@@ -303,7 +332,7 @@ html[data-theme="dark"]
   right:0;
   bottom:0;
 
-  height:90px;
+  height:75px;
 
   background:
     linear-gradient(
@@ -314,7 +343,6 @@ html[data-theme="dark"]
   z-index:-1;
 
 }
-
 
 
 /* =========================================================
@@ -339,16 +367,15 @@ html[data-theme="dark"]
       calc(100% - 48px)
     );
 
-  height:86px;
+  height:84px;
 
   display:flex;
 
   align-items:center;
 
-  gap:26px;
+  gap:24px;
 
 }
-
 
 
 /* =========================================================
@@ -381,7 +408,11 @@ html[data-theme="dark"]
 
   border:
     2px solid
-    rgba(228,152,71,.45);
+    rgba(216,137,66,.45);
+
+  box-shadow:
+    0 5px 14px
+    rgba(42,26,16,.12);
 
 }
 
@@ -399,7 +430,6 @@ html[data-theme="dark"]
 }
 
 
-
 /* =========================================================
    NAV
    ========================================================= */
@@ -410,7 +440,7 @@ html[data-theme="dark"]
 
   align-items:center;
 
-  gap:34px;
+  gap:32px;
 
 }
 
@@ -419,15 +449,19 @@ html[data-theme="dark"]
 
   position:relative;
 
-  padding:30px 0 20px;
+  padding:
+    29px 0 18px;
 
   text-decoration:none;
-
-  color:var(--ink);
 
   font-size:14px;
 
   font-weight:500;
+
+  color:var(--ink);
+
+  transition:
+    color var(--transition);
 
 }
 
@@ -439,19 +473,21 @@ html[data-theme="dark"]
   position:absolute;
 
   left:50%;
-  bottom:13px;
-
-  width:0;
-  height:2px;
+  bottom:11px;
 
   transform:
     translateX(-50%);
 
+  width:0;
+  height:2px;
+
   background:
-    var(--accent);
+    var(--orange);
+
+  border-radius:999px;
 
   transition:
-    width .25s ease;
+    width var(--transition);
 
 }
 
@@ -459,7 +495,8 @@ html[data-theme="dark"]
 .nav-links a:hover,
 .nav-links a.active{
 
-  color:var(--accent);
+  color:
+    var(--orange);
 
 }
 
@@ -472,7 +509,6 @@ html[data-theme="dark"]
 }
 
 
-
 /* =========================================================
    SOCIAL
    ========================================================= */
@@ -483,7 +519,7 @@ html[data-theme="dark"]
 
   align-items:center;
 
-  gap:15px;
+  gap:14px;
 
 }
 
@@ -497,11 +533,11 @@ html[data-theme="dark"]
 
   place-items:center;
 
-  color:var(--ink);
-
   text-decoration:none;
 
-  opacity:.9;
+  color:var(--ink);
+
+  opacity:.88;
 
   transition:
     color .2s ease,
@@ -512,7 +548,8 @@ html[data-theme="dark"]
 
 .social-nav a:hover{
 
-  color:var(--accent);
+  color:
+    var(--orange);
 
   transform:
     translateY(-2px);
@@ -545,18 +582,18 @@ html[data-theme="dark"]
 .behance-link{
 
   font-size:18px;
-
   font-weight:700;
 
 }
 
 
-
 /* =========================================================
-   BOTÓN MODO
+   THEME TOGGLE
    ========================================================= */
 
 .theme-toggle{
+
+  min-width:90px;
 
   height:40px;
 
@@ -574,11 +611,14 @@ html[data-theme="dark"]
     1px solid
     var(--border);
 
-  border-radius:
-    999px;
+  border-radius:999px;
 
   background:
-    var(--surface);
+    color-mix(
+      in srgb,
+      var(--surface) 92%,
+      transparent
+    );
 
   color:
     var(--ink);
@@ -586,13 +626,12 @@ html[data-theme="dark"]
   cursor:pointer;
 
   box-shadow:
-    0 5px 14px
-    rgba(0,0,0,.07);
+    0 5px 16px
+    rgba(0,0,0,.06);
 
   transition:
     transform .2s ease,
-    border-color .2s ease,
-    background-color .4s ease;
+    border-color .2s ease;
 
 }
 
@@ -603,7 +642,7 @@ html[data-theme="dark"]
     translateY(-2px);
 
   border-color:
-    var(--accent);
+    var(--orange);
 
 }
 
@@ -626,7 +665,6 @@ html[data-theme="dark"]
 }
 
 
-
 /* =========================================================
    MENÚ MÓVIL
    ========================================================= */
@@ -637,8 +675,6 @@ html[data-theme="dark"]
 
   width:42px;
   height:42px;
-
-  padding:10px;
 
   border:
     1px solid
@@ -651,6 +687,8 @@ html[data-theme="dark"]
 
   color:
     var(--ink);
+
+  padding:10px;
 
   cursor:pointer;
 
@@ -666,15 +704,13 @@ html[data-theme="dark"]
 
 .menu-toggle span{
 
-  display:block;
-
   width:19px;
   height:2px;
 
-  border-radius:10px;
-
   background:
     currentColor;
+
+  border-radius:999px;
 
   transition:
     .25s ease;
@@ -710,7 +746,6 @@ span:nth-child(3){
 }
 
 
-
 /* =========================================================
    HERO CONTENT
    ========================================================= */
@@ -724,10 +759,10 @@ span:nth-child(3){
     );
 
   margin:
-    75px auto 0;
+    72px auto 0;
 
   padding:
-    54px 0 72px;
+    50px 0 66px;
 
 }
 
@@ -735,7 +770,7 @@ span:nth-child(3){
 .eyebrow{
 
   margin:
-    0 0 7px;
+    0 0 8px;
 
   font-family:
     "DM Serif Display",
@@ -743,13 +778,13 @@ span:nth-child(3){
 
   font-size:
     clamp(
-      26px,
+      27px,
       2.7vw,
       40px
     );
 
   color:
-    var(--accent);
+    var(--orange);
 
   line-height:1;
 
@@ -767,8 +802,8 @@ span:nth-child(3){
   font-size:
     clamp(
       62px,
-      6.8vw,
-      100px
+      6.5vw,
+      96px
     );
 
   font-weight:400;
@@ -783,7 +818,7 @@ span:nth-child(3){
 .hero-role{
 
   margin:
-    26px 0 5px;
+    25px 0 4px;
 
   font-size:16px;
 
@@ -794,7 +829,7 @@ span:nth-child(3){
 
 .hero-copy{
 
-  max-width:440px;
+  max-width:430px;
 
   margin:0;
 
@@ -808,7 +843,6 @@ span:nth-child(3){
 }
 
 
-
 /* =========================================================
    BOTONES
    ========================================================= */
@@ -820,10 +854,12 @@ span:nth-child(3){
   align-items:center;
   justify-content:center;
 
-  min-height:48px;
+  gap:9px;
+
+  min-height:47px;
 
   padding:
-    11px 26px;
+    10px 25px;
 
   border-radius:999px;
 
@@ -855,13 +891,13 @@ span:nth-child(3){
   background:
     linear-gradient(
       135deg,
-      #f59045,
-      #ef7422
+      #ee8d46,
+      #df6e25
     );
 
   box-shadow:
     0 8px 20px
-    rgba(239,116,34,.24);
+    rgba(220,103,33,.22);
 
 }
 
@@ -869,23 +905,32 @@ span:nth-child(3){
 .btn-primary:hover{
 
   box-shadow:
-    0 12px 26px
-    rgba(239,116,34,.33);
+    0 12px 25px
+    rgba(220,103,33,.30);
 
 }
 
 
 .btn-secondary{
 
-  border:
-    1px solid
-    var(--border);
+  color:
+    var(--ink);
 
   background:
     rgba(255,255,255,.06);
 
-  color:
-    var(--ink);
+  border:
+    1px solid
+    var(--border);
+
+}
+
+
+html[data-theme="light"]
+.btn-secondary{
+
+  background:
+    rgba(255,250,243,.58);
 
 }
 
@@ -898,10 +943,9 @@ span:nth-child(3){
 
   gap:14px;
 
-  margin-top:29px;
+  margin-top:27px;
 
 }
-
 
 
 /* =========================================================
@@ -917,10 +961,9 @@ span:nth-child(3){
     );
 
   margin:
-    0 auto 45px;
+    0 auto 50px;
 
 }
-
 
 
 /* =========================================================
@@ -930,14 +973,14 @@ span:nth-child(3){
 .section{
 
   margin:
-    62px 0;
+    58px 0;
 
 }
 
 
 .about{
 
-  margin-top:68px;
+  margin-top:72px;
 
 }
 
@@ -948,7 +991,7 @@ span:nth-child(3){
 
   align-items:center;
 
-  gap:11px;
+  gap:10px;
 
   margin-bottom:18px;
 
@@ -965,7 +1008,7 @@ span:nth-child(3){
 
   font-size:
     clamp(
-      27px,
+      28px,
       2.4vw,
       35px
     );
@@ -978,16 +1021,16 @@ span:nth-child(3){
 .section-mark{
 
   color:
-    var(--accent);
+    var(--orange);
 
-  font-size:16px;
+  font-size:14px;
 
 }
 
 
 .about p{
 
-  max-width:1000px;
+  max-width:1020px;
 
   margin:0;
 
@@ -1001,14 +1044,13 @@ span:nth-child(3){
 }
 
 
-
 /* =========================================================
    ÁREAS
    ========================================================= */
 
 .areas{
 
-  margin-top:54px;
+  margin-top:50px;
 
 }
 
@@ -1020,14 +1062,20 @@ span:nth-child(3){
   grid-template-columns:
     repeat(6,1fr);
 
-  gap:16px;
+  gap:15px;
 
 }
 
 
+/* Base */
+
 .area-button{
 
-  min-height:100px;
+  position:relative;
+
+  overflow:hidden;
+
+  min-height:96px;
 
   display:flex;
 
@@ -1036,16 +1084,14 @@ span:nth-child(3){
   align-items:center;
   justify-content:center;
 
-  gap:10px;
+  gap:8px;
 
-  padding:16px 10px;
+  padding:
+    14px 9px;
 
   text-align:center;
 
   text-decoration:none;
-
-  background:
-    var(--area-bg);
 
   border:
     1px solid
@@ -1054,14 +1100,40 @@ span:nth-child(3){
   border-radius:
     var(--radius-sm);
 
+  background:
+    var(--surface);
+
   box-shadow:
-    0 5px 14px
-    rgba(0,0,0,.04);
+    0 5px 16px
+    rgba(49,32,20,.045);
 
   transition:
     transform .22s ease,
-    box-shadow .22s ease,
-    border-color .22s ease;
+    border-color .22s ease,
+    box-shadow .22s ease;
+
+}
+
+
+.area-button::after{
+
+  content:"";
+
+  position:absolute;
+
+  left:14px;
+  right:14px;
+  bottom:0;
+
+  height:2px;
+
+  opacity:.45;
+
+  border-radius:
+    999px 999px 0 0;
+
+  background:
+    var(--area-accent);
 
 }
 
@@ -1072,10 +1144,10 @@ span:nth-child(3){
     translateY(-4px);
 
   border-color:
-    rgba(242,124,45,.55);
+    var(--area-accent);
 
   box-shadow:
-    var(--card-shadow);
+    var(--shadow-hover);
 
 }
 
@@ -1092,15 +1164,125 @@ span:nth-child(3){
 
 .area-button span{
 
-  font-size:11px;
+  font-size:10px;
 
   font-weight:600;
 
   color:
-    var(--accent);
+    var(--area-accent);
 
 }
 
+
+/* =========================================================
+   COLORES MUY SUAVES EN DÍA
+   ========================================================= */
+
+html[data-theme="light"]
+.area-3d{
+
+  --area-accent:#bb7541;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffaf3,
+      #f7eadc
+    );
+
+}
+
+
+html[data-theme="light"]
+.area-code{
+
+  --area-accent:#47738f;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffaf3,
+      #eaf2f5
+    );
+
+}
+
+
+html[data-theme="light"]
+.area-edit{
+
+  --area-accent:#c77b58;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffaf3,
+      #faebe3
+    );
+
+}
+
+
+html[data-theme="light"]
+.area-clothes{
+
+  --area-accent:#9b6f6b;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffaf3,
+      #f2e6e3
+    );
+
+}
+
+
+html[data-theme="light"]
+.area-ai{
+
+  --area-accent:#6d8470;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffaf3,
+      #e9eee7
+    );
+
+}
+
+
+html[data-theme="light"]
+.area-games{
+
+  --area-accent:#ae853f;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffaf3,
+      #f7eed8
+    );
+
+}
+
+
+/* Noche: coherentes */
+
+html[data-theme="dark"]
+.area-button{
+
+  --area-accent:#d88a42;
+
+  background:
+    linear-gradient(
+      145deg,
+      #24211d,
+      #1b1916
+    );
+
+}
 
 
 /* =========================================================
@@ -1109,14 +1291,14 @@ span:nth-child(3){
 
 .projects{
 
-  margin-top:72px;
+  margin-top:70px;
 
 }
 
 
 .projects-head{
 
-  margin-bottom:27px;
+  margin-bottom:25px;
 
 }
 
@@ -1143,13 +1325,12 @@ span:nth-child(3){
 
 .rotate-symbol{
 
-  color:
-    var(--accent);
-
   margin-left:5px;
 
-}
+  color:
+    var(--orange);
 
+}
 
 
 /* =========================================================
@@ -1170,9 +1351,8 @@ span:nth-child(3){
 }
 
 
-
 /* =========================================================
-   CARD
+   PROJECT CARD
    ========================================================= */
 
 .card{
@@ -1190,13 +1370,13 @@ span:nth-child(3){
 
   border:
     1px solid
-    var(--border);
+    var(--soft-border);
 
   border-radius:
     var(--radius-md);
 
   box-shadow:
-    var(--card-shadow);
+    var(--shadow);
 
   transition:
     transform .25s ease,
@@ -1212,13 +1392,35 @@ span:nth-child(3){
     translateY(-5px);
 
   border-color:
-    rgba(242,124,45,.3);
+    rgba(226,119,45,.30);
 
   box-shadow:
-    var(--card-shadow-hover);
+    var(--shadow-hover);
 
 }
 
+
+/* Día: efecto papel */
+
+html[data-theme="light"]
+.card{
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.36),
+      transparent 42%
+    ),
+
+    var(--surface);
+
+}
+
+
+/* =========================================================
+   PROJECT IMAGE
+   ========================================================= */
 
 .card .thumb,
 .card .poster{
@@ -1226,16 +1428,33 @@ span:nth-child(3){
   display:block;
 
   width:100%;
-  height:185px;
+  height:182px;
 
   object-fit:cover;
-
   object-position:center;
 
-  background:#171717;
+  background:#161616;
+
+  transition:
+    transform .45s ease;
 
 }
 
+
+.card:hover
+.thumb,
+.card:hover
+.poster{
+
+  transform:
+    scale(1.025);
+
+}
+
+
+/* =========================================================
+   PROJECT CONTENT
+   ========================================================= */
 
 .card .content{
 
@@ -1251,11 +1470,13 @@ span:nth-child(3){
 }
 
 
+/* =========================================================
+   PILL
+   ========================================================= */
+
 .pill{
 
   align-self:flex-start;
-
-  display:inline-flex;
 
   margin:
     -32px 0 12px;
@@ -1263,19 +1484,23 @@ span:nth-child(3){
   padding:
     5px 11px;
 
-  border-radius:999px;
-
   color:#fff;
 
   background:
-    rgba(146,88,47,.92);
+    rgba(151,91,48,.92);
+
+  border:
+    1px solid
+    rgba(255,255,255,.15);
+
+  border-radius:999px;
+
+  backdrop-filter:
+    blur(8px);
 
   font-size:10px;
 
   font-weight:600;
-
-  backdrop-filter:
-    blur(7px);
 
 }
 
@@ -1284,7 +1509,7 @@ span:nth-child(3){
 .pill{
 
   background:
-    rgba(48,91,131,.92);
+    rgba(49,86,112,.94);
 
 }
 
@@ -1293,15 +1518,19 @@ span:nth-child(3){
 .pill{
 
   background:
-    rgba(99,73,112,.92);
+    rgba(104,73,102,.94);
 
 }
 
 
+/* =========================================================
+   PROJECT TEXT
+   ========================================================= */
+
 .card h3{
 
   margin:
-    3px 0 8px;
+    3px 0 7px;
 
   color:
     var(--ink);
@@ -1316,7 +1545,7 @@ span:nth-child(3){
 .card p{
 
   margin:
-    0 0 16px;
+    0 0 15px;
 
   color:
     var(--text-soft);
@@ -1325,11 +1554,13 @@ span:nth-child(3){
 
   line-height:1.65;
 
-  display:-webkit-box;
+  display:
+    -webkit-box;
 
   -webkit-line-clamp:3;
 
-  -webkit-box-orient:vertical;
+  -webkit-box-orient:
+    vertical;
 
   overflow:hidden;
 
@@ -1343,7 +1574,7 @@ span:nth-child(3){
   align-self:flex-start;
 
   color:
-    var(--accent);
+    var(--orange);
 
   text-decoration:none;
 
@@ -1354,9 +1585,8 @@ span:nth-child(3){
 }
 
 
-
 /* =========================================================
-   CONTACTO DESKTOP
+   CONTACTO
    ========================================================= */
 
 .contact-banner{
@@ -1390,8 +1620,11 @@ span:nth-child(3){
   background-position:
     center;
 
+  background-repeat:
+    no-repeat;
+
   box-shadow:
-    var(--card-shadow);
+    var(--shadow);
 
 }
 
@@ -1411,32 +1644,38 @@ span:nth-child(3){
 }
 
 
+/* Día */
+
 html[data-theme="light"]
 .contact-banner::before{
 
   background:
+
     linear-gradient(
       90deg,
-      transparent 22%,
-      rgba(255,249,241,.48) 36%,
-      rgba(255,249,241,.88) 51%,
-      rgba(255,249,241,.22) 76%,
+      rgba(246,239,229,.03) 20%,
+      rgba(246,239,229,.52) 35%,
+      rgba(246,239,229,.94) 50%,
+      rgba(246,239,229,.32) 72%,
       transparent
     );
 
 }
 
 
+/* Noche */
+
 html[data-theme="dark"]
 .contact-banner::before{
 
   background:
+
     linear-gradient(
       90deg,
-      transparent 20%,
-      rgba(15,13,11,.48) 34%,
-      rgba(15,13,11,.83) 51%,
-      rgba(15,13,11,.35) 76%,
+      rgba(12,11,9,.03) 20%,
+      rgba(12,11,9,.51) 35%,
+      rgba(12,11,9,.86) 50%,
+      rgba(12,11,9,.38) 73%,
       transparent
     );
 
@@ -1454,7 +1693,7 @@ html[data-theme="dark"]
   margin-left:29%;
 
   padding:
-    30px 18px;
+    28px 18px;
 
 }
 
@@ -1462,7 +1701,7 @@ html[data-theme="dark"]
 .contact-copy h2{
 
   margin:
-    0 0 6px;
+    0 0 5px;
 
   font-family:
     "DM Serif Display",
@@ -1494,41 +1733,16 @@ html[data-theme="dark"]
 
   font-size:14px;
 
+  line-height:1.65;
+
 }
 
 
 .contact-button{
 
-  min-width:132px;
+  min-width:135px;
 
 }
-
-
-.contact-number{
-
-  display:inline-block;
-
-  margin-left:14px;
-
-  color:
-    var(--text-soft);
-
-  font-size:12px;
-
-  text-decoration:none;
-
-  font-weight:500;
-
-}
-
-
-.contact-number:hover{
-
-  color:
-    var(--accent);
-
-}
-
 
 
 /* =========================================================
@@ -1547,11 +1761,11 @@ html[data-theme="dark"]
     0 auto;
 
   padding:
-    20px 0 34px;
+    19px 0 35px;
 
   border-top:
     1px solid
-    var(--border);
+    var(--soft-border);
 
   text-align:center;
 
@@ -1570,7 +1784,6 @@ html[data-theme="dark"]
 }
 
 
-
 /* =========================================================
    TABLET
    ========================================================= */
@@ -1586,13 +1799,6 @@ html[data-theme="dark"]
   }
 
 
-  .nav-links{
-
-    gap:20px;
-
-  }
-
-
   .project-grid,
   #project-grid{
 
@@ -1601,16 +1807,22 @@ html[data-theme="dark"]
 
   }
 
+
+  .nav-links{
+
+    gap:19px;
+
+  }
+
 }
 
 
-
 /* =========================================================
-   MENÚ TABLET
+   NAV TABLET / MOBILE
    ========================================================= */
 
 @media
-(max-width:850px){
+(max-width:900px){
 
   .social-nav{
 
@@ -1633,7 +1845,11 @@ html[data-theme="dark"]
     top:70px;
     right:0;
 
-    width:270px;
+    width:
+      min(
+        270px,
+        calc(100vw - 30px)
+      );
 
     display:flex;
 
@@ -1643,14 +1859,13 @@ html[data-theme="dark"]
 
     gap:0;
 
-    opacity:0;
+    padding:8px;
 
+    opacity:0;
     visibility:hidden;
 
     transform:
       translateY(-8px);
-
-    padding:8px;
 
     background:
       var(--surface);
@@ -1659,10 +1874,11 @@ html[data-theme="dark"]
       1px solid
       var(--border);
 
-    border-radius:17px;
+    border-radius:
+      17px;
 
     box-shadow:
-      var(--card-shadow-hover);
+      var(--shadow-hover);
 
     transition:
       .22s ease;
@@ -1673,7 +1889,6 @@ html[data-theme="dark"]
   .nav-links.open{
 
     opacity:1;
-
     visibility:visible;
 
     transform:
@@ -1684,7 +1899,8 @@ html[data-theme="dark"]
 
   .nav-links a{
 
-    padding:12px 14px;
+    padding:
+      12px 14px;
 
     border-radius:10px;
 
@@ -1700,9 +1916,8 @@ html[data-theme="dark"]
 }
 
 
-
 /* =========================================================
-   MÓVIL
+   MOBILE
    ========================================================= */
 
 @media
@@ -1710,14 +1925,16 @@ html[data-theme="dark"]
 
   html{
 
-    scroll-padding-top:72px;
+    scroll-padding-top:70px;
 
   }
 
 
+  /* HERO */
+
   .hero{
 
-    min-height:690px;
+    min-height:675px;
 
     border-radius:
       0 0 24px 24px;
@@ -1737,11 +1954,12 @@ html[data-theme="dark"]
   .hero-overlay{
 
     background:
+
       linear-gradient(
         to bottom,
-        rgba(255,249,241,.25),
-        rgba(255,249,241,.08) 36%,
-        rgba(255,249,241,.86) 73%,
+        rgba(246,239,229,.14),
+        rgba(246,239,229,.05) 34%,
+        rgba(246,239,229,.82) 72%,
         var(--page-bg) 100%
       );
 
@@ -1752,16 +1970,19 @@ html[data-theme="dark"]
   .hero-overlay{
 
     background:
+
       linear-gradient(
         to bottom,
-        rgba(10,10,9,.14),
-        rgba(10,10,9,.22) 35%,
-        rgba(10,10,9,.84) 72%,
+        rgba(10,10,9,.12),
+        rgba(10,10,9,.18) 34%,
+        rgba(10,10,9,.83) 72%,
         var(--page-bg) 100%
       );
 
   }
 
+
+  /* TOPBAR */
 
   .topbar{
 
@@ -1799,6 +2020,8 @@ html[data-theme="dark"]
 
   .theme-toggle{
 
+    min-width:42px;
+
     width:42px;
     height:42px;
 
@@ -1821,18 +2044,20 @@ html[data-theme="dark"]
   }
 
 
+  /* HERO TEXT */
+
   .hero-content{
 
     align-self:flex-end;
 
     width:
-      calc(100% - 36px);
+      calc(100% - 34px);
 
     margin:
       auto auto 0;
 
     padding:
-      330px 0 64px;
+      325px 0 62px;
 
   }
 
@@ -1895,6 +2120,8 @@ html[data-theme="dark"]
   }
 
 
+  /* CONTENT */
+
   .container{
 
     width:
@@ -1906,7 +2133,7 @@ html[data-theme="dark"]
   .section{
 
     margin:
-      48px 0;
+      47px 0;
 
   }
 
@@ -1941,13 +2168,11 @@ html[data-theme="dark"]
   }
 
 
-  /* =======================================================
-     ÁREAS MÓVIL
-     ======================================================= */
+  /* ÁREAS */
 
   .areas{
 
-    margin-top:47px;
+    margin-top:45px;
 
   }
 
@@ -1957,19 +2182,17 @@ html[data-theme="dark"]
     grid-template-columns:
       repeat(2,1fr);
 
-    gap:11px;
+    gap:10px;
 
   }
 
 
   .area-button{
 
-    min-height:88px;
+    min-height:86px;
 
     padding:
-      13px 7px;
-
-    gap:7px;
+      12px 7px;
 
   }
 
@@ -1988,9 +2211,7 @@ html[data-theme="dark"]
   }
 
 
-  /* =======================================================
-     PROYECTOS MÓVIL
-     ======================================================= */
+  /* PROYECTOS */
 
   .projects{
 
@@ -2020,7 +2241,7 @@ html[data-theme="dark"]
   .card .thumb,
   .card .poster{
 
-    height:200px;
+    height:195px;
 
   }
 
@@ -2042,42 +2263,36 @@ html[data-theme="dark"]
 
   .card p{
 
-    font-size:12px;
-
     -webkit-line-clamp:4;
 
   }
 
 
   /* =======================================================
-     CONTACTO MÓVIL
+     CONTACTO MOBILE
      ======================================================= */
 
   .contact-banner{
 
-    min-height:350px;
+    min-height:340px;
 
     margin:
       62px 0 34px;
 
     align-items:flex-end;
 
-    border-radius:24px;
+    border-radius:23px;
+
+    /*
+      Importantísimo:
+      mostramos el lado de Monky
+    */
 
     background-size:
       auto 100%;
 
     background-position:
-      15% center;
-
-    background-repeat:no-repeat;
-
-  }
-
-
-  .contact-banner::before{
-
-    z-index:1;
+      14% center;
 
   }
 
@@ -2086,12 +2301,13 @@ html[data-theme="dark"]
   .contact-banner::before{
 
     background:
+
       linear-gradient(
         to bottom,
-        rgba(14,12,10,.03) 0%,
-        rgba(14,12,10,.08) 30%,
-        rgba(14,12,10,.67) 66%,
-        rgba(14,12,10,.96) 100%
+        rgba(12,10,8,.02) 0%,
+        rgba(12,10,8,.08) 35%,
+        rgba(12,10,8,.68) 68%,
+        rgba(12,10,8,.96) 100%
       );
 
   }
@@ -2101,12 +2317,13 @@ html[data-theme="dark"]
   .contact-banner::before{
 
     background:
+
       linear-gradient(
         to bottom,
-        rgba(255,249,241,.01) 0%,
-        rgba(255,249,241,.07) 30%,
-        rgba(255,246,235,.74) 67%,
-        rgba(255,246,235,.97) 100%
+        rgba(246,239,229,.01) 0%,
+        rgba(246,239,229,.04) 33%,
+        rgba(246,239,229,.75) 68%,
+        rgba(246,239,229,.98) 100%
       );
 
   }
@@ -2119,7 +2336,7 @@ html[data-theme="dark"]
     margin:0;
 
     padding:
-      185px 20px 25px;
+      180px 20px 24px;
 
     text-align:center;
 
@@ -2142,14 +2359,12 @@ html[data-theme="dark"]
 
   .contact-copy p{
 
-    max-width:330px;
+    max-width:320px;
 
     margin:
       0 auto 17px;
 
     font-size:12px;
-
-    line-height:1.6;
 
   }
 
@@ -2157,28 +2372,14 @@ html[data-theme="dark"]
   html[data-theme="dark"]
   .contact-copy p{
 
-    color:#e8ddd4;
+    color:#e7dbd0;
 
   }
 
 
   .contact-button{
 
-    min-width:145px;
-
-  }
-
-
-  .contact-number{
-
-    display:block;
-
-    margin:
-      11px 0 0;
-
-    text-align:center;
-
-    font-size:11px;
+    min-width:148px;
 
   }
 
@@ -2205,9 +2406,8 @@ html[data-theme="dark"]
 }
 
 
-
 /* =========================================================
-   TELÉFONOS PEQUEÑOS
+   MOBILE PEQUEÑO
    ========================================================= */
 
 @media
@@ -2220,36 +2420,21 @@ html[data-theme="dark"]
   }
 
 
-  .areas-grid{
-
-    gap:9px;
-
-  }
-
-
-  .area-button{
-
-    min-height:84px;
-
-  }
-
-
   .card .thumb,
   .card .poster{
 
-    height:185px;
+    height:180px;
 
   }
 
 
   .contact-banner{
 
-    min-height:335px;
+    min-height:325px;
 
   }
 
 }
-
 
 
 /* =========================================================
@@ -2261,12 +2446,11 @@ button:focus-visible{
 
   outline:
     3px solid
-    var(--accent);
+    var(--orange);
 
   outline-offset:3px;
 
 }
-
 
 
 /* =========================================================
