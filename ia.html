@@ -1,163 +1,4890 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Inteligencia Artificial — MoncadaArt</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{ --radius:16px; --accent:#8ab4ff; --accent2:#55ffe1; }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Poppins,system-ui}
-    body{transition:background .4s,color .4s}
-    body.dark{ --bg:#0b0e13; --card:#11151c; --soft:#1c2230; --ink:#eaf0ff; --muted:#b1b8cc; background:var(--bg); color:var(--ink); }
-    body.light{ --bg:#f5f6fb; --card:#ffffff; --soft:#e9eef4; --ink:#0f1222; --muted:#5a6275; background:var(--bg); color:var(--ink); }
 
-    header.hero{ position:relative; min-height:36vh; display:grid; place-items:end center; overflow:hidden; border-bottom:1px solid rgba(255,255,255,.06)}
-    .hero .cover{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(.6)}
-    .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(11,14,19,.95))}
-    .perfil{ position:relative; display:flex; gap:14px; align-items:center; margin:16px; padding:12px 14px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); backdrop-filter:blur(10px); border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    body.light .perfil{ background:rgba(255,255,255,0.85); border:1px solid rgba(0,0,0,0.1); box-shadow:0 8px 25px rgba(0,0,0,0.15)}
-    .avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.2)}
-    .info h1{margin:0;font-size:clamp(22px,3.6vw,38px)}
-    .info p{margin:.2rem 0 0;color:var(--muted)}
+  <meta
+    name="description"
+    content="Proyectos y experimentos de inteligencia artificial de Christian Moncada: generación visual, creatividad, automatización y nuevas herramientas digitales."
+  >
 
-    main{max-width:1100px;margin:26px auto;padding:0 18px}
-    .toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:10px 0 18px}
-    .search{display:flex;align-items:center;gap:8px;background:var(--soft);border:1px solid rgba(255,255,255,.08);padding:10px 12px;border-radius:12px;min-width:230px}
-    body.light .search{border:1px solid #e7e9f3;box-shadow:0 3px 8px rgba(0,0,0,.1)}
-    .search input{all:unset;width:100%}
+  <meta
+    name="theme-color"
+    content="#f6efe5"
+  >
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-    .card{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.06);transition:transform .18s ease,box-shadow .18s ease}
-    .card:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(0,0,0,.35)}
-    .poster{display:block;width:100%;height:180px;object-fit:cover;object-position:center;background:#0f1a24;border-radius:12px}
-    .titleWrap{padding:10px 12px}
-    .title{font-weight:800;font-size:16px;line-height:1.25;margin:0 0 6px}
-    .desc{color:var(--muted);font-size:13px;line-height:1.4;min-height:2.2em;margin:0 0 10px}
-    .btns{display:flex;gap:8px;flex-wrap:wrap}
-    .btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0f16;font-weight:800;padding:8px 12px;border-radius:10px;font-size:13px}
 
-    .modal{ position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.55); backdrop-filter: blur(6px); z-index:50 }
-    .modal.open{ display:grid }
-    .modal .box{ width:min(900px,94vw); max-height:min(86vh,980px); border-radius:20px; overflow:hidden; background:var(--card); border:1px solid rgba(255,255,255,.12); box-shadow:0 30px 80px rgba(0,0,0,.55); display:flex; flex-direction:column }
-    .proj-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid rgba(255,255,255,.10); position:sticky; top:0; background:var(--card) }
-    .proj-title{ font-size:22px; font-weight:800; margin:0 }
-    .close-btn{ all:unset; cursor:pointer; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16) }
-
-    .proj{ display:grid; grid-template-columns: 1.15fr .85fr; gap:18px; padding:18px; overflow:auto }
-    @media (max-width:860px){ .proj{ grid-template-columns:1fr } }
-    .proj-hero{ width:100%; max-height:60vh; object-fit:contain; object-position:center; background:#0f1a24; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.25); margin-bottom:10px; }
-    .proj-sub{ color:var(--muted); margin-top:6px; line-height:1.6 }
-  </style>
-</head>
-<body>
-  <header class="hero">
-    <img class="cover" src="assets/img/portada.jpeg" alt="Portada">
-    <div class="overlay"></div>
-    <div class="perfil">
-      <img class="avatar" src="assets/img/perfil.jpeg" alt="Perfil">
-      <div class="info">
-        <h1>Inteligencia Artificial</h1>
-        <p>Arte generativo, pipelines y herramientas creativas.</p>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <div class="toolbar">
-      <div class="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="q" placeholder="Buscar por título..." aria-label="Buscar proyectos">
-      </div>
-    </div>
-    <section id="grid" class="grid"></section>
-  </main>
-
-  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="box" id="modalBox">
-      <div class="proj-head">
-        <h2 class="proj-title" id="projTitle">Proyecto</h2>
-        <button class="close-btn" id="closeBtn" aria-label="Cerrar">✕</button>
-      </div>
-      <div class="proj" id="modalContent"></div>
-    </div>
-  </div>
+  <!-- =====================================================
+       TEMA INICIAL
+       ===================================================== -->
 
   <script>
-    (function(){ const h=new Date().getHours(); document.body.className=(h>=7&&h<19)?'light':'dark'; })();
 
-    const GRID=document.getElementById("grid"),
-          Q=document.getElementById("q"),
-          MODAL=document.getElementById("modal"),
-          MODAL_TITLE=document.getElementById("projTitle"),
-          MODAL_CONTENT=document.getElementById("modalContent"),
-          CLOSE_BTN=document.getElementById("closeBtn");
-    let projects=[];
+    (function () {
 
-    function placeholder(t="Proyecto"){
-      return `data:image/svg+xml,${encodeURIComponent(
-        "<svg xmlns='http://www.w3.org/2000/svg' width='800' height='450'>"
-        +"<rect width='100%' height='100%' fill='#0f1a24'/>"
-        +"<text x='50%' y='50%' fill='#87a7ff' text-anchor='middle' dominant-baseline='middle' font-family='Poppins' font-size='24'>"
-        +t+"</text></svg>"
-      )}`;
-    }
+      const savedTheme =
+        sessionStorage.getItem("moncada-theme");
 
-    function render(list){
-      if(!list.length){ GRID.innerHTML="<p style='color:var(--muted);text-align:center;'>Sin proyectos disponibles.</p>"; return; }
-      GRID.innerHTML=list.map((p,i)=>`
-        <div class='card'>
-          <img class='poster' src='${p.cover||placeholder(p.title)}' alt='${p.title}'>
-          <div class='titleWrap'>
-            <h3 class='title'>${p.title}</h3>
-            <p class='desc'>${p.desc||""}</p>
-            <div class='btns'><a href='#' class='btn' data-i='${i}'>Ver proyecto</a></div>
-          </div>
-        </div>
-      `).join("");
-    }
+      const hour =
+        new Date().getHours();
 
-    Q.addEventListener('input',()=>{
-      const q=Q.value.toLowerCase();
-      render(projects.filter(p=>(p.title||"").toLowerCase().includes(q) || (p.desc||"").toLowerCase().includes(q)));
-    });
+      const automaticTheme =
+        hour >= 7 && hour < 19
+          ? "light"
+          : "dark";
 
-    function openModalFor(p){
-      MODAL_TITLE.textContent=p.title||"Proyecto";
-      const media=[];
-      if(p.cover) media.push(`<img class="proj-hero" src="${p.cover}" alt="${p.title}">`);
-      if(p.gallery && Array.isArray(p.gallery)){ p.gallery.forEach(img=> media.push(`<img class="proj-hero" src="${img}" alt="Vista de ${p.title}">`)); }
-      if(p.video){
-        if(p.video.includes("youtube")||p.video.includes("youtu.be")){
-          const id=p.video.split("v=")[1]?.split("&")[0]||p.video.split("youtu.be/")[1];
-          media.push(`<iframe class="proj-hero" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>`);
-        }else if(p.video.endsWith(".mp4")){
-          media.push(`<video class="proj-hero" src="${p.video}" controls></video>`);
-        }
-      }
-      MODAL_CONTENT.innerHTML=`<div>${media.join("")}</div><div><h3 style="margin-bottom:6px;">Descripción</h3><p class="proj-sub">${p.desc||"Sin descripción."}</p></div>`;
-      MODAL.classList.add('open'); MODAL.setAttribute('aria-hidden','false'); CLOSE_BTN.focus();
-    }
+      document.documentElement.setAttribute(
+        "data-theme",
+        savedTheme || automaticTheme
+      );
 
-    function closeModal(){ MODAL.classList.remove('open'); MODAL.setAttribute('aria-hidden','true'); }
-    GRID.addEventListener('click',e=>{ const b=e.target.closest('[data-i]'); if(!b)return; e.preventDefault(); openModalFor(projects[b.dataset.i]); });
-    CLOSE_BTN.addEventListener('click', closeModal);
-    MODAL.addEventListener('click', e=>{ if(e.target===MODAL) closeModal(); });
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+    })();
 
-    async function load(){
-      try{
-        const r=await fetch("IA/manifest.json",{cache:"no-store"});
-        const d=await r.json();
-        projects=d.projects||[];
-      }catch{
-        projects=[];
-      }
-      render(projects);
-    }
-    load();
   </script>
+
+
+  <!-- =====================================================
+       FUENTES
+       ===================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    /* =====================================================
+       MONCADAART — INTELIGENCIA ARTIFICIAL
+       ===================================================== */
+
+
+    /* =====================================================
+       VARIABLES
+       ===================================================== */
+
+    :root {
+
+      --orange: #e8792e;
+      --orange-dark: #cc6121;
+
+      --monky-blue: #315d78;
+      --ai-blue: #587b91;
+
+      --max-width: 1420px;
+
+      --radius-sm: 18px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+
+    }
+
+
+    /* =====================================================
+       MODO CLARO
+       ===================================================== */
+
+    html[data-theme="light"] {
+
+      --page-bg: #f6efe5;
+
+      --surface: #fffaf3;
+      --surface-2: #f2e6d7;
+      --surface-3: #ead9c5;
+
+      --ink: #2a201a;
+
+      --text-soft: #695c53;
+
+      --border:
+        rgba(119,80,51,.18);
+
+      --soft-border:
+        rgba(119,80,51,.10);
+
+      --shadow:
+        0 12px 30px
+        rgba(80,52,31,.08);
+
+      --shadow-hover:
+        0 20px 46px
+        rgba(80,52,31,.16);
+
+    }
+
+
+    /* =====================================================
+       MODO OSCURO
+       ===================================================== */
+
+    html[data-theme="dark"] {
+
+      --page-bg: #10100e;
+
+      --surface: #1c1a17;
+      --surface-2: #24211c;
+      --surface-3: #2b2721;
+
+      --ink: #fff5e7;
+
+      --text-soft: #c5b8ad;
+
+      --border:
+        rgba(225,153,75,.20);
+
+      --soft-border:
+        rgba(225,153,75,.10);
+
+      --shadow:
+        0 12px 32px
+        rgba(0,0,0,.28);
+
+      --shadow-hover:
+        0 22px 48px
+        rgba(0,0,0,.44);
+
+    }
+
+
+    /* =====================================================
+       RESET
+       ===================================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--page-bg);
+
+      font-family:
+        "Poppins",
+        sans-serif;
+
+      line-height: 1.6;
+
+      transition:
+        background-color .4s ease,
+        color .4s ease;
+
+    }
+
+
+    html[data-theme="light"] body {
+
+      background:
+
+        radial-gradient(
+          circle at 7% 15%,
+          rgba(232,121,46,.06),
+          transparent 25%
+        ),
+
+        radial-gradient(
+          circle at 93% 46%,
+          rgba(49,93,120,.07),
+          transparent 28%
+        ),
+
+        var(--page-bg);
+
+    }
+
+
+    img {
+      max-width: 100%;
+    }
+
+
+    a {
+      color: inherit;
+    }
+
+
+    button,
+    input {
+      font: inherit;
+    }
+
+
+    ::selection {
+
+      color: #fff;
+
+      background:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
+       HERO
+       ===================================================== */
+
+    .hero {
+
+      position: relative;
+
+      min-height: 390px;
+
+      overflow: hidden;
+
+      isolation: isolate;
+
+      display: flex;
+
+      align-items: flex-end;
+
+      border-radius:
+        0 0 34px 34px;
+
+    }
+
+
+    .hero-cover {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: -3;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      object-position:
+        center 46%;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-cover {
+
+      filter:
+        brightness(.90)
+        saturate(.90);
+
+    }
+
+
+    html[data-theme="dark"]
+    .hero-cover {
+
+      filter:
+        brightness(.43)
+        saturate(.75);
+
+    }
+
+
+    /* =====================================================
+       HERO OVERLAY
+       ===================================================== */
+
+    .hero-overlay {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: -2;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-overlay {
+
+      background:
+
+        linear-gradient(
+          90deg,
+          rgba(246,239,229,.98) 0%,
+          rgba(246,239,229,.92) 24%,
+          rgba(246,239,229,.53) 48%,
+          rgba(246,239,229,.10) 70%
+        ),
+
+        linear-gradient(
+          to top,
+          var(--page-bg),
+          transparent 42%
+        );
+
+    }
+
+
+    html[data-theme="dark"]
+    .hero-overlay {
+
+      background:
+
+        linear-gradient(
+          90deg,
+          rgba(13,12,10,.94) 0%,
+          rgba(13,12,10,.78) 25%,
+          rgba(13,12,10,.43) 50%,
+          rgba(13,12,10,.18) 75%
+        ),
+
+        linear-gradient(
+          to top,
+          var(--page-bg),
+          transparent 44%
+        );
+
+    }
+
+
+    /* =====================================================
+       TOPBAR
+       ===================================================== */
+
+    .topbar {
+
+      position: absolute;
+
+      z-index: 20;
+
+      top: 0;
+      left: 50%;
+
+      transform:
+        translateX(-50%);
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      height: 84px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 24px;
+
+    }
+
+
+    /* =====================================================
+       BRAND
+       ===================================================== */
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      margin-right: auto;
+
+      text-decoration: none;
+
+    }
+
+
+    .brand-avatar {
+
+      width: 50px;
+      height: 50px;
+
+      object-fit: cover;
+
+      border-radius: 50%;
+
+      border:
+        2px solid
+        rgba(216,137,66,.45);
+
+      box-shadow:
+        0 5px 14px
+        rgba(42,26,16,.12);
+
+    }
+
+
+    .brand-name {
+
+      font-family:
+        "Pacifico",
+        cursive;
+
+      font-size: 24px;
+
+      white-space: nowrap;
+
+    }
+
+
+    /* =====================================================
+       NAV
+       ===================================================== */
+
+    .nav-links {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 30px;
+
+    }
+
+
+    .nav-links a {
+
+      position: relative;
+
+      padding:
+        29px 0 18px;
+
+      color:
+        var(--ink);
+
+      text-decoration: none;
+
+      font-size: 14px;
+
+      font-weight: 500;
+
+    }
+
+
+    .nav-links a::after {
+
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: 11px;
+
+      width: 0;
+      height: 2px;
+
+      transform:
+        translateX(-50%);
+
+      background:
+        var(--orange);
+
+      border-radius: 999px;
+
+      transition:
+        width .22s ease;
+
+    }
+
+
+    .nav-links a:hover {
+
+      color:
+        var(--orange);
+
+    }
+
+
+    .nav-links a:hover::after {
+
+      width: 27px;
+
+    }
+
+
+    /* =====================================================
+       REDES
+       ===================================================== */
+
+    .social-nav {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 13px;
+
+    }
+
+
+    .social-nav a {
+
+      width: 30px;
+      height: 30px;
+
+      display: grid;
+
+      place-items: center;
+
+      color:
+        var(--ink);
+
+      text-decoration: none;
+
+      transition:
+        color .2s ease,
+        transform .2s ease;
+
+    }
+
+
+    .social-nav a:hover {
+
+      color:
+        var(--orange);
+
+      transform:
+        translateY(-2px);
+
+    }
+
+
+    .social-nav svg {
+
+      width: 20px;
+      height: 20px;
+
+      fill: none;
+
+      stroke:
+        currentColor;
+
+      stroke-width: 1.8;
+
+    }
+
+
+    .social-nav svg path {
+
+      fill:
+        currentColor;
+
+      stroke: none;
+
+    }
+
+
+    .behance {
+
+      font-size: 18px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       THEME
+       ===================================================== */
+
+    .theme-toggle {
+
+      min-width: 90px;
+
+      height: 40px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      padding:
+        0 13px;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 16px
+        rgba(0,0,0,.06);
+
+      transition:
+        transform .2s ease,
+        border-color .2s ease;
+
+    }
+
+
+    .theme-toggle:hover {
+
+      transform:
+        translateY(-2px);
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    .theme-icon {
+      font-size: 17px;
+    }
+
+
+    .theme-text {
+
+      font-size: 11px;
+
+      font-weight: 600;
+
+    }
+
+
+    /* =====================================================
+       MENÚ MÓVIL
+       ===================================================== */
+
+    .menu-toggle {
+
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 10px;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        12px;
+
+      cursor: pointer;
+
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 5px;
+
+    }
+
+
+    .menu-toggle span {
+
+      width: 19px;
+      height: 2px;
+
+      background:
+        currentColor;
+
+      border-radius: 999px;
+
+      transition:
+        .25s ease;
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(1) {
+
+      transform:
+        translateY(7px)
+        rotate(45deg);
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(2) {
+
+      opacity: 0;
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(3) {
+
+      transform:
+        translateY(-7px)
+        rotate(-45deg);
+
+    }
+
+
+    /* =====================================================
+       HERO CONTENT
+       ===================================================== */
+
+    .hero-content {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        130px 0 62px;
+
+    }
+
+
+    .breadcrumb {
+
+      margin:
+        0 0 8px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.8px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .hero-content h1 {
+
+      max-width: 900px;
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          54px,
+          5.8vw,
+          84px
+        );
+
+      font-weight: 400;
+
+      line-height: .97;
+
+      letter-spacing:
+        -1.7px;
+
+    }
+
+
+    .hero-description {
+
+      max-width: 650px;
+
+      margin:
+        19px 0 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 14px;
+
+      line-height: 1.8;
+
+    }
+
+
+    .hero-tools {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 7px;
+
+      margin-top: 19px;
+
+    }
+
+
+    .hero-tools span {
+
+      padding:
+        6px 11px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        rgba(255,255,255,.05);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      font-size: 9px;
+
+      font-weight: 600;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-tools span {
+
+      background:
+        rgba(255,250,243,.66);
+
+    }
+
+
+    /* =====================================================
+       CONTAINER
+       ===================================================== */
+
+    .container {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+    }
+
+
+    /* =====================================================
+       PROCESO CREATIVO
+       ===================================================== */
+
+    .process-section {
+
+      position: relative;
+
+      padding:
+        68px 0 68px;
+
+    }
+
+
+    .process-heading {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 10px;
+
+      margin-bottom: 28px;
+
+    }
+
+
+    .process-heading h2 {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          28px,
+          2.5vw,
+          36px
+        );
+
+      font-weight: 400;
+
+      line-height: 1;
+
+    }
+
+
+    .process-star {
+
+      color:
+        var(--orange);
+
+      font-size: 14px;
+
+    }
+
+
+    /* =====================================================
+       TARJETA PROCESO
+       ===================================================== */
+
+    .process-card {
+
+      position: relative;
+
+      overflow: hidden;
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0,.9fr)
+        1px
+        minmax(0,1.35fr);
+
+      align-items: stretch;
+
+      gap:
+        clamp(
+          34px,
+          4.5vw,
+          70px
+        );
+
+      padding:
+        clamp(
+          34px,
+          4vw,
+          52px
+        )
+        clamp(
+          30px,
+          4.5vw,
+          58px
+        );
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--soft-border);
+
+      border-radius:
+        28px;
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    /* =====================================================
+       DECORACIÓN
+       ===================================================== */
+
+    .process-card::before {
+
+      content: "";
+
+      position: absolute;
+
+      top: -170px;
+      left: -120px;
+
+      width: 300px;
+      height: 300px;
+
+      border-radius: 50%;
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(232,121,46,.12),
+          transparent 70%
+        );
+
+      pointer-events: none;
+
+    }
+
+
+    .process-card::after {
+
+      content: "";
+
+      position: absolute;
+
+      right: -140px;
+      bottom: -170px;
+
+      width: 310px;
+      height: 310px;
+
+      border-radius: 50%;
+
+      background:
+
+        radial-gradient(
+          circle,
+          rgba(49,93,120,.13),
+          transparent 70%
+        );
+
+      pointer-events: none;
+
+    }
+
+
+    html[data-theme="light"]
+    .process-card {
+
+      background:
+
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.45),
+          transparent 44%
+        ),
+
+        #fffaf3;
+
+    }
+
+
+    html[data-theme="dark"]
+    .process-card {
+
+      background:
+
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,.025),
+          transparent 45%
+        ),
+
+        var(--surface);
+
+    }
+
+
+    /* =====================================================
+       IZQUIERDA
+       ===================================================== */
+
+    .process-intro {
+
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      align-items:
+        flex-start;
+
+    }
+
+
+    .process-kicker {
+
+      display: block;
+
+      margin-bottom: 17px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.6px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .process-title {
+
+      max-width: 530px;
+
+      margin: 0;
+
+      color:
+        var(--ink);
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          39px,
+          4vw,
+          58px
+        );
+
+      font-weight: 400;
+
+      line-height: 1.08;
+
+      letter-spacing:
+        -.6px;
+
+    }
+
+
+    .process-title strong {
+
+      color:
+        var(--orange);
+
+      font-weight: 400;
+
+    }
+
+
+    .process-caption {
+
+      margin:
+        23px 0 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11px;
+
+      font-weight: 500;
+
+    }
+
+
+    /* =====================================================
+       DIVISOR
+       ===================================================== */
+
+    .process-divider {
+
+      position: relative;
+
+      z-index: 2;
+
+      width: 1px;
+
+      min-height: 205px;
+
+      background:
+
+        linear-gradient(
+          to bottom,
+          transparent,
+          rgba(232,121,46,.47) 18%,
+          rgba(232,121,46,.47) 82%,
+          transparent
+        );
+
+    }
+
+
+    /* =====================================================
+       DERECHA
+       ===================================================== */
+
+    .process-info {
+
+      position: relative;
+
+      z-index: 2;
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+
+    .process-description {
+
+      max-width: 735px;
+
+      margin:
+        0 0 27px;
+
+      color:
+        var(--text-soft);
+
+      font-size:
+        clamp(
+          14px,
+          1.25vw,
+          16px
+        );
+
+      line-height: 1.9;
+
+    }
+
+
+    /* =====================================================
+       TAGS
+       ===================================================== */
+
+    .process-tags {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 9px;
+
+    }
+
+
+    .process-tags span {
+
+      min-height: 32px;
+
+      display:
+        inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        6px 13px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      font-size: 10px;
+
+      font-weight: 600;
+
+      transition:
+        transform .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+
+    }
+
+
+    html[data-theme="light"]
+    .process-tags span {
+
+      background:
+        rgba(244,232,217,.65);
+
+    }
+
+
+    /* Toques azul Monky para IA */
+
+    html[data-theme="light"]
+    .process-tags span:nth-child(2),
+    html[data-theme="light"]
+    .process-tags span:nth-child(4) {
+
+      background:
+        rgba(220,232,238,.68);
+
+      border-color:
+        rgba(49,93,120,.18);
+
+    }
+
+
+    html[data-theme="dark"]
+    .process-tags span {
+
+      background:
+        rgba(255,255,255,.035);
+
+    }
+
+
+    .process-tags span:hover {
+
+      transform:
+        translateY(-2px);
+
+      color:
+        var(--ink);
+
+      border-color:
+        rgba(232,121,46,.48);
+
+    }
+
+
+    /* =====================================================
+       PROYECTOS
+       ===================================================== */
+
+    .projects {
+
+      padding:
+        10px 0 82px;
+
+    }
+
+
+    .projects-head {
+
+      display: flex;
+
+      align-items:
+        flex-end;
+
+      justify-content:
+        space-between;
+
+      gap: 30px;
+
+      margin-bottom: 28px;
+
+    }
+
+
+    .section-heading {
+      margin: 0;
+    }
+
+
+    .section-kicker {
+
+      display: block;
+
+      margin-bottom: 3px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.5px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .section-heading h2 {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          32px,
+          3vw,
+          42px
+        );
+
+      font-weight: 400;
+
+    }
+
+
+    /* =====================================================
+       BUSCADOR
+       ===================================================== */
+
+    .toolbar {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+    }
+
+
+    .search {
+
+      width: 330px;
+      height: 46px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      padding:
+        0 15px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      box-shadow:
+        0 5px 15px
+        rgba(50,30,17,.04);
+
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+
+    }
+
+
+    .search:focus-within {
+
+      border-color:
+        rgba(232,121,46,.55);
+
+      box-shadow:
+        0 7px 20px
+        rgba(181,95,38,.10);
+
+    }
+
+
+    .search input {
+
+      width: 100%;
+
+      color:
+        var(--ink);
+
+      background:
+        transparent;
+
+      border: 0;
+
+      outline: none;
+
+      font-size: 12px;
+
+    }
+
+
+    .search input::placeholder {
+
+      color:
+        var(--text-soft);
+
+      opacity: .72;
+
+    }
+
+
+    .project-count {
+
+      white-space: nowrap;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11px;
+
+    }
+
+
+    /* =====================================================
+       GRID
+       ===================================================== */
+
+    .grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0,1fr)
+        );
+
+      gap:
+        24px 22px;
+
+    }
+
+
+    /* =====================================================
+       CARD
+       ===================================================== */
+
+    .card {
+
+      position: relative;
+
+      min-width: 0;
+
+      overflow: hidden;
+
+      display: flex;
+
+      flex-direction: column;
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--soft-border);
+
+      border-radius:
+        var(--radius-md);
+
+      box-shadow:
+        var(--shadow);
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
+    }
+
+
+    html[data-theme="light"]
+    .card {
+
+      background:
+
+        linear-gradient(
+          145deg,
+          rgba(255,255,255,.30),
+          transparent 40%
+        ),
+
+        var(--surface);
+
+    }
+
+
+    .card:hover {
+
+      transform:
+        translateY(-5px);
+
+      border-color:
+        rgba(232,121,46,.30);
+
+      box-shadow:
+        var(--shadow-hover);
+
+    }
+
+
+    /* =====================================================
+       POSTER
+       ===================================================== */
+
+    .poster-wrap {
+
+      position: relative;
+
+      overflow: hidden;
+
+      background:
+        #161616;
+
+      cursor: pointer;
+
+    }
+
+
+    .poster {
+
+      display: block;
+
+      width: 100%;
+
+      aspect-ratio:
+        16 / 9;
+
+      object-fit: cover;
+
+      object-position: center;
+
+      transition:
+        transform .5s ease;
+
+    }
+
+
+    .card:hover
+    .poster {
+
+      transform:
+        scale(1.035);
+
+    }
+
+
+    .poster-wrap::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      pointer-events: none;
+
+      background:
+
+        linear-gradient(
+          to top,
+          rgba(15,12,9,.20),
+          transparent 52%
+        );
+
+    }
+
+
+    /* =====================================================
+       CARD CONTENT
+       ===================================================== */
+
+    .card-content {
+
+      flex: 1;
+
+      display: flex;
+
+      flex-direction: column;
+
+      padding:
+        17px 18px 19px;
+
+    }
+
+
+    .project-tag {
+
+      align-self:
+        flex-start;
+
+      display:
+        inline-flex;
+
+      margin-bottom: 11px;
+
+      padding:
+        5px 10px;
+
+      color:
+        #41687d;
+
+      background:
+        rgba(49,93,120,.10);
+
+      border:
+        1px solid
+        rgba(49,93,120,.17);
+
+      border-radius:
+        999px;
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        .4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    html[data-theme="dark"]
+    .project-tag {
+
+      color:
+        #a7c7d8;
+
+      background:
+        rgba(79,126,151,.10);
+
+      border-color:
+        rgba(120,166,190,.15);
+
+    }
+
+
+    .title {
+
+      margin:
+        0 0 8px;
+
+      font-size: 17px;
+
+      line-height: 1.38;
+
+    }
+
+
+    .desc {
+
+      margin:
+        0 0 17px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11.5px;
+
+      line-height: 1.7;
+
+      display:
+        -webkit-box;
+
+      -webkit-line-clamp:
+        3;
+
+      -webkit-box-orient:
+        vertical;
+
+      overflow: hidden;
+
+    }
+
+
+    .view-project {
+
+      align-self:
+        flex-start;
+
+      margin-top: auto;
+
+      padding: 0;
+
+      color:
+        var(--orange);
+
+      background:
+        transparent;
+
+      border: 0;
+
+      cursor: pointer;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+    }
+
+
+    .view-project span {
+
+      display:
+        inline-block;
+
+      transition:
+        transform .2s ease;
+
+    }
+
+
+    .view-project:hover
+    span {
+
+      transform:
+        translateX(4px);
+
+    }
+
+
+    /* =====================================================
+       EMPTY
+       ===================================================== */
+
+    .empty {
+
+      grid-column:
+        1 / -1;
+
+      padding:
+        60px 20px;
+
+      color:
+        var(--text-soft);
+
+      text-align:
+        center;
+
+      background:
+        var(--surface);
+
+      border:
+        1px dashed
+        var(--border);
+
+      border-radius:
+        20px;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =====================================================
+       MODAL
+       ===================================================== */
+
+    .modal {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 100;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 28px;
+
+      background:
+        rgba(6,6,5,.76);
+
+      backdrop-filter:
+        blur(9px);
+
+    }
+
+
+    .modal.open {
+      display: flex;
+    }
+
+
+    .modal-box {
+
+      width:
+        min(
+          1080px,
+          94vw
+        );
+
+      max-height:
+        90vh;
+
+      overflow: auto;
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        27px;
+
+      box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.50);
+
+    }
+
+
+    /* =====================================================
+       MODAL HEAD
+       ===================================================== */
+
+    .modal-head {
+
+      position: sticky;
+
+      z-index: 5;
+
+      top: 0;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content:
+        space-between;
+
+      gap: 20px;
+
+      padding:
+        17px 20px;
+
+      background:
+        var(--surface);
+
+      border-bottom:
+        1px solid
+        var(--soft-border);
+
+    }
+
+
+    .modal-label {
+
+      display: block;
+
+      margin-bottom: 1px;
+
+      color:
+        var(--orange);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .modal-title {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size: 22px;
+
+      font-weight: 400;
+
+    }
+
+
+    .close {
+
+      width: 40px;
+      height: 40px;
+
+      display: grid;
+
+      place-items: center;
+
+      flex:
+        0 0 auto;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 50%;
+
+      cursor: pointer;
+
+    }
+
+
+    .close:hover {
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
+       MODAL BODY
+       ===================================================== */
+
+    .modal-body {
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0,1.2fr)
+        minmax(280px,.8fr);
+
+      gap: 32px;
+
+      padding: 25px;
+
+    }
+
+
+    .modal-media {
+      min-width: 0;
+    }
+
+
+    .shot {
+
+      display: block;
+
+      width: 100%;
+
+      max-height: 62vh;
+
+      margin-bottom: 12px;
+
+      object-fit: contain;
+
+      object-position: center;
+
+      background:
+        #151515;
+
+      border-radius:
+        18px;
+
+    }
+
+
+    iframe.shot {
+
+      min-height: 330px;
+
+      border: 0;
+
+    }
+
+
+    .modal-info {
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+
+    .modal-info-kicker {
+
+      margin:
+        0 0 10px;
+
+      color:
+        var(--orange);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing:
+        1.4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .modal-description {
+
+      margin:
+        0 0 18px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 13px;
+
+      line-height: 1.85;
+
+    }
+
+
+    .modal-tag {
+
+      align-self:
+        flex-start;
+
+      padding:
+        7px 11px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      font-size: 10px;
+
+      font-weight: 600;
+
+    }
+
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .footer {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        22px 0 35px;
+
+      color:
+        var(--text-soft);
+
+      text-align: center;
+
+      border-top:
+        1px solid
+        var(--soft-border);
+
+    }
+
+
+    .footer p {
+
+      margin: 0;
+
+      font-size: 11px;
+
+    }
+
+
+    .footer a {
+
+      color:
+        var(--orange);
+
+      text-decoration: none;
+
+    }
+
+
+    /* =====================================================
+       TABLET
+       ===================================================== */
+
+    @media
+    (max-width:1050px) {
+
+      .grid {
+
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0,1fr)
+          );
+
+      }
+
+    }
+
+
+    @media
+    (max-width:900px) {
+
+      .social-nav {
+        display: none;
+      }
+
+
+      .menu-toggle {
+        display: flex;
+      }
+
+
+      .nav-links {
+
+        position: absolute;
+
+        top: 70px;
+        right: 0;
+
+        width:
+          min(
+            270px,
+            calc(100vw - 30px)
+          );
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 0;
+
+        padding: 8px;
+
+        opacity: 0;
+
+        visibility:
+          hidden;
+
+        transform:
+          translateY(-8px);
+
+        background:
+          var(--surface);
+
+        border:
+          1px solid
+          var(--border);
+
+        border-radius:
+          17px;
+
+        box-shadow:
+          var(--shadow-hover);
+
+        transition:
+          .22s ease;
+
+      }
+
+
+      .nav-links.open {
+
+        opacity: 1;
+
+        visibility:
+          visible;
+
+        transform:
+          translateY(0);
+
+      }
+
+
+      .nav-links a {
+
+        padding:
+          12px 14px;
+
+      }
+
+
+      .nav-links a::after {
+        display: none;
+      }
+
+
+      .process-card {
+
+        grid-template-columns:
+          minmax(0,.85fr)
+          1px
+          minmax(0,1.15fr);
+
+        gap: 30px;
+
+        padding:
+          36px 30px;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media
+    (max-width:640px) {
+
+
+      .hero {
+
+        min-height:
+          490px;
+
+        border-radius:
+          0 0 24px 24px;
+
+      }
+
+
+      .hero-cover {
+
+        object-position:
+          57% center;
+
+      }
+
+
+      html[data-theme="light"]
+      .hero-overlay {
+
+        background:
+
+          linear-gradient(
+            to bottom,
+            rgba(246,239,229,.16),
+            rgba(246,239,229,.16) 32%,
+            rgba(246,239,229,.84) 70%,
+            var(--page-bg) 100%
+          );
+
+      }
+
+
+      html[data-theme="dark"]
+      .hero-overlay {
+
+        background:
+
+          linear-gradient(
+            to bottom,
+            rgba(10,10,9,.21),
+            rgba(10,10,9,.28) 33%,
+            rgba(10,10,9,.83) 71%,
+            var(--page-bg) 100%
+          );
+
+      }
+
+
+      .topbar {
+
+        width:
+          calc(100% - 26px);
+
+        height: 70px;
+
+        gap: 8px;
+
+      }
+
+
+      .brand {
+        gap: 8px;
+      }
+
+
+      .brand-avatar {
+
+        width: 40px;
+        height: 40px;
+
+      }
+
+
+      .brand-name {
+        font-size: 17px;
+      }
+
+
+      .theme-toggle {
+
+        min-width: 42px;
+
+        width: 42px;
+        height: 42px;
+
+        padding: 0;
+
+      }
+
+
+      .theme-text {
+        display: none;
+      }
+
+
+      .hero-content {
+
+        width:
+          calc(100% - 34px);
+
+        padding:
+          245px 0 43px;
+
+      }
+
+
+      .breadcrumb {
+        font-size: 8px;
+      }
+
+
+      .hero-content h1 {
+
+        font-size:
+          clamp(
+            48px,
+            14vw,
+            65px
+          );
+
+      }
+
+
+      .hero-description {
+
+        max-width: 345px;
+
+        margin-top:
+          14px;
+
+        font-size:
+          11.5px;
+
+        line-height:
+          1.7;
+
+      }
+
+
+      .hero-tools {
+        margin-top: 15px;
+      }
+
+
+      .hero-tools span {
+
+        padding:
+          5px 9px;
+
+        font-size: 8px;
+
+      }
+
+
+      .container {
+
+        width:
+          calc(100% - 30px);
+
+      }
+
+
+      /* PROCESS */
+
+      .process-section {
+
+        padding:
+          50px 0 48px;
+
+      }
+
+
+      .process-heading {
+
+        margin-bottom:
+          21px;
+
+      }
+
+
+      .process-heading h2 {
+
+        font-size:
+          27px;
+
+      }
+
+
+      .process-card {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 0;
+
+        padding:
+          28px 22px 25px;
+
+        border-radius:
+          22px;
+
+      }
+
+
+      .process-intro {
+
+        padding-bottom:
+          25px;
+
+      }
+
+
+      .process-kicker {
+
+        margin-bottom:
+          12px;
+
+        font-size:
+          8.5px;
+
+      }
+
+
+      .process-title {
+
+        max-width:
+          100%;
+
+        font-size:
+          clamp(
+            35px,
+            11vw,
+            45px
+          );
+
+        line-height:
+          1.06;
+
+      }
+
+
+      .process-caption {
+
+        margin-top:
+          17px;
+
+        font-size:
+          10px;
+
+      }
+
+
+      .process-divider {
+
+        width: 100%;
+
+        height: 1px;
+
+        min-height: 0;
+
+        margin:
+          0 0 24px;
+
+        background:
+
+          linear-gradient(
+            to right,
+            rgba(232,121,46,.56),
+            rgba(232,121,46,.16),
+            transparent
+          );
+
+      }
+
+
+      .process-description {
+
+        margin-bottom:
+          22px;
+
+        font-size:
+          12px;
+
+        line-height:
+          1.8;
+
+      }
+
+
+      .process-tags {
+        gap: 7px;
+      }
+
+
+      .process-tags span {
+
+        min-height:
+          29px;
+
+        padding:
+          5px 10px;
+
+        font-size:
+          9px;
+
+      }
+
+
+      /* PROJECTS */
+
+      .projects {
+
+        padding:
+          2px 0 65px;
+
+      }
+
+
+      .projects-head {
+
+        display: block;
+
+        margin-bottom:
+          22px;
+
+      }
+
+
+      .section-heading {
+
+        margin-bottom:
+          18px;
+
+      }
+
+
+      .section-heading h2 {
+
+        font-size:
+          31px;
+
+      }
+
+
+      .toolbar {
+
+        width: 100%;
+
+      }
+
+
+      .search {
+
+        flex: 1;
+
+        width: auto;
+
+        height: 43px;
+
+      }
+
+
+      .project-count {
+        display: none;
+      }
+
+
+      .grid {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 18px;
+
+      }
+
+
+      .card {
+
+        border-radius:
+          20px;
+
+      }
+
+
+      .card-content {
+
+        padding:
+          15px 16px 18px;
+
+      }
+
+
+      .title {
+
+        font-size:
+          17px;
+
+      }
+
+
+      .desc {
+
+        font-size:
+          11px;
+
+        -webkit-line-clamp:
+          4;
+
+      }
+
+
+      /* MODAL */
+
+      .modal {
+        padding: 10px;
+      }
+
+
+      .modal-box {
+
+        width: 100%;
+
+        max-height:
+          94vh;
+
+        border-radius:
+          22px;
+
+      }
+
+
+      .modal-head {
+
+        padding:
+          14px 15px;
+
+      }
+
+
+      .modal-title {
+
+        font-size:
+          19px;
+
+      }
+
+
+      .modal-body {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 19px;
+
+        padding: 15px;
+
+      }
+
+
+      iframe.shot {
+
+        min-height:
+          220px;
+
+      }
+
+
+      .modal-description {
+
+        font-size:
+          12px;
+
+      }
+
+
+      .footer {
+
+        width:
+          calc(100% - 30px);
+
+      }
+
+    }
+
+
+    @media
+    (max-width:420px) {
+
+      .brand-name {
+        font-size: 15px;
+      }
+
+
+      .hero-content h1 {
+
+        font-size:
+          48px;
+
+      }
+
+
+      .process-card {
+
+        padding:
+          25px 18px;
+
+      }
+
+
+      .process-title {
+
+        font-size:
+          36px;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       ACCESIBILIDAD
+       ===================================================== */
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+
+      outline:
+        3px solid
+        var(--orange);
+
+      outline-offset:
+        3px;
+
+    }
+
+
+    @media
+    (prefers-reduced-motion:reduce) {
+
+      *,
+      *::before,
+      *::after {
+
+        scroll-behavior:
+          auto !important;
+
+        animation-duration:
+          .01ms !important;
+
+        transition-duration:
+          .01ms !important;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- =====================================================
+       PORTADA IA
+       ===================================================== -->
+
+  <header class="hero">
+
+
+    <img
+      class="hero-cover"
+      src="assets/img/portada.jpeg"
+      alt=""
+    >
+
+
+    <div
+      class="hero-overlay"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- ===================================================
+         NAVEGACIÓN
+         =================================================== -->
+
+    <nav
+      class="topbar"
+      aria-label="Navegación principal"
+    >
+
+
+      <!-- LOGO -->
+
+      <a
+        class="brand"
+        href="index.html"
+      >
+
+        <img
+          class="brand-avatar"
+          src="assets/img/perfil.jpeg"
+          alt=""
+        >
+
+        <span class="brand-name">
+          MoncadaArt
+        </span>
+
+      </a>
+
+
+      <!-- LINKS -->
+
+      <div
+        class="nav-links"
+        id="mainNav"
+      >
+
+        <a href="index.html">
+          Inicio
+        </a>
+
+        <a href="index.html#projects">
+          Proyectos
+        </a>
+
+        <a href="index.html#about">
+          Sobre mí
+        </a>
+
+        <a href="index.html#contacto">
+          Contacto
+        </a>
+
+      </div>
+
+
+      <!-- REDES -->
+
+      <div class="social-nav">
+
+
+        <!-- INSTAGRAM -->
+
+        <a
+          href="#"
+          aria-label="Instagram"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="5"
+            ></rect>
+
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+            ></circle>
+
+            <circle
+              cx="17.5"
+              cy="6.5"
+              r="1"
+            ></circle>
+
+          </svg>
+
+        </a>
+
+
+        <!-- BEHANCE -->
+
+        <a
+          href="#"
+          class="behance"
+          aria-label="Behance"
+        >
+          Bē
+        </a>
+
+
+        <!-- GITHUB -->
+
+        <a
+          href="https://github.com/Christianmon0108"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M12 3a9 9 0 0 0-2.85 17.54c.45.08.62-.2.62-.43v-1.68c-2.52.55-3.05-1.07-3.05-1.07-.41-1.05-1-1.33-1-1.33-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.1.98 2.62.75.08-.58.31-.98.57-1.2-2.01-.23-4.13-1-4.13-4.47 0-.99.35-1.79.93-2.42-.09-.23-.4-1.15.09-2.39 0 0 .76-.24 2.48.92A8.6 8.6 0 0 1 12 8.28a8.6 8.6 0 0 1 2.26.3c1.72-1.16 2.48-.92 2.48-.92.49 1.24.18 2.16.09 2.39.58.63.93 1.43.93 2.42 0 3.48-2.12 4.24-4.14 4.47.33.28.61.83.61 1.67v2.48c0 .24.16.52.63.43A9 9 0 0 0 12 3Z"
+            ></path>
+
+          </svg>
+
+        </a>
+
+      </div>
+
+
+      <!-- TEMA -->
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="Cambiar tema"
+      >
+
+        <span
+          class="theme-icon"
+          id="themeIcon"
+          aria-hidden="true"
+        >
+          ☾
+        </span>
+
+        <span
+          class="theme-text"
+          id="themeText"
+        >
+          Oscuro
+        </span>
+
+      </button>
+
+
+      <!-- MENÚ MÓVIL -->
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+
+    </nav>
+
+
+    <!-- ===================================================
+         HERO CONTENT
+         =================================================== -->
+
+    <div class="hero-content">
+
+
+      <p class="breadcrumb">
+        Portafolio / Inteligencia Artificial
+      </p>
+
+
+      <h1>
+        Inteligencia
+        <br>
+        Artificial
+      </h1>
+
+
+      <p class="hero-description">
+        Exploro la inteligencia artificial como una herramienta
+        creativa para generar imágenes, desarrollar conceptos,
+        experimentar con nuevas ideas y ampliar las posibilidades
+        del diseño digital.
+      </p>
+
+
+      <div class="hero-tools">
+
+        <span>
+          Generación visual
+        </span>
+
+        <span>
+          Prompting
+        </span>
+
+        <span>
+          Automatización
+        </span>
+
+        <span>
+          Experimentación
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+  </header>
+
+
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
+
+  <main class="container">
+
+
+    <!-- ===================================================
+         PROCESO CREATIVO
+         =================================================== -->
+
+    <section class="process-section">
+
+
+      <div class="process-heading">
+
+        <span
+          class="process-star"
+          aria-hidden="true"
+        >
+          ✦
+        </span>
+
+        <h2>
+          Proceso creativo
+        </h2>
+
+      </div>
+
+
+      <div class="process-card">
+
+
+        <!-- IZQUIERDA -->
+
+        <div class="process-intro">
+
+          <span class="process-kicker">
+            Idea · Iteración · Exploración
+          </span>
+
+
+          <h3 class="process-title">
+            De la idea
+            <br>
+            a nuevas
+            <strong>posibilidades.</strong>
+          </h3>
+
+
+          <p class="process-caption">
+            La tecnología amplía el proceso creativo.
+          </p>
+
+        </div>
+
+
+        <!-- DIVISOR -->
+
+        <div
+          class="process-divider"
+          aria-hidden="true"
+        ></div>
+
+
+        <!-- DERECHA -->
+
+        <div class="process-info">
+
+
+          <p class="process-description">
+            Utilizo inteligencia artificial como parte del proceso
+            creativo para explorar conceptos, generar referencias,
+            experimentar con estilos y desarrollar nuevas soluciones
+            visuales. Combino estas herramientas con diseño y criterio
+            artístico para transformar una idea inicial en resultados
+            útiles, interesantes y visualmente sólidos.
+          </p>
+
+
+          <div class="process-tags">
+
+            <span>
+              Generación visual
+            </span>
+
+            <span>
+              Prompting
+            </span>
+
+            <span>
+              Concept Art
+            </span>
+
+            <span>
+              Automatización
+            </span>
+
+            <span>
+              Experimentación
+            </span>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </section>
+
+
+    <!-- ===================================================
+         PROYECTOS IA
+         =================================================== -->
+
+    <section class="projects">
+
+
+      <div class="projects-head">
+
+
+        <div class="section-heading">
+
+          <span class="section-kicker">
+            Galería
+          </span>
+
+          <h2>
+            Proyectos de IA
+          </h2>
+
+        </div>
+
+
+        <div class="toolbar">
+
+
+          <!-- BUSCADOR -->
+
+          <label
+            class="search"
+            for="q"
+          >
+
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="currentColor"
+                stroke-width="2"
+              ></circle>
+
+              <path
+                d="M20 20L16.5 16.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              ></path>
+
+            </svg>
+
+
+            <input
+              id="q"
+              type="search"
+              placeholder="Buscar proyecto..."
+              autocomplete="off"
+            >
+
+          </label>
+
+
+          <span
+            class="project-count"
+            id="projectCount"
+          >
+            0 proyectos
+          </span>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- GRID -->
+
+      <div
+        id="grid"
+        class="grid"
+      ></div>
+
+
+    </section>
+
+
+  </main>
+
+
+  <!-- =====================================================
+       MODAL
+       ===================================================== -->
+
+  <div
+    id="modal"
+    class="modal"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+  >
+
+
+    <div class="modal-box">
+
+
+      <!-- HEADER -->
+
+      <div class="modal-head">
+
+
+        <div>
+
+          <span class="modal-label">
+            Proyecto creativo
+          </span>
+
+          <h2
+            class="modal-title"
+            id="modalTitle"
+          >
+            Proyecto
+          </h2>
+
+        </div>
+
+
+        <button
+          class="close"
+          id="modalClose"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ✕
+        </button>
+
+
+      </div>
+
+
+      <!-- BODY -->
+
+      <div class="modal-body">
+
+
+        <div
+          class="modal-media"
+          id="modalMedia"
+        ></div>
+
+
+        <div class="modal-info">
+
+
+          <p class="modal-info-kicker">
+            Inteligencia Artificial
+          </p>
+
+
+          <p
+            class="modal-description"
+            id="modalDescription"
+          >
+            Sin descripción.
+          </p>
+
+
+          <span class="modal-tag">
+            IA · Creatividad digital
+          </span>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="footer">
+
+    <p>
+
+      ©
+      <span id="currentYear"></span>
+      MoncadaArt ·
+
+      <a href="index.html">
+        Volver al inicio
+      </a>
+
+    </p>
+
+  </footer>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+       ===================================================== -->
+
+  <script>
+
+
+    /* =====================================================
+       TEMA
+       ===================================================== */
+
+    const themeToggle =
+      document.getElementById(
+        "themeToggle"
+      );
+
+    const themeIcon =
+      document.getElementById(
+        "themeIcon"
+      );
+
+    const themeText =
+      document.getElementById(
+        "themeText"
+      );
+
+
+    function automaticTheme() {
+
+      const hour =
+        new Date().getHours();
+
+      return (
+        hour >= 7 &&
+        hour < 19
+      )
+        ? "light"
+        : "dark";
+
+    }
+
+
+    function updateThemeButton() {
+
+      const theme =
+        document.documentElement
+          .getAttribute(
+            "data-theme"
+          );
+
+
+      if (theme === "dark") {
+
+        themeIcon.textContent =
+          "☀";
+
+        themeText.textContent =
+          "Claro";
+
+      } else {
+
+        themeIcon.textContent =
+          "☾";
+
+        themeText.textContent =
+          "Oscuro";
+
+      }
+
+    }
+
+
+    function applyTheme(theme) {
+
+      document.documentElement
+        .setAttribute(
+          "data-theme",
+          theme
+        );
+
+
+      const metaTheme =
+        document.querySelector(
+          'meta[name="theme-color"]'
+        );
+
+
+      if (metaTheme) {
+
+        metaTheme.setAttribute(
+          "content",
+          theme === "dark"
+            ? "#10100e"
+            : "#f6efe5"
+        );
+
+      }
+
+
+      updateThemeButton();
+
+    }
+
+
+    applyTheme(
+
+      sessionStorage.getItem(
+        "moncada-theme"
+      )
+
+      ||
+
+      automaticTheme()
+
+    );
+
+
+    themeToggle.addEventListener(
+      "click",
+      () => {
+
+        const current =
+          document.documentElement
+            .getAttribute(
+              "data-theme"
+            );
+
+
+        const next =
+          current === "dark"
+            ? "light"
+            : "dark";
+
+
+        sessionStorage.setItem(
+          "moncada-theme",
+          next
+        );
+
+
+        applyTheme(next);
+
+      }
+    );
+
+
+    /* =====================================================
+       MENÚ
+       ===================================================== */
+
+    const menuToggle =
+      document.getElementById(
+        "menuToggle"
+      );
+
+    const mainNav =
+      document.getElementById(
+        "mainNav"
+      );
+
+
+    menuToggle.addEventListener(
+      "click",
+      () => {
+
+        const open =
+          mainNav.classList.toggle(
+            "open"
+          );
+
+
+        menuToggle.classList.toggle(
+          "active",
+          open
+        );
+
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          String(open)
+        );
+
+      }
+    );
+
+
+    mainNav
+      .querySelectorAll("a")
+      .forEach(link => {
+
+        link.addEventListener(
+          "click",
+          () => {
+
+            mainNav.classList.remove(
+              "open"
+            );
+
+            menuToggle.classList.remove(
+              "active"
+            );
+
+            menuToggle.setAttribute(
+              "aria-expanded",
+              "false"
+            );
+
+          }
+        );
+
+      });
+
+
+    /* =====================================================
+       AÑO
+       ===================================================== */
+
+    document.getElementById(
+      "currentYear"
+    ).textContent =
+      new Date().getFullYear();
+
+
+    /* =====================================================
+       ELEMENTOS
+       ===================================================== */
+
+    const GRID =
+      document.getElementById(
+        "grid"
+      );
+
+    const SEARCH =
+      document.getElementById(
+        "q"
+      );
+
+    const COUNT =
+      document.getElementById(
+        "projectCount"
+      );
+
+
+    const MODAL =
+      document.getElementById(
+        "modal"
+      );
+
+    const MODAL_TITLE =
+      document.getElementById(
+        "modalTitle"
+      );
+
+    const MODAL_DESCRIPTION =
+      document.getElementById(
+        "modalDescription"
+      );
+
+    const MODAL_MEDIA =
+      document.getElementById(
+        "modalMedia"
+      );
+
+    const MODAL_CLOSE =
+      document.getElementById(
+        "modalClose"
+      );
+
+
+    let projects = [];
+
+
+    /* =====================================================
+       ESCAPE
+       ===================================================== */
+
+    function escapeHTML(
+      value = ""
+    ) {
+
+      return String(value)
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =====================================================
+       PLACEHOLDER
+       ===================================================== */
+
+    function placeholder(
+      title = "Proyecto"
+    ) {
+
+      const safe =
+        escapeHTML(
+          title
+        );
+
+
+      const svg = `
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1000"
+          height="563"
+        >
+
+          <rect
+            width="100%"
+            height="100%"
+            fill="#e9ded1"
+          />
+
+          <circle
+            cx="500"
+            cy="235"
+            r="80"
+            fill="#dce8ee"
+          />
+
+          <text
+            x="50%"
+            y="66%"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            fill="#6a584c"
+            font-family="Arial"
+            font-size="28"
+          >
+            ${safe}
+          </text>
+
+        </svg>
+
+      `;
+
+
+      return (
+        "data:image/svg+xml," +
+        encodeURIComponent(svg)
+      );
+
+    }
+
+
+    /* =====================================================
+       YOUTUBE
+       ===================================================== */
+
+    function getYouTubeID(
+      url = ""
+    ) {
+
+      if (!url) {
+
+        return "";
+
+      }
+
+
+      try {
+
+        const parsed =
+          new URL(
+            url,
+            window.location.href
+          );
+
+
+        const host =
+          parsed.hostname
+            .replace(
+              /^www\./,
+              ""
+            );
+
+
+        if (
+          host === "youtu.be"
+        ) {
+
+          return (
+            parsed.pathname
+              .replace(
+                /^\/+/,
+                ""
+              )
+              .split("/")[0]
+            || ""
+          );
+
+        }
+
+
+        if (
+          host.includes(
+            "youtube.com"
+          )
+        ) {
+
+
+          if (
+            parsed.pathname ===
+            "/watch"
+          ) {
+
+            return (
+              parsed.searchParams
+                .get("v")
+              || ""
+            );
+
+          }
+
+
+          if (
+            parsed.pathname
+              .startsWith(
+                "/shorts/"
+              )
+          ) {
+
+            return (
+              parsed.pathname
+                .split("/")[2]
+              || ""
+            );
+
+          }
+
+
+          if (
+            parsed.pathname
+              .startsWith(
+                "/embed/"
+              )
+          ) {
+
+            return (
+              parsed.pathname
+                .split("/")[2]
+              || ""
+            );
+
+          }
+
+        }
+
+      }
+
+      catch {
+
+        return "";
+
+      }
+
+
+      return "";
+
+    }
+
+
+    function getYouTubeThumbnail(
+      url
+    ) {
+
+      const id =
+        getYouTubeID(
+          url
+        );
+
+
+      return id
+
+        ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
+
+        : "";
+
+    }
+
+
+    function getYouTubeFallback(
+      url
+    ) {
+
+      const id =
+        getYouTubeID(
+          url
+        );
+
+
+      return id
+
+        ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+
+        : "";
+
+    }
+
+
+    /* =====================================================
+       RENDER
+       ===================================================== */
+
+    function render(
+      list
+    ) {
+
+      GRID.innerHTML =
+        "";
+
+
+      COUNT.textContent =
+
+        list.length === 1
+
+          ? "1 proyecto"
+
+          : `${list.length} proyectos`;
+
+
+      if (
+        !list.length
+      ) {
+
+        GRID.innerHTML = `
+
+          <div class="empty">
+
+            No encontré proyectos
+            que coincidan con tu búsqueda.
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      list.forEach(
+        project => {
+
+
+          const card =
+            document.createElement(
+              "article"
+            );
+
+
+          card.className =
+            "card";
+
+
+          /* ===============================================
+             POSTER
+             =============================================== */
+
+          const posterWrap =
+            document.createElement(
+              "div"
+            );
+
+
+          posterWrap.className =
+            "poster-wrap";
+
+
+          const image =
+            document.createElement(
+              "img"
+            );
+
+
+          image.className =
+            "poster";
+
+
+          const youtubeThumbnail =
+            getYouTubeThumbnail(
+              project.video
+            );
+
+
+          image.src =
+
+            youtubeThumbnail
+
+            ||
+
+            project.cover
+
+            ||
+
+            placeholder(
+              project.title
+            );
+
+
+          image.alt =
+            project.title ||
+            "Proyecto";
+
+
+          image.loading =
+            "lazy";
+
+
+          image.decoding =
+            "async";
+
+
+          let fallbackUsed =
+            false;
+
+
+          image.onerror =
+            () => {
+
+
+              const youtubeFallback =
+                getYouTubeFallback(
+                  project.video
+                );
+
+
+              if (
+                youtubeFallback &&
+                !fallbackUsed
+              ) {
+
+                fallbackUsed =
+                  true;
+
+
+                image.src =
+                  youtubeFallback;
+
+
+                return;
+
+              }
+
+
+              image.onerror =
+                null;
+
+
+              image.src =
+                placeholder(
+                  project.title
+                );
+
+            };
+
+
+          posterWrap.appendChild(
+            image
+          );
+
+
+          posterWrap.addEventListener(
+            "click",
+            () => {
+
+              openViewer(
+                project
+              );
+
+            }
+          );
+
+
+          /* ===============================================
+             CONTENT
+             =============================================== */
+
+          const content =
+            document.createElement(
+              "div"
+            );
+
+
+          content.className =
+            "card-content";
+
+
+          content.innerHTML = `
+
+            <span class="project-tag">
+              ${escapeHTML(
+                project.categoria ||
+                "Inteligencia Artificial"
+              )}
+            </span>
+
+            <h3 class="title">
+              ${escapeHTML(
+                project.title ||
+                "Proyecto"
+              )}
+            </h3>
+
+            <p class="desc">
+              ${escapeHTML(
+                project.desc ||
+                ""
+              )}
+            </p>
+
+          `;
+
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+
+          button.className =
+            "view-project";
+
+
+          button.type =
+            "button";
+
+
+          button.innerHTML =
+            `Ver proyecto <span>→</span>`;
+
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              openViewer(
+                project
+              );
+
+            }
+          );
+
+
+          content.appendChild(
+            button
+          );
+
+
+          card.appendChild(
+            posterWrap
+          );
+
+
+          card.appendChild(
+            content
+          );
+
+
+          GRID.appendChild(
+            card
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
+    function applyFilter() {
+
+      const query =
+        (
+          SEARCH.value ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      const filtered =
+        projects.filter(
+          project => {
+
+
+            const searchable =
+              [
+
+                project.title,
+                project.desc,
+                project.categoria
+
+              ]
+
+              .filter(Boolean)
+
+              .join(" ")
+
+              .toLowerCase();
+
+
+            return searchable.includes(
+              query
+            );
+
+          }
+        );
+
+
+      render(
+        filtered
+      );
+
+    }
+
+
+    SEARCH.addEventListener(
+      "input",
+      applyFilter
+    );
+
+
+    /* =====================================================
+       MODAL
+       ===================================================== */
+
+    function openViewer(
+      project
+    ) {
+
+      if (!project) {
+
+        return;
+
+      }
+
+
+      MODAL_TITLE.textContent =
+        project.title ||
+        "Proyecto";
+
+
+      MODAL_DESCRIPTION.textContent =
+        project.desc ||
+        "Sin descripción.";
+
+
+      MODAL_MEDIA.innerHTML =
+        "";
+
+
+      const media = [];
+
+
+      /* Cover */
+
+      if (
+        project.cover
+      ) {
+
+        media.push({
+
+          type:
+            "image",
+
+          src:
+            project.cover
+
+        });
+
+      }
+
+
+      /* Galería */
+
+      (
+        project.gallery ||
+        []
+      ).forEach(
+        src => {
+
+          if (!src) {
+
+            return;
+
+          }
+
+
+          media.push({
+
+            type:
+              "image",
+
+            src:
+              src
+
+          });
+
+        }
+      );
+
+
+      /* Video */
+
+      if (
+        project.video
+      ) {
+
+        const youtubeID =
+          getYouTubeID(
+            project.video
+          );
+
+
+        if (
+          youtubeID
+        ) {
+
+          media.push({
+
+            type:
+              "youtube",
+
+            src:
+              `https://www.youtube.com/embed/${youtubeID}?rel=0`
+
+          });
+
+        }
+
+        else if (
+          /\.(mp4|webm|mov)$/i
+            .test(
+              project.video
+            )
+        ) {
+
+          media.push({
+
+            type:
+              "video",
+
+            src:
+              project.video
+
+          });
+
+        }
+
+      }
+
+
+      /* Sin media */
+
+      if (
+        !media.length
+      ) {
+
+        media.push({
+
+          type:
+            "image",
+
+          src:
+            placeholder(
+              project.title
+            )
+
+        });
+
+      }
+
+
+      /* Render media */
+
+      media.forEach(
+        item => {
+
+
+          if (
+            item.type ===
+            "image"
+          ) {
+
+            const image =
+              document.createElement(
+                "img"
+              );
+
+
+            image.className =
+              "shot";
+
+
+            image.src =
+              item.src;
+
+
+            image.alt =
+              project.title ||
+              "Proyecto";
+
+
+            image.loading =
+              "lazy";
+
+
+            image.onerror =
+              () => {
+
+                image.onerror =
+                  null;
+
+
+                image.src =
+                  placeholder(
+                    project.title
+                  );
+
+              };
+
+
+            MODAL_MEDIA.appendChild(
+              image
+            );
+
+          }
+
+
+          if (
+            item.type ===
+            "youtube"
+          ) {
+
+            const iframe =
+              document.createElement(
+                "iframe"
+              );
+
+
+            iframe.className =
+              "shot";
+
+
+            iframe.src =
+              item.src;
+
+
+            iframe.allow =
+              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+
+
+            iframe.allowFullscreen =
+              true;
+
+
+            MODAL_MEDIA.appendChild(
+              iframe
+            );
+
+          }
+
+
+          if (
+            item.type ===
+            "video"
+          ) {
+
+            const video =
+              document.createElement(
+                "video"
+              );
+
+
+            video.className =
+              "shot";
+
+
+            video.src =
+              item.src;
+
+
+            video.controls =
+              true;
+
+
+            video.playsInline =
+              true;
+
+
+            MODAL_MEDIA.appendChild(
+              video
+            );
+
+          }
+
+        }
+      );
+
+
+      MODAL.classList.add(
+        "open"
+      );
+
+
+      MODAL.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      document.body.style.overflow =
+        "hidden";
+
+
+      MODAL_CLOSE.focus();
+
+    }
+
+
+    function closeViewer() {
+
+
+      MODAL
+        .querySelectorAll(
+          "video"
+        )
+        .forEach(
+          video => {
+
+            video.pause();
+
+          }
+        );
+
+
+      MODAL_MEDIA.innerHTML =
+        "";
+
+
+      MODAL.classList.remove(
+        "open"
+      );
+
+
+      MODAL.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      document.body.style.overflow =
+        "";
+
+    }
+
+
+    MODAL_CLOSE.addEventListener(
+      "click",
+      closeViewer
+    );
+
+
+    MODAL.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          MODAL
+        ) {
+
+          closeViewer();
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key ===
+          "Escape" &&
+          MODAL.classList.contains(
+            "open"
+          )
+        ) {
+
+          closeViewer();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       LOAD
+       ===================================================== */
+
+    async function loadProjects() {
+
+      try {
+
+        const response =
+          await fetch(
+
+            `IA/manifest.json?v=${Date.now()}`,
+
+            {
+              cache:
+                "no-store"
+            }
+
+          );
+
+
+        if (
+          !response.ok
+        ) {
+
+          throw new Error(
+            `HTTP ${response.status}`
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        projects =
+          Array.isArray(
+            data.projects
+          )
+
+            ? data.projects.map(
+                project => ({
+
+                  title:
+                    project.title ||
+                    "Proyecto",
+
+                  desc:
+                    project.desc ||
+                    "",
+
+                  cover:
+                    project.cover ||
+                    "",
+
+                  video:
+                    project.video ||
+                    "",
+
+                  categoria:
+                    project.categoria ||
+                    "Inteligencia Artificial",
+
+                  gallery:
+                    Array.isArray(
+                      project.gallery
+                    )
+                      ? project.gallery
+                      : []
+
+                })
+              )
+
+            : [];
+
+
+        applyFilter();
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "Error cargando IA/manifest.json:",
+          error
+        );
+
+
+        projects =
+          [];
+
+
+        render([]);
+
+      }
+
+    }
+
+
+    loadProjects();
+
+
+  </script>
+
+
 </body>
 </html>
