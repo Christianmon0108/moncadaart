@@ -4,10 +4,6 @@
    ========================================================= */
 
 
-/* =========================================================
-   CATEGORÍAS
-   ========================================================= */
-
 const CATEGORY_CONFIG = [
 
   {
@@ -77,30 +73,11 @@ function escapeHTML(
 
   return String(value)
 
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -208,7 +185,7 @@ async function fetchJSON(
 
 
 /* =========================================================
-   YOUTUBE
+   YOUTUBE ID
    ========================================================= */
 
 function getYouTubeID(
@@ -318,7 +295,7 @@ function getYouTubeID(
 
 
 /* =========================================================
-   YOUTUBE THUMBNAIL
+   YOUTUBE THUMBNAILS
    ========================================================= */
 
 function getYouTubeThumbnail(
@@ -330,9 +307,7 @@ function getYouTubeThumbnail(
 
 
   return id
-
     ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
-
     : "";
 
 }
@@ -347,16 +322,14 @@ function getYouTubeFallback(
 
 
   return id
-
     ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
-
     : "";
 
 }
 
 
 /* =========================================================
-   NORMALIZAR PROYECTO
+   NORMALIZAR
    ========================================================= */
 
 function normalizeItem(
@@ -368,24 +341,26 @@ function normalizeItem(
     project.video || "";
 
 
-  const youtubeThumbnail =
-    getYouTubeThumbnail(
-      video
-    );
-
-
   const image =
 
-    youtubeThumbnail ||
+    getYouTubeThumbnail(
+      video
+    )
 
-    project.cover ||
+    ||
 
-    project.img ||
+    project.cover
+
+    ||
+
+    project.img
+
+    ||
 
     "";
 
 
-  return{
+  return {
 
     title:
       project.title ||
@@ -489,7 +464,7 @@ function seededShuffle(
 
 
 /* =========================================================
-   ROTATION BUCKET
+   BUCKET
    ========================================================= */
 
 function getRotationBucket(){
@@ -530,7 +505,7 @@ async function loadCategory(
 
   ){
 
-    return{
+    return {
 
       config,
       projects:[]
@@ -540,7 +515,7 @@ async function loadCategory(
   }
 
 
-  return{
+  return {
 
     config,
 
@@ -597,7 +572,7 @@ function projectKey(
 
 
 /* =========================================================
-   SELECT PROJECTS
+   SELECT
    ========================================================= */
 
 function selectProjects(
@@ -616,7 +591,7 @@ function selectProjects(
     new Set();
 
 
-  /* Uno de cada categoría */
+  /* Uno por categoría */
 
   groups.forEach(
     (
@@ -664,7 +639,7 @@ function selectProjects(
   );
 
 
-  /* Rellenar espacios */
+  /* Rellenar si falta */
 
   if(
     selected.length <
@@ -680,15 +655,12 @@ function selectProjects(
         )
 
         .filter(
-
           project =>
-
             !used.has(
               projectKey(
                 project
               )
             )
-
         );
 
 
@@ -697,8 +669,7 @@ function selectProjects(
 
         remaining,
 
-        bucket +
-        99991
+        bucket + 99991
 
       );
 
@@ -738,8 +709,7 @@ function selectProjects(
 
     selected,
 
-    bucket +
-    3571
+    bucket + 3571
 
   ).slice(
     0,
@@ -784,7 +754,6 @@ function renderCards(
 
     `;
 
-
     return;
 
   }
@@ -816,7 +785,9 @@ function renderCards(
 
       img.src =
 
-        project.img ||
+        project.img
+
+        ||
 
         placeholderSVG(
           project.title
@@ -845,7 +816,9 @@ function renderCards(
 
           if(
 
-            !fallbackUsed &&
+            !fallbackUsed
+
+            &&
 
             project.youtubeFallback
 
@@ -925,10 +898,11 @@ function renderCards(
         "click",
         () => {
 
-
           if(
 
-            project.href &&
+            project.href
+
+            &&
 
             project.href !== "#"
 
