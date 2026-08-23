@@ -1,28 +1,25 @@
 /* =========================================================
-   MONCADAART — HOME V4
-   Día = estudio creativo cálido
-   Noche = estudio creativo nocturno
+   MONCADAART
+   HOME — SOBRE MÍ EDITORIAL
    ========================================================= */
 
 
 /* =========================================================
-   VARIABLES GENERALES
+   VARIABLES
    ========================================================= */
 
 :root{
 
   --orange:#e8792e;
-  --orange-dark:#cc6121;
-  --orange-soft:#f2a268;
+  --orange-dark:#ca6122;
+  --orange-soft:#f1a168;
 
-  --monky-blue:#244f6d;
-  --monky-blue-soft:#dce8ee;
+  --monky-blue:#315d78;
 
   --max-width:1420px;
 
   --radius-sm:18px;
   --radius-md:22px;
-  --radius-lg:30px;
 
   --transition:.25s ease;
 
@@ -30,42 +27,39 @@
 
 
 /* =========================================================
-   MODO DÍA
+   MODO CLARO
    ========================================================= */
 
 html[data-theme="light"]{
 
-  /* Fondo tipo papel / estudio */
-
   --page-bg:#f6efe5;
 
   --surface:#fffaf3;
-  --surface-2:#f3e8da;
-  --surface-3:#eadbc9;
+  --surface-2:#f3e7d8;
 
   --ink:#2a201a;
 
-  --text-soft:#6b5e54;
+  --text-soft:#695c53;
 
   --border:
-    rgba(121,82,53,.17);
+    rgba(119,80,51,.18);
 
   --soft-border:
-    rgba(121,82,53,.10);
+    rgba(119,80,51,.10);
 
   --shadow:
     0 10px 30px
-    rgba(96,64,39,.08);
+    rgba(80,52,31,.08);
 
   --shadow-hover:
-    0 18px 42px
-    rgba(96,64,39,.15);
+    0 20px 44px
+    rgba(80,52,31,.15);
 
 }
 
 
 /* =========================================================
-   MODO NOCHE
+   MODO OSCURO
    ========================================================= */
 
 html[data-theme="dark"]{
@@ -74,7 +68,6 @@ html[data-theme="dark"]{
 
   --surface:#1c1a17;
   --surface-2:#24211c;
-  --surface-3:#2b261f;
 
   --ink:#fff5e7;
 
@@ -107,14 +100,19 @@ html[data-theme="dark"]{
 
 
 html{
+
   scroll-behavior:smooth;
+
   scroll-padding-top:90px;
+
 }
 
 
 html,
 body{
+
   min-height:100%;
+
 }
 
 
@@ -126,7 +124,8 @@ body{
     "Poppins",
     sans-serif;
 
-  color:var(--ink);
+  color:
+    var(--ink);
 
   background:
     var(--page-bg);
@@ -140,28 +139,20 @@ body{
 }
 
 
-/* Fondo creativo modo día */
-
 html[data-theme="light"] body{
 
   background:
 
     radial-gradient(
       circle at 8% 12%,
-      rgba(232,121,46,.07),
-      transparent 28%
+      rgba(232,121,46,.065),
+      transparent 27%
     ),
 
     radial-gradient(
-      circle at 92% 38%,
-      rgba(36,79,109,.055),
+      circle at 92% 40%,
+      rgba(49,93,120,.05),
       transparent 28%
-    ),
-
-    linear-gradient(
-      135deg,
-      rgba(255,255,255,.22),
-      transparent 35%
     ),
 
     var(--page-bg);
@@ -185,8 +176,12 @@ button{
 
 
 ::selection{
-  background:var(--orange);
+
   color:#fff;
+
+  background:
+    var(--orange);
+
 }
 
 
@@ -212,10 +207,6 @@ button{
 
 }
 
-
-/* =========================================================
-   HERO IMAGE
-   ========================================================= */
 
 .hero-cover{
 
@@ -243,8 +234,7 @@ html[data-theme="light"]
 
   filter:
     brightness(1.02)
-    saturate(.96)
-    contrast(1.01);
+    saturate(.96);
 
 }
 
@@ -268,10 +258,6 @@ html[data-theme="dark"]
 }
 
 
-/* =========================================================
-   HERO OVERLAY
-   ========================================================= */
-
 .hero-overlay{
 
   position:absolute;
@@ -283,10 +269,6 @@ html[data-theme="dark"]
 }
 
 
-/* Día:
-   crema solo donde está el texto,
-   imagen conserva color a la derecha */
-
 html[data-theme="light"]
 .hero-overlay{
 
@@ -295,16 +277,14 @@ html[data-theme="light"]
     linear-gradient(
       90deg,
       rgba(246,239,229,.97) 0%,
-      rgba(246,239,229,.91) 18%,
-      rgba(246,239,229,.63) 34%,
-      rgba(246,239,229,.16) 53%,
-      rgba(246,239,229,.02) 72%
+      rgba(246,239,229,.90) 18%,
+      rgba(246,239,229,.61) 34%,
+      rgba(246,239,229,.14) 54%,
+      rgba(246,239,229,.01) 75%
     );
 
 }
 
-
-/* Noche */
 
 html[data-theme="dark"]
 .hero-overlay{
@@ -313,10 +293,10 @@ html[data-theme="dark"]
 
     linear-gradient(
       90deg,
-      rgba(12,12,11,.92) 0%,
+      rgba(12,12,11,.92),
       rgba(12,12,11,.76) 25%,
-      rgba(12,12,11,.36) 51%,
-      rgba(12,12,11,.15) 78%
+      rgba(12,12,11,.35) 52%,
+      rgba(12,12,11,.14) 78%
     );
 
 }
@@ -334,13 +314,14 @@ html[data-theme="dark"]
 
   height:75px;
 
+  z-index:-1;
+
   background:
+
     linear-gradient(
       transparent,
       var(--page-bg)
     );
-
-  z-index:-1;
 
 }
 
@@ -431,7 +412,7 @@ html[data-theme="dark"]
 
 
 /* =========================================================
-   NAV
+   NAVIGATION
    ========================================================= */
 
 .nav-links{
@@ -452,16 +433,14 @@ html[data-theme="dark"]
   padding:
     29px 0 18px;
 
+  color:
+    var(--ink);
+
   text-decoration:none;
 
   font-size:14px;
 
   font-weight:500;
-
-  color:var(--ink);
-
-  transition:
-    color var(--transition);
 
 }
 
@@ -475,19 +454,19 @@ html[data-theme="dark"]
   left:50%;
   bottom:11px;
 
+  width:0;
+  height:2px;
+
   transform:
     translateX(-50%);
 
-  width:0;
-  height:2px;
+  border-radius:999px;
 
   background:
     var(--orange);
 
-  border-radius:999px;
-
   transition:
-    width var(--transition);
+    width .25s ease;
 
 }
 
@@ -533,15 +512,15 @@ html[data-theme="dark"]
 
   place-items:center;
 
-  text-decoration:none;
+  color:
+    var(--ink);
 
-  color:var(--ink);
+  text-decoration:none;
 
   opacity:.88;
 
   transition:
-    color .2s ease,
-    transform .2s ease;
+    .2s ease;
 
 }
 
@@ -574,6 +553,7 @@ html[data-theme="dark"]
 .social-nav svg path{
 
   fill:currentColor;
+
   stroke:none;
 
 }
@@ -582,6 +562,7 @@ html[data-theme="dark"]
 .behance-link{
 
   font-size:18px;
+
   font-weight:700;
 
 }
@@ -607,21 +588,17 @@ html[data-theme="dark"]
   padding:
     0 13px;
 
+  color:
+    var(--ink);
+
+  background:
+    var(--surface);
+
   border:
     1px solid
     var(--border);
 
   border-radius:999px;
-
-  background:
-    color-mix(
-      in srgb,
-      var(--surface) 92%,
-      transparent
-    );
-
-  color:
-    var(--ink);
 
   cursor:pointer;
 
@@ -651,8 +628,6 @@ html[data-theme="dark"]
 
   font-size:17px;
 
-  line-height:1;
-
 }
 
 
@@ -666,7 +641,7 @@ html[data-theme="dark"]
 
 
 /* =========================================================
-   MENÚ MÓVIL
+   MOBILE MENU BUTTON
    ========================================================= */
 
 .menu-toggle{
@@ -675,6 +650,8 @@ html[data-theme="dark"]
 
   width:42px;
   height:42px;
+
+  padding:10px;
 
   border:
     1px solid
@@ -687,8 +664,6 @@ html[data-theme="dark"]
 
   color:
     var(--ink);
-
-  padding:10px;
 
   cursor:pointer;
 
@@ -772,6 +747,9 @@ span:nth-child(3){
   margin:
     0 0 8px;
 
+  color:
+    var(--orange);
+
   font-family:
     "DM Serif Display",
     serif;
@@ -782,9 +760,6 @@ span:nth-child(3){
       2.7vw,
       40px
     );
-
-  color:
-    var(--orange);
 
   line-height:1;
 
@@ -844,10 +819,12 @@ span:nth-child(3){
 
 
 /* =========================================================
-   BOTONES
+   BUTTONS
    ========================================================= */
 
 .btn{
+
+  min-height:47px;
 
   display:inline-flex;
 
@@ -855,8 +832,6 @@ span:nth-child(3){
   justify-content:center;
 
   gap:9px;
-
-  min-height:47px;
 
   padding:
     10px 25px;
@@ -889,6 +864,7 @@ span:nth-child(3){
   color:#fff;
 
   background:
+
     linear-gradient(
       135deg,
       #ee8d46,
@@ -896,6 +872,7 @@ span:nth-child(3){
     );
 
   box-shadow:
+
     0 8px 20px
     rgba(220,103,33,.22);
 
@@ -905,6 +882,7 @@ span:nth-child(3){
 .btn-primary:hover{
 
   box-shadow:
+
     0 12px 25px
     rgba(220,103,33,.30);
 
@@ -967,20 +945,13 @@ html[data-theme="light"]
 
 
 /* =========================================================
-   SECCIONES
+   SECTION TITLES
    ========================================================= */
 
 .section{
 
   margin:
     58px 0;
-
-}
-
-
-.about{
-
-  margin-top:72px;
 
 }
 
@@ -1028,16 +999,315 @@ html[data-theme="light"]
 }
 
 
-.about p{
+/* =========================================================
+   SOBRE MÍ
+   ========================================================= */
 
-  max-width:1020px;
+.about-section{
+
+  position:relative;
+
+  margin-top:72px;
+
+  margin-bottom:72px;
+
+}
+
+
+.about-heading{
+
+  margin-bottom:27px;
+
+}
+
+
+/* =========================================================
+   ABOUT GRID
+   ========================================================= */
+
+.about-grid{
+
+  position:relative;
+
+  overflow:hidden;
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,.88fr)
+    1px
+    minmax(0,1.35fr);
+
+  align-items:stretch;
+
+  gap:
+    clamp(
+      34px,
+      4.5vw,
+      70px
+    );
+
+  padding:
+
+    clamp(
+      32px,
+      4vw,
+      50px
+    )
+
+    clamp(
+      28px,
+      4vw,
+      54px
+    );
+
+  border:
+    1px solid
+    var(--soft-border);
+
+  border-radius:28px;
+
+  background:
+    var(--surface);
+
+  box-shadow:
+    var(--shadow);
+
+}
+
+
+/* =========================================================
+   DECORATIVE LIGHT
+   ========================================================= */
+
+.about-grid::before{
+
+  content:"";
+
+  position:absolute;
+
+  top:-140px;
+  left:-110px;
+
+  width:270px;
+  height:270px;
+
+  border-radius:50%;
+
+  background:
+
+    radial-gradient(
+      circle,
+      rgba(232,121,46,.11),
+      transparent 70%
+    );
+
+  pointer-events:none;
+
+}
+
+
+.about-grid::after{
+
+  content:"";
+
+  position:absolute;
+
+  right:-110px;
+  bottom:-150px;
+
+  width:270px;
+  height:270px;
+
+  border-radius:50%;
+
+  background:
+
+    radial-gradient(
+      circle,
+      rgba(49,93,120,.09),
+      transparent 70%
+    );
+
+  pointer-events:none;
+
+}
+
+
+/* Light mode paper feeling */
+
+html[data-theme="light"]
+.about-grid{
+
+  background:
+
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.42),
+      transparent 44%
+    ),
+
+    #fffaf3;
+
+}
+
+
+/* =========================================================
+   ABOUT LEFT
+   ========================================================= */
+
+.about-intro{
+
+  position:relative;
+
+  z-index:2;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  align-items:flex-start;
+
+}
+
+
+.about-kicker{
+
+  margin-bottom:16px;
+
+  color:
+    var(--orange);
+
+  font-size:10px;
+
+  font-weight:600;
+
+  letter-spacing:1.6px;
+
+  text-transform:uppercase;
+
+}
+
+
+.about-statement{
+
+  max-width:480px;
 
   margin:0;
 
   color:
+    var(--ink);
+
+  font-family:
+    "DM Serif Display",
+    serif;
+
+  font-size:
+    clamp(
+      29px,
+      2.8vw,
+      43px
+    );
+
+  font-weight:400;
+
+  line-height:1.13;
+
+  letter-spacing:-.4px;
+
+}
+
+
+.about-statement strong{
+
+  color:
+    var(--orange);
+
+  font-weight:400;
+
+}
+
+
+.about-signature{
+
+  display:block;
+
+  margin-top:22px;
+
+  color:
     var(--text-soft);
 
-  font-size:15px;
+  font-size:11px;
+
+  font-weight:500;
+
+}
+
+
+/* =========================================================
+   ABOUT DIVIDER
+   ========================================================= */
+
+.about-divider{
+
+  position:relative;
+
+  z-index:2;
+
+  width:1px;
+
+  min-height:200px;
+
+  background:
+
+    linear-gradient(
+      to bottom,
+      transparent,
+      rgba(232,121,46,.46) 19%,
+      rgba(232,121,46,.46) 81%,
+      transparent
+    );
+
+}
+
+
+/* =========================================================
+   ABOUT RIGHT
+   ========================================================= */
+
+.about-info{
+
+  position:relative;
+
+  z-index:2;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+}
+
+
+.about-description{
+
+  max-width:720px;
+
+  margin:
+    0 0 27px;
+
+  color:
+    var(--text-soft);
+
+  font-size:
+    clamp(
+      14px,
+      1.25vw,
+      16px
+    );
 
   line-height:1.9;
 
@@ -1045,12 +1315,91 @@ html[data-theme="light"]
 
 
 /* =========================================================
-   ÁREAS
+   ABOUT TAGS
+   ========================================================= */
+
+.about-tags{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:9px;
+
+}
+
+
+.about-tags span{
+
+  min-height:32px;
+
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:
+    6px 13px;
+
+  color:
+    var(--text-soft);
+
+  background:
+    var(--surface-2);
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:999px;
+
+  font-size:10px;
+
+  font-weight:600;
+
+  transition:
+    transform .2s ease,
+    color .2s ease,
+    border-color .2s ease;
+
+}
+
+
+html[data-theme="light"]
+.about-tags span:nth-child(2),
+html[data-theme="light"]
+.about-tags span:nth-child(5){
+
+  background:
+    #e8f0f3;
+
+  border-color:
+    rgba(49,93,120,.15);
+
+}
+
+
+.about-tags span:hover{
+
+  color:
+    var(--ink);
+
+  border-color:
+    rgba(232,121,46,.44);
+
+  transform:
+    translateY(-2px);
+
+}
+
+
+/* =========================================================
+   AREAS
    ========================================================= */
 
 .areas{
 
-  margin-top:50px;
+  margin-top:53px;
 
 }
 
@@ -1067,9 +1416,10 @@ html[data-theme="light"]
 }
 
 
-/* Base */
-
 .area-button{
+
+  --area-accent:
+    var(--orange);
 
   position:relative;
 
@@ -1089,9 +1439,15 @@ html[data-theme="light"]
   padding:
     14px 9px;
 
+  color:
+    var(--ink);
+
   text-align:center;
 
   text-decoration:none;
+
+  background:
+    var(--surface);
 
   border:
     1px solid
@@ -1099,9 +1455,6 @@ html[data-theme="light"]
 
   border-radius:
     var(--radius-sm);
-
-  background:
-    var(--surface);
 
   box-shadow:
     0 5px 16px
@@ -1129,9 +1482,6 @@ html[data-theme="light"]
 
   opacity:.45;
 
-  border-radius:
-    999px 999px 0 0;
-
   background:
     var(--area-accent);
 
@@ -1156,32 +1506,29 @@ html[data-theme="light"]
 
   font-size:14px;
 
-  color:
-    var(--ink);
-
 }
 
 
 .area-button span{
 
+  color:
+    var(--area-accent);
+
   font-size:10px;
 
   font-weight:600;
-
-  color:
-    var(--area-accent);
 
 }
 
 
 /* =========================================================
-   COLORES MUY SUAVES EN DÍA
+   AREA COLORS
    ========================================================= */
 
 html[data-theme="light"]
 .area-3d{
 
-  --area-accent:#bb7541;
+  --area-accent:#b97544;
 
   background:
     linear-gradient(
@@ -1256,7 +1603,7 @@ html[data-theme="light"]
 html[data-theme="light"]
 .area-games{
 
-  --area-accent:#ae853f;
+  --area-accent:#aa823e;
 
   background:
     linear-gradient(
@@ -1268,14 +1615,13 @@ html[data-theme="light"]
 }
 
 
-/* Noche: coherentes */
-
 html[data-theme="dark"]
 .area-button{
 
   --area-accent:#d88a42;
 
   background:
+
     linear-gradient(
       145deg,
       #24211d,
@@ -1286,7 +1632,7 @@ html[data-theme="dark"]
 
 
 /* =========================================================
-   PROYECTOS
+   PROJECTS
    ========================================================= */
 
 .projects{
@@ -1334,7 +1680,7 @@ html[data-theme="dark"]
 
 
 /* =========================================================
-   GRID
+   PROJECT GRID
    ========================================================= */
 
 .project-grid,
@@ -1352,7 +1698,7 @@ html[data-theme="dark"]
 
 
 /* =========================================================
-   PROJECT CARD
+   PROJECT CARDS
    ========================================================= */
 
 .card{
@@ -1400,28 +1746,6 @@ html[data-theme="dark"]
 }
 
 
-/* Día: efecto papel */
-
-html[data-theme="light"]
-.card{
-
-  background:
-
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.36),
-      transparent 42%
-    ),
-
-    var(--surface);
-
-}
-
-
-/* =========================================================
-   PROJECT IMAGE
-   ========================================================= */
-
 .card .thumb,
 .card .poster{
 
@@ -1452,10 +1776,6 @@ html[data-theme="light"]
 }
 
 
-/* =========================================================
-   PROJECT CONTENT
-   ========================================================= */
-
 .card .content{
 
   flex:1;
@@ -1469,10 +1789,6 @@ html[data-theme="light"]
 
 }
 
-
-/* =========================================================
-   PILL
-   ========================================================= */
 
 .pill{
 
@@ -1523,17 +1839,10 @@ html[data-theme="light"]
 }
 
 
-/* =========================================================
-   PROJECT TEXT
-   ========================================================= */
-
 .card h3{
 
   margin:
     3px 0 7px;
-
-  color:
-    var(--ink);
 
   font-size:18px;
 
@@ -1554,8 +1863,7 @@ html[data-theme="light"]
 
   line-height:1.65;
 
-  display:
-    -webkit-box;
+  display:-webkit-box;
 
   -webkit-line-clamp:3;
 
@@ -1586,7 +1894,7 @@ html[data-theme="light"]
 
 
 /* =========================================================
-   CONTACTO
+   CONTACT
    ========================================================= */
 
 .contact-banner{
@@ -1604,13 +1912,6 @@ html[data-theme="light"]
   margin:
     82px 0 38px;
 
-  border:
-    1px solid
-    var(--border);
-
-  border-radius:
-    28px;
-
   background-image:
     url("assets/img/banner_contacto.png");
 
@@ -1622,6 +1923,12 @@ html[data-theme="light"]
 
   background-repeat:
     no-repeat;
+
+  border:
+    1px solid
+    var(--border);
+
+  border-radius:28px;
 
   box-shadow:
     var(--shadow);
@@ -1644,8 +1951,6 @@ html[data-theme="light"]
 }
 
 
-/* Día */
-
 html[data-theme="light"]
 .contact-banner::before{
 
@@ -1662,8 +1967,6 @@ html[data-theme="light"]
 
 }
 
-
-/* Noche */
 
 html[data-theme="dark"]
 .contact-banner::before{
@@ -1763,14 +2066,14 @@ html[data-theme="dark"]
   padding:
     19px 0 35px;
 
-  border-top:
-    1px solid
-    var(--soft-border);
+  color:
+    var(--text-soft);
 
   text-align:center;
 
-  color:
-    var(--text-soft);
+  border-top:
+    1px solid
+    var(--soft-border);
 
 }
 
@@ -1808,9 +2111,14 @@ html[data-theme="dark"]
   }
 
 
-  .nav-links{
+  .about-grid{
 
-    gap:19px;
+    grid-template-columns:
+      minmax(0,.85fr)
+      1px
+      minmax(0,1.15fr);
+
+    gap:30px;
 
   }
 
@@ -1818,7 +2126,7 @@ html[data-theme="dark"]
 
 
 /* =========================================================
-   NAV TABLET / MOBILE
+   TABLET NAV
    ========================================================= */
 
 @media
@@ -1874,8 +2182,7 @@ html[data-theme="dark"]
       1px solid
       var(--border);
 
-    border-radius:
-      17px;
+    border-radius:17px;
 
     box-shadow:
       var(--shadow-hover);
@@ -1889,6 +2196,7 @@ html[data-theme="dark"]
   .nav-links.open{
 
     opacity:1;
+
     visibility:visible;
 
     transform:
@@ -1901,8 +2209,6 @@ html[data-theme="dark"]
 
     padding:
       12px 14px;
-
-    border-radius:10px;
 
   }
 
@@ -1982,7 +2288,7 @@ html[data-theme="dark"]
   }
 
 
-  /* TOPBAR */
+  /* NAV */
 
   .topbar{
 
@@ -2033,13 +2339,6 @@ html[data-theme="dark"]
   .theme-text{
 
     display:none;
-
-  }
-
-
-  .theme-icon{
-
-    font-size:19px;
 
   }
 
@@ -2120,7 +2419,7 @@ html[data-theme="dark"]
   }
 
 
-  /* CONTENT */
+  /* CONTAINER */
 
   .container{
 
@@ -2138,20 +2437,6 @@ html[data-theme="dark"]
   }
 
 
-  .about{
-
-    margin-top:55px;
-
-  }
-
-
-  .section-heading{
-
-    margin-bottom:15px;
-
-  }
-
-
   .section-heading h2{
 
     font-size:26px;
@@ -2159,16 +2444,139 @@ html[data-theme="dark"]
   }
 
 
-  .about p{
+  /* =======================================================
+     SOBRE MÍ MOBILE
+     ======================================================= */
 
-    font-size:13px;
+  .about-section{
+
+    margin-top:55px;
+
+    margin-bottom:56px;
+
+  }
+
+
+  .about-heading{
+
+    margin-bottom:21px;
+
+  }
+
+
+  .about-grid{
+
+    grid-template-columns:1fr;
+
+    gap:0;
+
+    padding:
+      27px 22px 25px;
+
+    border-radius:22px;
+
+  }
+
+
+  .about-intro{
+
+    padding-bottom:25px;
+
+  }
+
+
+  .about-kicker{
+
+    margin-bottom:12px;
+
+    font-size:9px;
+
+    letter-spacing:1.2px;
+
+  }
+
+
+  .about-statement{
+
+    max-width:100%;
+
+    font-size:
+      clamp(
+        27px,
+        8vw,
+        34px
+      );
+
+    line-height:1.12;
+
+  }
+
+
+  .about-signature{
+
+    margin-top:16px;
+
+    font-size:10px;
+
+  }
+
+
+  .about-divider{
+
+    width:100%;
+
+    height:1px;
+
+    min-height:0;
+
+    margin:
+      0 0 24px;
+
+    background:
+
+      linear-gradient(
+        to right,
+        rgba(232,121,46,.55),
+        rgba(232,121,46,.16),
+        transparent
+      );
+
+  }
+
+
+  .about-description{
+
+    margin-bottom:22px;
+
+    font-size:12px;
 
     line-height:1.8;
 
   }
 
 
-  /* ÁREAS */
+  .about-tags{
+
+    gap:7px;
+
+  }
+
+
+  .about-tags span{
+
+    min-height:29px;
+
+    padding:
+      5px 10px;
+
+    font-size:9px;
+
+  }
+
+
+  /* =======================================================
+     AREAS MOBILE
+     ======================================================= */
 
   .areas{
 
@@ -2191,9 +2599,6 @@ html[data-theme="dark"]
 
     min-height:86px;
 
-    padding:
-      12px 7px;
-
   }
 
 
@@ -2211,7 +2616,9 @@ html[data-theme="dark"]
   }
 
 
-  /* PROYECTOS */
+  /* =======================================================
+     PROJECTS MOBILE
+     ======================================================= */
 
   .projects{
 
@@ -2220,18 +2627,10 @@ html[data-theme="dark"]
   }
 
 
-  .projects-head{
-
-    margin-bottom:22px;
-
-  }
-
-
   .project-grid,
   #project-grid{
 
-    grid-template-columns:
-      1fr;
+    grid-template-columns:1fr;
 
     gap:18px;
 
@@ -2242,14 +2641,6 @@ html[data-theme="dark"]
   .card .poster{
 
     height:195px;
-
-  }
-
-
-  .card .content{
-
-    padding:
-      15px 16px 18px;
 
   }
 
@@ -2269,7 +2660,7 @@ html[data-theme="dark"]
 
 
   /* =======================================================
-     CONTACTO MOBILE
+     CONTACT MOBILE
      ======================================================= */
 
   .contact-banner{
@@ -2282,11 +2673,6 @@ html[data-theme="dark"]
     align-items:flex-end;
 
     border-radius:23px;
-
-    /*
-      Importantísimo:
-      mostramos el lado de Monky
-    */
 
     background-size:
       auto 100%;
@@ -2304,10 +2690,10 @@ html[data-theme="dark"]
 
       linear-gradient(
         to bottom,
-        rgba(12,10,8,.02) 0%,
+        rgba(12,10,8,.02),
         rgba(12,10,8,.08) 35%,
         rgba(12,10,8,.68) 68%,
-        rgba(12,10,8,.96) 100%
+        rgba(12,10,8,.96)
       );
 
   }
@@ -2320,10 +2706,10 @@ html[data-theme="dark"]
 
       linear-gradient(
         to bottom,
-        rgba(246,239,229,.01) 0%,
+        rgba(246,239,229,.01),
         rgba(246,239,229,.04) 33%,
         rgba(246,239,229,.75) 68%,
-        rgba(246,239,229,.98) 100%
+        rgba(246,239,229,.98)
       );
 
   }
@@ -2344,8 +2730,6 @@ html[data-theme="dark"]
 
 
   .contact-copy h2{
-
-    margin-bottom:7px;
 
     font-size:
       clamp(
@@ -2377,13 +2761,6 @@ html[data-theme="dark"]
   }
 
 
-  .contact-button{
-
-    min-width:148px;
-
-  }
-
-
   /* FOOTER */
 
   .footer{
@@ -2396,18 +2773,11 @@ html[data-theme="dark"]
 
   }
 
-
-  .footer p{
-
-    font-size:11px;
-
-  }
-
 }
 
 
 /* =========================================================
-   MOBILE PEQUEÑO
+   SMALL MOBILE
    ========================================================= */
 
 @media
@@ -2416,6 +2786,21 @@ html[data-theme="dark"]
   .brand span{
 
     font-size:15px;
+
+  }
+
+
+  .about-grid{
+
+    padding:
+      24px 18px;
+
+  }
+
+
+  .about-statement{
+
+    font-size:27px;
 
   }
 
@@ -2438,7 +2823,7 @@ html[data-theme="dark"]
 
 
 /* =========================================================
-   ACCESIBILIDAD
+   ACCESSIBILITY
    ========================================================= */
 
 a:focus-visible,
@@ -2452,10 +2837,6 @@ button:focus-visible{
 
 }
 
-
-/* =========================================================
-   REDUCIR MOVIMIENTO
-   ========================================================= */
 
 @media
 (prefers-reduced-motion:reduce){
