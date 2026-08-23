@@ -1,301 +1,4500 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>Modelado 3D — MoncadaArt</title>
 
-  <!-- Fuente -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <meta
+    name="description"
+    content="Proyectos de modelado 3D de Christian Moncada: modelado, retopología, texturizado, materiales, simulaciones y renders."
+  >
 
-  <style>
-    :root{ --radius:16px; --accent:#8ab4ff; --accent2:#55ffe1; }
+  <meta
+    name="theme-color"
+    content="#f6efe5"
+  >
 
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Poppins,system-ui}
-    body{transition:background .4s,color .4s}
 
-    /* === Modos (se aplican por JS según la hora) === */
-    body.dark{ --bg:#0b0e13; --card:#11151c; --soft:#1c2230; --ink:#eaf0ff; --muted:#b1b8cc; background:var(--bg); color:var(--ink); }
-    body.light{ --bg:#f5f6fb; --card:#ffffff; --soft:#e9eef4; --ink:#0f1222; --muted:#5a6275; background:var(--bg); color:var(--ink); }
-
-    a{color:var(--accent);text-decoration:none}
-
-    /* === HERO (igual a “Edición”) === */
-    header.hero{ position:relative; min-height:36vh; display:grid; place-items:end center; overflow:hidden; border-bottom:1px solid rgba(255,255,255,.06)}
-    .hero .cover{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:brightness(.6)}
-    .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(11,14,19,.95))}
-    .perfil{ position:relative; display:flex; gap:14px; align-items:center; margin:16px; padding:12px 14px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); backdrop-filter:blur(10px); border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    body.light .perfil{ background:rgba(255,255,255,0.85); border:1px solid rgba(0,0,0,0.1); box-shadow:0 8px 25px rgba(0,0,0,0.15)}
-    .avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.2)}
-    .info h1{margin:0;font-size:clamp(22px,3.6vw,38px)}
-    .info p{margin:.2rem 0 0;color:var(--muted)}
-
-    /* === MAIN / Toolbar === */
-    main{max-width:1100px;margin:26px auto;padding:0 18px}
-    .toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:10px 0 18px}
-    .search{display:flex;align-items:center;gap:8px;background:var(--soft);border:1px solid rgba(255,255,255,.08);padding:10px 12px;border-radius:12px;min-width:230px}
-    body.light .search{border:1px solid #e7e9f3;box-shadow:0 3px 8px rgba(0,0,0,.1)}
-    .search input{all:unset;width:100%}
-
-    /* === GRID (cards igual a “Edición”) === */
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-    .card{position:relative;border-radius:var(--radius);overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.06);transition:transform .18s ease,box-shadow .18s ease}
-    .card:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(0,0,0,.35)}
-    .poster{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center;background:#0f1a24;border-radius:12px}
-    .titleWrap{padding:10px 12px}
-    .title{font-weight:800;font-size:16px;line-height:1.25;margin:0 0 6px}
-    .desc{color:var(--muted);font-size:13px;line-height:1.4;min-height:2.2em;margin:0 0 10px}
-    .btns{display:flex;gap:8px;flex-wrap:wrap}
-    .btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0f16;font-weight:800;padding:8px 12px;border-radius:10px;font-size:13px}
-    .btn.secondary{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.18)}
-
-    .empty{color:var(--muted);text-align:center;padding:18px}
-
-    /* === MODAL / VISOR (manteniendo tu estructura con links/galería) === */
-    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.55); backdrop-filter: blur(6px); z-index:50 }
-    .modal.open{ display:flex }
-    .modal .box{ width:min(960px,92vw); height:min(86vh,960px); background:var(--card); border:1px solid rgba(255,255,255,.12); border-radius:20px; overflow:auto; box-shadow:0 30px 80px rgba(0,0,0,.55) }
-    .mHead{ position:sticky; top:0; background:var(--card); display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.10) }
-    .mTitle{ font-size:20px; font-weight:800 }
-    .close{ all:unset; cursor:pointer; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16) }
-
-    .mBody{ padding:16px; display:grid; grid-template-columns:1.1fr .9fr; gap:18px }
-    @media (max-width:860px){ .mBody{ grid-template-columns:1fr } }
-
-    .mMedia .shot{ width:100%; max-height:60vh; object-fit:contain; object-position:center; background:#0f1a24; border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.25); margin-bottom:10px }
-    .mDesc{ color:var(--muted); line-height:1.6; margin-bottom:12px }
-    .mLinks{ display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 0 }
-    .mLinks a{ display:inline-block; padding:6px 10px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); color:var(--ink); font-size:12px }
-    body.light .mLinks a{ background:#f1f4fa; border:1px solid #e1e5f0; color:#0f1222 }
-    .mActs{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px }
-  </style>
-</head>
-<body>
-  <!-- HERO -->
-  <header class="hero">
-    <img class="cover" src="assets/img/portada.jpeg" alt="Portada">
-    <div class="overlay"></div>
-    <div class="perfil">
-      <img class="avatar" src="assets/img/perfil.jpeg" alt="Perfil">
-      <div class="info">
-        <h1>Modelado 3D</h1>
-        <p>Modelado 3D, Retopologá, texturizado y renders.</p>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <div class="toolbar">
-      <div class="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
-          <path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <input id="q" placeholder="Buscar por título..." aria-label="Buscar proyectos">
-      </div>
-    </div>
-
-    <section id="grid" class="grid"></section>
-  </main>
-
-  <!-- MODAL / VISOR -->
-  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="box" id="mBox">
-      <div class="mHead">
-        <h2 class="mTitle" id="mTitle">Proyecto</h2>
-        <button class="close" id="mClose" aria-label="Cerrar">✕</button>
-      </div>
-      <div class="mBody">
-        <div class="mMedia" id="mMedia"></div>
-        <div>
-          <p class="mDesc" id="mDesc">Sin descripción.</p>
-          <div class="mLinks" id="mLinks"></div>
-          <div class="mActs" id="mActs"></div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- =====================================================
+       TEMA INICIAL
+       ===================================================== -->
 
   <script>
-    /* === Tema automático por hora (igual que “Edición”) === */
-    function setMode(){
-      const h=new Date().getHours();
-      document.body.className=(h>=7&&h<19)?"light":"dark";
+
+    (function () {
+
+      const savedTheme =
+        sessionStorage.getItem("moncada-theme");
+
+      const hour =
+        new Date().getHours();
+
+      const automaticTheme =
+        hour >= 7 && hour < 19
+          ? "light"
+          : "dark";
+
+      document.documentElement.setAttribute(
+        "data-theme",
+        savedTheme || automaticTheme
+      );
+
+    })();
+
+  </script>
+
+
+  <!-- =====================================================
+       FUENTES
+       ===================================================== -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+
+  <style>
+
+    /* =====================================================
+       MONCADAART — MODELADO 3D
+       ===================================================== */
+
+
+    /* =====================================================
+       VARIABLES
+       ===================================================== */
+
+    :root {
+
+      --orange: #e8792e;
+      --orange-dark: #cc6121;
+
+      --monky-blue: #315d78;
+
+      --max-width: 1420px;
+
+      --radius-sm: 18px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+
     }
-    setMode();
 
-    /* === Elements === */
-    const GRID=document.getElementById("grid"),
-          Q=document.getElementById("q"),
-          MODAL=document.getElementById("modal"),
-          mTitle=document.getElementById("mTitle"),
-          mDesc=document.getElementById("mDesc"),
-          mMedia=document.getElementById("mMedia"),
-          mLinks=document.getElementById("mLinks"),
-          mActs=document.getElementById("mActs"),
-          mClose=document.getElementById("mClose");
 
-    let projects=[];
+    /* =====================================================
+       MODO CLARO
+       ===================================================== */
 
-    /* Placeholder SVG para portadas faltantes */
-    function placeholder(t="Proyecto"){
-      return `data:image/svg+xml,${encodeURIComponent(
-        "<svg xmlns='http://www.w3.org/2000/svg' width='800' height='450'>"
-        +"<rect width='100%' height='100%' fill='#0f1a24'/>"
-        +"<text x='50%' y='50%' fill='#87a7ff' text-anchor='middle' dominant-baseline='middle' font-family='Poppins' font-size='24'>"
-        +t.replace(/&/g,"&amp;")
-        +"</text></svg>"
-      )}`;
+    html[data-theme="light"] {
+
+      --page-bg: #f6efe5;
+
+      --surface: #fffaf3;
+      --surface-2: #f2e6d7;
+      --surface-3: #ead9c5;
+
+      --ink: #2a201a;
+
+      --text-soft: #695c53;
+
+      --border:
+        rgba(119, 80, 51, .18);
+
+      --soft-border:
+        rgba(119, 80, 51, .10);
+
+      --shadow:
+        0 12px 30px
+        rgba(80, 52, 31, .08);
+
+      --shadow-hover:
+        0 20px 46px
+        rgba(80, 52, 31, .16);
+
     }
 
-    /* Render del grid (respeta tu lógica de createElement) */
-    function render(list){
-      GRID.innerHTML = "";
-      if(!list.length){
-        GRID.innerHTML = `<div class="empty">Sin proyectos. Edita <code>Modelado/manifest.json</code> con <code>title</code>, <code>cover</code>, <code>desc</code>, <code>href</code> (opcional), <code>links</code> (opcional) y <code>gallery</code> (opcional).</div>`;
-        return;
+
+    /* =====================================================
+       MODO OSCURO
+       ===================================================== */
+
+    html[data-theme="dark"] {
+
+      --page-bg: #10100e;
+
+      --surface: #1c1a17;
+      --surface-2: #24211c;
+      --surface-3: #2b2721;
+
+      --ink: #fff5e7;
+
+      --text-soft: #c5b8ad;
+
+      --border:
+        rgba(225, 153, 75, .20);
+
+      --soft-border:
+        rgba(225, 153, 75, .10);
+
+      --shadow:
+        0 12px 32px
+        rgba(0, 0, 0, .28);
+
+      --shadow-hover:
+        0 22px 48px
+        rgba(0, 0, 0, .44);
+
+    }
+
+
+    /* =====================================================
+       RESET
+       ===================================================== */
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+
+    html {
+
+      scroll-behavior: smooth;
+
+    }
+
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      color: var(--ink);
+
+      background: var(--page-bg);
+
+      font-family:
+        "Poppins",
+        sans-serif;
+
+      line-height: 1.6;
+
+      transition:
+        background-color .4s ease,
+        color .4s ease;
+
+    }
+
+
+    html[data-theme="light"] body {
+
+      background:
+
+        radial-gradient(
+          circle at 7% 15%,
+          rgba(232, 121, 46, .06),
+          transparent 25%
+        ),
+
+        radial-gradient(
+          circle at 93% 46%,
+          rgba(49, 93, 120, .05),
+          transparent 27%
+        ),
+
+        var(--page-bg);
+
+    }
+
+
+    img {
+
+      max-width: 100%;
+
+    }
+
+
+    a {
+
+      color: inherit;
+
+    }
+
+
+    button,
+    input {
+
+      font: inherit;
+
+    }
+
+
+    ::selection {
+
+      color: #fff;
+
+      background:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
+       HERO
+       ===================================================== */
+
+    .hero {
+
+      position: relative;
+
+      min-height: 390px;
+
+      overflow: hidden;
+
+      isolation: isolate;
+
+      border-radius:
+        0 0 34px 34px;
+
+      display: flex;
+
+      align-items: flex-end;
+
+    }
+
+
+    .hero-cover {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: -3;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      object-position:
+        center 46%;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-cover {
+
+      filter:
+        brightness(.90)
+        saturate(.90);
+
+    }
+
+
+    html[data-theme="dark"]
+    .hero-cover {
+
+      filter:
+        brightness(.43)
+        saturate(.75);
+
+    }
+
+
+    /* =====================================================
+       HERO OVERLAY
+       ===================================================== */
+
+    .hero-overlay {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: -2;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-overlay {
+
+      background:
+
+        linear-gradient(
+          90deg,
+          rgba(246, 239, 229, .98) 0%,
+          rgba(246, 239, 229, .92) 24%,
+          rgba(246, 239, 229, .53) 48%,
+          rgba(246, 239, 229, .10) 70%
+        ),
+
+        linear-gradient(
+          to top,
+          var(--page-bg),
+          transparent 42%
+        );
+
+    }
+
+
+    html[data-theme="dark"]
+    .hero-overlay {
+
+      background:
+
+        linear-gradient(
+          90deg,
+          rgba(13, 12, 10, .94) 0%,
+          rgba(13, 12, 10, .78) 25%,
+          rgba(13, 12, 10, .43) 50%,
+          rgba(13, 12, 10, .18) 75%
+        ),
+
+        linear-gradient(
+          to top,
+          var(--page-bg),
+          transparent 44%
+        );
+
+    }
+
+
+    /* =====================================================
+       NAVEGACIÓN
+       ===================================================== */
+
+    .topbar {
+
+      position: absolute;
+
+      z-index: 20;
+
+      top: 0;
+      left: 50%;
+
+      transform:
+        translateX(-50%);
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      height: 84px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 24px;
+
+    }
+
+
+    /* =====================================================
+       MARCA
+       ===================================================== */
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      margin-right: auto;
+
+      text-decoration: none;
+
+    }
+
+
+    .brand-avatar {
+
+      width: 50px;
+      height: 50px;
+
+      object-fit: cover;
+
+      border-radius: 50%;
+
+      border:
+        2px solid
+        rgba(216, 137, 66, .45);
+
+      box-shadow:
+        0 5px 14px
+        rgba(42, 26, 16, .12);
+
+    }
+
+
+    .brand-name {
+
+      font-family:
+        "Pacifico",
+        cursive;
+
+      font-size: 24px;
+
+      white-space: nowrap;
+
+    }
+
+
+    /* =====================================================
+       LINKS
+       ===================================================== */
+
+    .nav-links {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 30px;
+
+    }
+
+
+    .nav-links a {
+
+      position: relative;
+
+      padding:
+        29px 0 18px;
+
+      color: var(--ink);
+
+      text-decoration: none;
+
+      font-size: 14px;
+
+      font-weight: 500;
+
+    }
+
+
+    .nav-links a::after {
+
+      content: "";
+
+      position: absolute;
+
+      left: 50%;
+      bottom: 11px;
+
+      width: 0;
+      height: 2px;
+
+      transform:
+        translateX(-50%);
+
+      background:
+        var(--orange);
+
+      border-radius: 999px;
+
+      transition:
+        width .22s ease;
+
+    }
+
+
+    .nav-links a:hover {
+
+      color:
+        var(--orange);
+
+    }
+
+
+    .nav-links a:hover::after {
+
+      width: 27px;
+
+    }
+
+
+    /* =====================================================
+       SOCIAL
+       ===================================================== */
+
+    .social-nav {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 13px;
+
+    }
+
+
+    .social-nav a {
+
+      width: 30px;
+      height: 30px;
+
+      display: grid;
+
+      place-items: center;
+
+      color:
+        var(--ink);
+
+      text-decoration: none;
+
+      transition:
+        color .2s ease,
+        transform .2s ease;
+
+    }
+
+
+    .social-nav a:hover {
+
+      color:
+        var(--orange);
+
+      transform:
+        translateY(-2px);
+
+    }
+
+
+    .social-nav svg {
+
+      width: 20px;
+      height: 20px;
+
+      fill: none;
+
+      stroke:
+        currentColor;
+
+      stroke-width: 1.8;
+
+    }
+
+
+    .social-nav svg path {
+
+      fill:
+        currentColor;
+
+      stroke: none;
+
+    }
+
+
+    .behance {
+
+      font-size: 18px;
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       CAMBIAR TEMA
+       ===================================================== */
+
+    .theme-toggle {
+
+      min-width: 90px;
+
+      height: 40px;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      padding:
+        0 13px;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 999px;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 5px 16px
+        rgba(0, 0, 0, .06);
+
+      transition:
+        transform .2s ease,
+        border-color .2s ease;
+
+    }
+
+
+    .theme-toggle:hover {
+
+      transform:
+        translateY(-2px);
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    .theme-icon {
+
+      font-size: 17px;
+
+    }
+
+
+    .theme-text {
+
+      font-size: 11px;
+
+      font-weight: 600;
+
+    }
+
+
+    /* =====================================================
+       MENÚ MÓVIL
+       ===================================================== */
+
+    .menu-toggle {
+
+      display: none;
+
+      width: 42px;
+      height: 42px;
+
+      padding: 10px;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 12px;
+
+      cursor: pointer;
+
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 5px;
+
+    }
+
+
+    .menu-toggle span {
+
+      width: 19px;
+      height: 2px;
+
+      background:
+        currentColor;
+
+      border-radius: 999px;
+
+      transition:
+        .25s ease;
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(1) {
+
+      transform:
+        translateY(7px)
+        rotate(45deg);
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(2) {
+
+      opacity: 0;
+
+    }
+
+
+    .menu-toggle.active
+    span:nth-child(3) {
+
+      transform:
+        translateY(-7px)
+        rotate(-45deg);
+
+    }
+
+
+    /* =====================================================
+       CONTENIDO DEL HERO
+       ===================================================== */
+
+    .hero-content {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        130px 0 62px;
+
+    }
+
+
+    .breadcrumb {
+
+      margin:
+        0 0 8px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.8px;
+
+      text-transform: uppercase;
+
+    }
+
+
+    .hero-content h1 {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          56px,
+          6vw,
+          86px
+        );
+
+      font-weight: 400;
+
+      line-height: .95;
+
+      letter-spacing: -1.8px;
+
+    }
+
+
+    .hero-description {
+
+      max-width: 590px;
+
+      margin:
+        19px 0 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 14px;
+
+      line-height: 1.8;
+
+    }
+
+
+    /* =====================================================
+       TOOLS
+       ===================================================== */
+
+    .hero-tools {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 7px;
+
+      margin-top: 19px;
+
+    }
+
+
+    .hero-tools span {
+
+      padding:
+        6px 11px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        rgba(255, 255, 255, .05);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 999px;
+
+      font-size: 9px;
+
+      font-weight: 600;
+
+    }
+
+
+    html[data-theme="light"]
+    .hero-tools span {
+
+      background:
+        rgba(255, 250, 243, .66);
+
+    }
+
+
+    /* =====================================================
+       MAIN
+       ===================================================== */
+
+    .container {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+    }
+
+
+    /* =====================================================
+       INTRO
+       ===================================================== */
+
+    .intro {
+
+      display: grid;
+
+      grid-template-columns:
+        .8fr
+        1.2fr;
+
+      gap:
+        clamp(
+          45px,
+          7vw,
+          110px
+        );
+
+      align-items: center;
+
+      padding:
+        74px 0 62px;
+
+      border-bottom:
+        1px solid
+        var(--soft-border);
+
+    }
+
+
+    .intro-label {
+
+      display: block;
+
+      margin-bottom: 12px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.6px;
+
+      text-transform: uppercase;
+
+    }
+
+
+    .intro h2 {
+
+      max-width: 460px;
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          34px,
+          3.6vw,
+          52px
+        );
+
+      font-weight: 400;
+
+      line-height: 1.08;
+
+    }
+
+
+    .intro h2 strong {
+
+      color:
+        var(--orange);
+
+      font-weight: 400;
+
+    }
+
+
+    .intro-copy {
+
+      max-width: 680px;
+
+      margin: 0;
+
+      color:
+        var(--text-soft);
+
+      font-size: 14px;
+
+      line-height: 1.9;
+
+    }
+
+
+    /* =====================================================
+       PROYECTOS
+       ===================================================== */
+
+    .projects {
+
+      padding:
+        61px 0 80px;
+
+    }
+
+
+    .projects-head {
+
+      display: flex;
+
+      align-items: flex-end;
+
+      justify-content: space-between;
+
+      gap: 30px;
+
+      margin-bottom: 28px;
+
+    }
+
+
+    .section-heading {
+
+      margin: 0;
+
+    }
+
+
+    .section-kicker {
+
+      display: block;
+
+      margin-bottom: 3px;
+
+      color:
+        var(--orange);
+
+      font-size: 10px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.5px;
+
+      text-transform: uppercase;
+
+    }
+
+
+    .section-heading h2 {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size:
+        clamp(
+          32px,
+          3vw,
+          42px
+        );
+
+      font-weight: 400;
+
+    }
+
+
+    /* =====================================================
+       TOOLBAR
+       ===================================================== */
+
+    .toolbar {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+    }
+
+
+    .search {
+
+      width: 330px;
+      height: 46px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 9px;
+
+      padding:
+        0 15px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius: 999px;
+
+      box-shadow:
+        0 5px 15px
+        rgba(50, 30, 17, .04);
+
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+
+    }
+
+
+    .search:focus-within {
+
+      border-color:
+        rgba(232, 121, 46, .55);
+
+      box-shadow:
+        0 7px 20px
+        rgba(181, 95, 38, .10);
+
+    }
+
+
+    .search svg {
+
+      flex:
+        0 0 auto;
+
+    }
+
+
+    .search input {
+
+      width: 100%;
+
+      color:
+        var(--ink);
+
+      background:
+        transparent;
+
+      border: 0;
+
+      outline: none;
+
+      font-size: 12px;
+
+    }
+
+
+    .search input::placeholder {
+
+      color:
+        var(--text-soft);
+
+      opacity: .72;
+
+    }
+
+
+    .project-count {
+
+      white-space: nowrap;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11px;
+
+    }
+
+
+    /* =====================================================
+       GRID
+       ===================================================== */
+
+    .grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          3,
+          minmax(0, 1fr)
+        );
+
+      gap:
+        24px 22px;
+
+    }
+
+
+    /* =====================================================
+       CARD
+       ===================================================== */
+
+    .card {
+
+      position: relative;
+
+      min-width: 0;
+
+      overflow: hidden;
+
+      display: flex;
+
+      flex-direction: column;
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--soft-border);
+
+      border-radius:
+        var(--radius-md);
+
+      box-shadow:
+        var(--shadow);
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+
+    }
+
+
+    html[data-theme="light"]
+    .card {
+
+      background:
+
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, .30),
+          transparent 40%
+        ),
+
+        var(--surface);
+
+    }
+
+
+    .card:hover {
+
+      transform:
+        translateY(-5px);
+
+      border-color:
+        rgba(232, 121, 46, .30);
+
+      box-shadow:
+        var(--shadow-hover);
+
+    }
+
+
+    /* =====================================================
+       IMAGEN
+       ===================================================== */
+
+    .poster-wrap {
+
+      position: relative;
+
+      overflow: hidden;
+
+      background:
+        #161616;
+
+      cursor: pointer;
+
+    }
+
+
+    .poster {
+
+      display: block;
+
+      width: 100%;
+
+      aspect-ratio:
+        16 / 9;
+
+      object-fit: cover;
+
+      object-position: center;
+
+      transition:
+        transform .5s ease;
+
+    }
+
+
+    .card:hover
+    .poster {
+
+      transform:
+        scale(1.035);
+
+    }
+
+
+    .poster-wrap::after {
+
+      content: "";
+
+      position: absolute;
+
+      inset: 0;
+
+      pointer-events: none;
+
+      background:
+
+        linear-gradient(
+          to top,
+          rgba(15, 12, 9, .20),
+          transparent 50%
+        );
+
+    }
+
+
+    /* =====================================================
+       CONTENIDO CARD
+       ===================================================== */
+
+    .card-content {
+
+      flex: 1;
+
+      display: flex;
+
+      flex-direction: column;
+
+      padding:
+        17px 18px 19px;
+
+    }
+
+
+    .project-tag {
+
+      align-self:
+        flex-start;
+
+      display:
+        inline-flex;
+
+      margin-bottom: 11px;
+
+      padding:
+        5px 10px;
+
+      color:
+        #965321;
+
+      background:
+        rgba(232, 121, 46, .10);
+
+      border:
+        1px solid
+        rgba(232, 121, 46, .16);
+
+      border-radius:
+        999px;
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: .4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    html[data-theme="dark"]
+    .project-tag {
+
+      color:
+        #f3a86f;
+
+      background:
+        rgba(232, 121, 46, .09);
+
+    }
+
+
+    .title {
+
+      margin:
+        0 0 8px;
+
+      font-size: 17px;
+
+      line-height: 1.38;
+
+    }
+
+
+    .desc {
+
+      margin:
+        0 0 17px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 11.5px;
+
+      line-height: 1.7;
+
+      display:
+        -webkit-box;
+
+      -webkit-line-clamp:
+        3;
+
+      -webkit-box-orient:
+        vertical;
+
+      overflow: hidden;
+
+    }
+
+
+    .view-project {
+
+      align-self:
+        flex-start;
+
+      margin-top:
+        auto;
+
+      padding: 0;
+
+      color:
+        var(--orange);
+
+      background:
+        transparent;
+
+      border: 0;
+
+      cursor: pointer;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      text-decoration: none;
+
+    }
+
+
+    .view-project span {
+
+      display:
+        inline-block;
+
+      transition:
+        transform .2s ease;
+
+    }
+
+
+    .view-project:hover span {
+
+      transform:
+        translateX(4px);
+
+    }
+
+
+    /* =====================================================
+       VACÍO
+       ===================================================== */
+
+    .empty {
+
+      grid-column:
+        1 / -1;
+
+      padding:
+        60px 20px;
+
+      color:
+        var(--text-soft);
+
+      text-align:
+        center;
+
+      background:
+        var(--surface);
+
+      border:
+        1px dashed
+        var(--border);
+
+      border-radius:
+        20px;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =====================================================
+       MODAL
+       ===================================================== */
+
+    .modal {
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 100;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        28px;
+
+      background:
+        rgba(6, 6, 5, .76);
+
+      backdrop-filter:
+        blur(9px);
+
+    }
+
+
+    .modal.open {
+
+      display: flex;
+
+    }
+
+
+    /* =====================================================
+       MODAL BOX
+       ===================================================== */
+
+    .modal-box {
+
+      width:
+        min(
+          1080px,
+          94vw
+        );
+
+      max-height:
+        90vh;
+
+      overflow: auto;
+
+      background:
+        var(--surface);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        27px;
+
+      box-shadow:
+        0 30px 90px
+        rgba(0, 0, 0, .50);
+
+    }
+
+
+    /* =====================================================
+       MODAL HEADER
+       ===================================================== */
+
+    .modal-head {
+
+      position: sticky;
+
+      z-index: 5;
+
+      top: 0;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 20px;
+
+      padding:
+        17px 20px;
+
+      background:
+        var(--surface);
+
+      border-bottom:
+        1px solid
+        var(--soft-border);
+
+    }
+
+
+    .modal-label {
+
+      display: block;
+
+      margin-bottom: 1px;
+
+      color:
+        var(--orange);
+
+      font-size: 8px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .modal-title {
+
+      margin: 0;
+
+      font-family:
+        "DM Serif Display",
+        serif;
+
+      font-size: 22px;
+
+      font-weight: 400;
+
+    }
+
+
+    .close {
+
+      width: 40px;
+      height: 40px;
+
+      display: grid;
+
+      place-items: center;
+
+      flex:
+        0 0 auto;
+
+      color:
+        var(--ink);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        50%;
+
+      cursor: pointer;
+
+      transition:
+        transform .2s ease,
+        border-color .2s ease;
+
+    }
+
+
+    .close:hover {
+
+      transform:
+        rotate(5deg);
+
+      border-color:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
+       MODAL BODY
+       ===================================================== */
+
+    .modal-body {
+
+      display: grid;
+
+      grid-template-columns:
+        minmax(0, 1.2fr)
+        minmax(280px, .8fr);
+
+      gap: 32px;
+
+      padding:
+        25px;
+
+    }
+
+
+    /* =====================================================
+       MEDIA
+       ===================================================== */
+
+    .modal-media {
+
+      min-width: 0;
+
+    }
+
+
+    .shot {
+
+      display: block;
+
+      width: 100%;
+
+      max-height: 62vh;
+
+      margin-bottom: 12px;
+
+      object-fit: contain;
+
+      object-position: center;
+
+      background:
+        #151515;
+
+      border-radius: 18px;
+
+    }
+
+
+    iframe.shot {
+
+      min-height: 330px;
+
+      border: 0;
+
+    }
+
+
+    /* =====================================================
+       MODAL INFO
+       ===================================================== */
+
+    .modal-info {
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+    }
+
+
+    .modal-info-kicker {
+
+      margin:
+        0 0 10px;
+
+      color:
+        var(--orange);
+
+      font-size: 9px;
+
+      font-weight: 700;
+
+      letter-spacing: 1.4px;
+
+      text-transform:
+        uppercase;
+
+    }
+
+
+    .modal-description {
+
+      margin:
+        0 0 18px;
+
+      color:
+        var(--text-soft);
+
+      font-size: 13px;
+
+      line-height: 1.85;
+
+    }
+
+
+    /* =====================================================
+       LINKS MODAL
+       ===================================================== */
+
+    .modal-links {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 8px;
+
+      margin:
+        3px 0 0;
+
+    }
+
+
+    .modal-links a {
+
+      padding:
+        7px 11px;
+
+      color:
+        var(--text-soft);
+
+      background:
+        var(--surface-2);
+
+      border:
+        1px solid
+        var(--border);
+
+      border-radius:
+        999px;
+
+      text-decoration: none;
+
+      font-size: 10px;
+
+      font-weight: 600;
+
+    }
+
+
+    .modal-links a:hover {
+
+      color:
+        var(--orange);
+
+    }
+
+
+    /* =====================================================
+       ACCIONES
+       ===================================================== */
+
+    .modal-actions {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 9px;
+
+      margin-top: 20px;
+
+    }
+
+
+    .modal-btn {
+
+      min-height: 42px;
+
+      display:
+        inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      padding:
+        8px 18px;
+
+      color: #fff;
+
+      background:
+
+        linear-gradient(
+          135deg,
+          #ee8d46,
+          #df6e25
+        );
+
+      border-radius:
+        999px;
+
+      text-decoration: none;
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+    }
+
+
+    .modal-btn.secondary {
+
+      color:
+        var(--ink);
+
+      background:
+        transparent;
+
+      border:
+        1px solid
+        var(--border);
+
+    }
+
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .footer {
+
+      width:
+        min(
+          var(--max-width),
+          calc(100% - 48px)
+        );
+
+      margin:
+        0 auto;
+
+      padding:
+        22px 0 35px;
+
+      color:
+        var(--text-soft);
+
+      text-align:
+        center;
+
+      border-top:
+        1px solid
+        var(--soft-border);
+
+    }
+
+
+    .footer p {
+
+      margin: 0;
+
+      font-size: 11px;
+
+    }
+
+
+    .footer a {
+
+      color:
+        var(--orange);
+
+      text-decoration: none;
+
+    }
+
+
+    /* =====================================================
+       TABLET
+       ===================================================== */
+
+    @media
+    (max-width: 1050px) {
+
+      .grid {
+
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0, 1fr)
+          );
+
       }
-      list.forEach((p, idx)=>{
-        const card = document.createElement('div');
-        card.className = 'card';
 
-        const img = document.createElement('img');
-        img.className = 'poster';
-        img.src = p.cover || placeholder(p.title);
-        img.alt = p.title;
-        img.loading = "lazy";
-        img.onerror = () => { img.src = placeholder(p.title); };
 
-        const wrap = document.createElement('div');
-        wrap.className = 'titleWrap';
-        wrap.innerHTML = `
-          <h3 class="title">${p.title||"Proyecto"}</h3>
-          <p class="desc">${p.desc||""}</p>
-          <div class="btns">
-            <a href="#" class="btn" data-i="${idx}">Ver proyecto</a>
+      .intro {
+
+        gap: 40px;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       TABLET NAV
+       ===================================================== */
+
+    @media
+    (max-width: 900px) {
+
+      .social-nav {
+
+        display: none;
+
+      }
+
+
+      .menu-toggle {
+
+        display: flex;
+
+      }
+
+
+      .nav-links {
+
+        position: absolute;
+
+        top: 70px;
+        right: 0;
+
+        width:
+          min(
+            270px,
+            calc(100vw - 30px)
+          );
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 0;
+
+        padding: 8px;
+
+        opacity: 0;
+
+        visibility: hidden;
+
+        transform:
+          translateY(-8px);
+
+        background:
+          var(--surface);
+
+        border:
+          1px solid
+          var(--border);
+
+        border-radius: 17px;
+
+        box-shadow:
+          var(--shadow-hover);
+
+        transition:
+          .22s ease;
+
+      }
+
+
+      .nav-links.open {
+
+        opacity: 1;
+
+        visibility: visible;
+
+        transform:
+          translateY(0);
+
+      }
+
+
+      .nav-links a {
+
+        padding:
+          12px 14px;
+
+      }
+
+
+      .nav-links a::after {
+
+        display: none;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media
+    (max-width: 640px) {
+
+
+      /* ===================================================
+         HERO
+         =================================================== */
+
+      .hero {
+
+        min-height: 490px;
+
+        border-radius:
+          0 0 24px 24px;
+
+      }
+
+
+      .hero-cover {
+
+        object-position:
+          57% center;
+
+      }
+
+
+      html[data-theme="light"]
+      .hero-overlay {
+
+        background:
+
+          linear-gradient(
+            to bottom,
+            rgba(246, 239, 229, .16),
+            rgba(246, 239, 229, .16) 32%,
+            rgba(246, 239, 229, .84) 70%,
+            var(--page-bg) 100%
+          );
+
+      }
+
+
+      html[data-theme="dark"]
+      .hero-overlay {
+
+        background:
+
+          linear-gradient(
+            to bottom,
+            rgba(10, 10, 9, .21),
+            rgba(10, 10, 9, .28) 33%,
+            rgba(10, 10, 9, .83) 71%,
+            var(--page-bg) 100%
+          );
+
+      }
+
+
+      /* ===================================================
+         NAV
+         =================================================== */
+
+      .topbar {
+
+        width:
+          calc(100% - 26px);
+
+        height: 70px;
+
+        gap: 8px;
+
+      }
+
+
+      .brand {
+
+        gap: 8px;
+
+      }
+
+
+      .brand-avatar {
+
+        width: 40px;
+        height: 40px;
+
+      }
+
+
+      .brand-name {
+
+        font-size: 17px;
+
+      }
+
+
+      .theme-toggle {
+
+        min-width: 42px;
+
+        width: 42px;
+        height: 42px;
+
+        padding: 0;
+
+      }
+
+
+      .theme-text {
+
+        display: none;
+
+      }
+
+
+      /* ===================================================
+         HERO CONTENT
+         =================================================== */
+
+      .hero-content {
+
+        width:
+          calc(100% - 34px);
+
+        padding:
+          245px 0 43px;
+
+      }
+
+
+      .breadcrumb {
+
+        font-size: 8px;
+
+      }
+
+
+      .hero-content h1 {
+
+        font-size:
+          clamp(
+            50px,
+            15vw,
+            67px
+          );
+
+      }
+
+
+      .hero-description {
+
+        max-width: 340px;
+
+        margin-top: 14px;
+
+        font-size: 11.5px;
+
+        line-height: 1.7;
+
+      }
+
+
+      .hero-tools {
+
+        margin-top: 15px;
+
+      }
+
+
+      .hero-tools span {
+
+        padding:
+          5px 9px;
+
+        font-size: 8px;
+
+      }
+
+
+      /* ===================================================
+         CONTENT
+         =================================================== */
+
+      .container {
+
+        width:
+          calc(100% - 30px);
+
+      }
+
+
+      /* ===================================================
+         INTRO
+         =================================================== */
+
+      .intro {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 20px;
+
+        padding:
+          49px 0 43px;
+
+      }
+
+
+      .intro h2 {
+
+        max-width: 360px;
+
+        font-size:
+          clamp(
+            31px,
+            9vw,
+            39px
+          );
+
+      }
+
+
+      .intro-copy {
+
+        font-size: 12px;
+
+        line-height: 1.8;
+
+      }
+
+
+      /* ===================================================
+         PROYECTOS
+         =================================================== */
+
+      .projects {
+
+        padding:
+          46px 0 65px;
+
+      }
+
+
+      .projects-head {
+
+        display: block;
+
+        margin-bottom: 22px;
+
+      }
+
+
+      .section-heading {
+
+        margin-bottom: 18px;
+
+      }
+
+
+      .section-heading h2 {
+
+        font-size: 31px;
+
+      }
+
+
+      /* ===================================================
+         SEARCH
+         =================================================== */
+
+      .toolbar {
+
+        width: 100%;
+
+        justify-content:
+          space-between;
+
+      }
+
+
+      .search {
+
+        flex: 1;
+
+        width: auto;
+
+        height: 43px;
+
+      }
+
+
+      .project-count {
+
+        display: none;
+
+      }
+
+
+      /* ===================================================
+         GRID
+         =================================================== */
+
+      .grid {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 18px;
+
+      }
+
+
+      .card {
+
+        border-radius: 20px;
+
+      }
+
+
+      .card-content {
+
+        padding:
+          15px 16px 18px;
+
+      }
+
+
+      .title {
+
+        font-size: 17px;
+
+      }
+
+
+      .desc {
+
+        font-size: 11px;
+
+        -webkit-line-clamp:
+          4;
+
+      }
+
+
+      /* ===================================================
+         MODAL
+         =================================================== */
+
+      .modal {
+
+        padding: 10px;
+
+      }
+
+
+      .modal-box {
+
+        width: 100%;
+
+        max-height: 94vh;
+
+        border-radius: 22px;
+
+      }
+
+
+      .modal-head {
+
+        padding:
+          14px 15px;
+
+      }
+
+
+      .modal-title {
+
+        font-size: 19px;
+
+      }
+
+
+      .modal-body {
+
+        grid-template-columns:
+          1fr;
+
+        gap: 19px;
+
+        padding: 15px;
+
+      }
+
+
+      iframe.shot {
+
+        min-height: 220px;
+
+      }
+
+
+      .modal-info {
+
+        padding:
+          3px 3px 8px;
+
+      }
+
+
+      .modal-description {
+
+        font-size: 12px;
+
+      }
+
+
+      /* ===================================================
+         FOOTER
+         =================================================== */
+
+      .footer {
+
+        width:
+          calc(100% - 30px);
+
+      }
+
+    }
+
+
+    /* =====================================================
+       SMALL PHONE
+       ===================================================== */
+
+    @media
+    (max-width: 420px) {
+
+      .brand-name {
+
+        font-size: 15px;
+
+      }
+
+
+      .hero-content h1 {
+
+        font-size: 50px;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       ACCESSIBILITY
+       ===================================================== */
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+
+      outline:
+        3px solid
+        var(--orange);
+
+      outline-offset:
+        3px;
+
+    }
+
+
+    @media
+    (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+
+        scroll-behavior:
+          auto !important;
+
+        animation-duration:
+          .01ms !important;
+
+        transition-duration:
+          .01ms !important;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- =====================================================
+       HERO
+       ===================================================== -->
+
+  <header class="hero">
+
+
+    <img
+      class="hero-cover"
+      src="assets/img/portada.jpeg"
+      alt=""
+    >
+
+
+    <div
+      class="hero-overlay"
+      aria-hidden="true"
+    ></div>
+
+
+    <!-- ===================================================
+         NAVEGACIÓN
+         =================================================== -->
+
+    <nav
+      class="topbar"
+      aria-label="Navegación principal"
+    >
+
+
+      <!-- LOGO -->
+
+      <a
+        class="brand"
+        href="index.html"
+      >
+
+        <img
+          class="brand-avatar"
+          src="assets/img/perfil.jpeg"
+          alt=""
+        >
+
+        <span class="brand-name">
+          MoncadaArt
+        </span>
+
+      </a>
+
+
+      <!-- LINKS -->
+
+      <div
+        class="nav-links"
+        id="mainNav"
+      >
+
+        <a href="index.html">
+          Inicio
+        </a>
+
+        <a href="index.html#projects">
+          Proyectos
+        </a>
+
+        <a href="index.html#about">
+          Sobre mí
+        </a>
+
+        <a href="index.html#contacto">
+          Contacto
+        </a>
+
+      </div>
+
+
+      <!-- REDES -->
+
+      <div class="social-nav">
+
+
+        <!-- INSTAGRAM -->
+
+        <a
+          href="#"
+          aria-label="Instagram"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <rect
+              x="3"
+              y="3"
+              width="18"
+              height="18"
+              rx="5"
+            ></rect>
+
+            <circle
+              cx="12"
+              cy="12"
+              r="4"
+            ></circle>
+
+            <circle
+              cx="17.5"
+              cy="6.5"
+              r="1"
+            ></circle>
+
+          </svg>
+
+        </a>
+
+
+        <!-- BEHANCE -->
+
+        <a
+          href="#"
+          class="behance"
+          aria-label="Behance"
+        >
+          Bē
+        </a>
+
+
+        <!-- GITHUB -->
+
+        <a
+          href="https://github.com/Christianmon0108"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+
+            <path
+              d="M12 3a9 9 0 0 0-2.85 17.54c.45.08.62-.2.62-.43v-1.68c-2.52.55-3.05-1.07-3.05-1.07-.41-1.05-1-1.33-1-1.33-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.38 2.1.98 2.62.75.08-.58.31-.98.57-1.2-2.01-.23-4.13-1-4.13-4.47 0-.99.35-1.79.93-2.42-.09-.23-.4-1.15.09-2.39 0 0 .76-.24 2.48.92A8.6 8.6 0 0 1 12 8.28a8.6 8.6 0 0 1 2.26.3c1.72-1.16 2.48-.92 2.48-.92.49 1.24.18 2.16.09 2.39.58.63.93 1.43.93 2.42 0 3.48-2.12 4.24-4.14 4.47.33.28.61.83.61 1.67v2.48c0 .24.16.52.63.43A9 9 0 0 0 12 3Z"
+            ></path>
+
+          </svg>
+
+        </a>
+
+      </div>
+
+
+      <!-- TEMA -->
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="Cambiar tema"
+      >
+
+        <span
+          class="theme-icon"
+          id="themeIcon"
+          aria-hidden="true"
+        >
+          ☾
+        </span>
+
+        <span
+          class="theme-text"
+          id="themeText"
+        >
+          Oscuro
+        </span>
+
+      </button>
+
+
+      <!-- MOBILE -->
+
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+      >
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+
+
+    </nav>
+
+
+    <!-- ===================================================
+         MODELADO 3D
+         =================================================== -->
+
+    <div class="hero-content">
+
+
+      <p class="breadcrumb">
+        Portafolio / Modelado 3D
+      </p>
+
+
+      <h1>
+        Modelado 3D
+      </h1>
+
+
+      <p class="hero-description">
+        Modelado, retopología, texturizado,
+        materiales y renders para transformar
+        conceptos en piezas tridimensionales.
+      </p>
+
+
+      <div
+        class="hero-tools"
+        aria-label="Herramientas y especialidades"
+      >
+
+        <span>
+          Blender
+        </span>
+
+        <span>
+          Substance Painter
+        </span>
+
+        <span>
+          Texturizado
+        </span>
+
+        <span>
+          Render
+        </span>
+
+      </div>
+
+
+    </div>
+
+
+  </header>
+
+
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
+
+  <main class="container">
+
+
+    <!-- ===================================================
+         INTRODUCCIÓN
+         =================================================== -->
+
+    <section class="intro">
+
+
+      <div>
+
+        <span class="intro-label">
+          Modelado · Materiales · Render
+        </span>
+
+        <h2>
+          Del concepto
+          <br>
+          al <strong>volumen.</strong>
+        </h2>
+
+      </div>
+
+
+      <p class="intro-copy">
+        Exploro formas, materiales, iluminación y estilos
+        para transformar una idea en una pieza 3D.
+        Aquí encontrarás objetos, experimentos visuales,
+        simulaciones y proyectos desarrollados durante
+        mi proceso creativo.
+      </p>
+
+
+    </section>
+
+
+    <!-- ===================================================
+         PROYECTOS
+         =================================================== -->
+
+    <section class="projects">
+
+
+      <div class="projects-head">
+
+
+        <div class="section-heading">
+
+          <span class="section-kicker">
+            Galería
+          </span>
+
+          <h2>
+            Proyectos 3D
+          </h2>
+
+        </div>
+
+
+        <div class="toolbar">
+
+
+          <!-- SEARCH -->
+
+          <label
+            class="search"
+            for="q"
+          >
+
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+                stroke="currentColor"
+                stroke-width="2"
+              ></circle>
+
+              <path
+                d="M20 20L16.5 16.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              ></path>
+
+            </svg>
+
+
+            <input
+              id="q"
+              type="search"
+              placeholder="Buscar proyecto..."
+              autocomplete="off"
+            >
+
+          </label>
+
+
+          <span
+            class="project-count"
+            id="projectCount"
+          >
+            0 proyectos
+          </span>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- GRID -->
+
+      <div
+        id="grid"
+        class="grid"
+      ></div>
+
+
+    </section>
+
+
+  </main>
+
+
+  <!-- =====================================================
+       MODAL
+       ===================================================== -->
+
+  <div
+    id="modal"
+    class="modal"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+  >
+
+
+    <div
+      class="modal-box"
+      id="modalBox"
+    >
+
+
+      <!-- HEADER -->
+
+      <div class="modal-head">
+
+
+        <div>
+
+          <span class="modal-label">
+            Proyecto 3D
+          </span>
+
+          <h2
+            class="modal-title"
+            id="modalTitle"
+          >
+            Proyecto
+          </h2>
+
+        </div>
+
+
+        <button
+          class="close"
+          id="modalClose"
+          type="button"
+          aria-label="Cerrar proyecto"
+        >
+          ✕
+        </button>
+
+
+      </div>
+
+
+      <!-- BODY -->
+
+      <div class="modal-body">
+
+
+        <!-- MEDIA -->
+
+        <div
+          class="modal-media"
+          id="modalMedia"
+        ></div>
+
+
+        <!-- INFO -->
+
+        <div class="modal-info">
+
+
+          <p class="modal-info-kicker">
+            Modelado 3D
+          </p>
+
+
+          <p
+            class="modal-description"
+            id="modalDescription"
+          >
+            Sin descripción.
+          </p>
+
+
+          <div
+            class="modal-links"
+            id="modalLinks"
+          ></div>
+
+
+          <div
+            class="modal-actions"
+            id="modalActions"
+          ></div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="footer">
+
+    <p>
+      ©
+      <span id="currentYear"></span>
+      MoncadaArt ·
+      <a href="index.html">
+        Volver al inicio
+      </a>
+    </p>
+
+  </footer>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+       ===================================================== -->
+
+  <script>
+
+
+    /* =====================================================
+       TEMA
+       ===================================================== */
+
+    const themeToggle =
+      document.getElementById(
+        "themeToggle"
+      );
+
+    const themeIcon =
+      document.getElementById(
+        "themeIcon"
+      );
+
+    const themeText =
+      document.getElementById(
+        "themeText"
+      );
+
+
+    function automaticTheme() {
+
+      const hour =
+        new Date().getHours();
+
+      return (
+        hour >= 7 &&
+        hour < 19
+      )
+        ? "light"
+        : "dark";
+
+    }
+
+
+    function updateThemeButton() {
+
+      const theme =
+        document.documentElement
+          .getAttribute("data-theme");
+
+
+      if (theme === "dark") {
+
+        themeIcon.textContent =
+          "☀";
+
+        themeText.textContent =
+          "Claro";
+
+      } else {
+
+        themeIcon.textContent =
+          "☾";
+
+        themeText.textContent =
+          "Oscuro";
+
+      }
+
+    }
+
+
+    function applyTheme(theme) {
+
+      document.documentElement
+        .setAttribute(
+          "data-theme",
+          theme
+        );
+
+
+      const metaTheme =
+        document.querySelector(
+          'meta[name="theme-color"]'
+        );
+
+
+      if (metaTheme) {
+
+        metaTheme.setAttribute(
+          "content",
+          theme === "dark"
+            ? "#10100e"
+            : "#f6efe5"
+        );
+
+      }
+
+
+      updateThemeButton();
+
+    }
+
+
+    applyTheme(
+
+      sessionStorage.getItem(
+        "moncada-theme"
+      )
+
+      ||
+
+      automaticTheme()
+
+    );
+
+
+    themeToggle.addEventListener(
+      "click",
+      () => {
+
+        const current =
+          document.documentElement
+            .getAttribute(
+              "data-theme"
+            );
+
+
+        const next =
+          current === "dark"
+            ? "light"
+            : "dark";
+
+
+        sessionStorage.setItem(
+          "moncada-theme",
+          next
+        );
+
+
+        applyTheme(next);
+
+      }
+    );
+
+
+    /* =====================================================
+       MENÚ MÓVIL
+       ===================================================== */
+
+    const menuToggle =
+      document.getElementById(
+        "menuToggle"
+      );
+
+    const mainNav =
+      document.getElementById(
+        "mainNav"
+      );
+
+
+    menuToggle.addEventListener(
+      "click",
+      () => {
+
+        const open =
+          mainNav.classList.toggle(
+            "open"
+          );
+
+
+        menuToggle.classList.toggle(
+          "active",
+          open
+        );
+
+
+        menuToggle.setAttribute(
+          "aria-expanded",
+          String(open)
+        );
+
+      }
+    );
+
+
+    mainNav
+      .querySelectorAll("a")
+      .forEach(link => {
+
+        link.addEventListener(
+          "click",
+          () => {
+
+            mainNav.classList.remove(
+              "open"
+            );
+
+            menuToggle.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+      });
+
+
+    /* =====================================================
+       AÑO
+       ===================================================== */
+
+    document.getElementById(
+      "currentYear"
+    ).textContent =
+      new Date().getFullYear();
+
+
+    /* =====================================================
+       ELEMENTOS PROYECTOS
+       ===================================================== */
+
+    const GRID =
+      document.getElementById("grid");
+
+    const SEARCH =
+      document.getElementById("q");
+
+    const COUNT =
+      document.getElementById(
+        "projectCount"
+      );
+
+
+    const MODAL =
+      document.getElementById(
+        "modal"
+      );
+
+    const MODAL_TITLE =
+      document.getElementById(
+        "modalTitle"
+      );
+
+    const MODAL_DESCRIPTION =
+      document.getElementById(
+        "modalDescription"
+      );
+
+    const MODAL_MEDIA =
+      document.getElementById(
+        "modalMedia"
+      );
+
+    const MODAL_LINKS =
+      document.getElementById(
+        "modalLinks"
+      );
+
+    const MODAL_ACTIONS =
+      document.getElementById(
+        "modalActions"
+      );
+
+    const MODAL_CLOSE =
+      document.getElementById(
+        "modalClose"
+      );
+
+
+    let projects = [];
+
+
+    /* =====================================================
+       ESCAPE
+       ===================================================== */
+
+    function escapeHTML(
+      value = ""
+    ) {
+
+      return String(value)
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
+    }
+
+
+    /* =====================================================
+       PLACEHOLDER
+       ===================================================== */
+
+    function placeholder(
+      title = "Proyecto"
+    ) {
+
+      const safe =
+        String(title)
+          .replace(
+            /&/g,
+            "&amp;"
+          )
+          .replace(
+            /</g,
+            "&lt;"
+          )
+          .replace(
+            />/g,
+            "&gt;"
+          );
+
+
+      const svg = `
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1000"
+          height="563"
+        >
+
+          <rect
+            width="100%"
+            height="100%"
+            fill="#e9ded1"
+          />
+
+          <text
+            x="50%"
+            y="50%"
+            text-anchor="middle"
+            dominant-baseline="middle"
+            fill="#7d6251"
+            font-family="Arial"
+            font-size="30"
+          >
+            ${safe}
+          </text>
+
+        </svg>
+
+      `;
+
+
+      return (
+        "data:image/svg+xml," +
+        encodeURIComponent(svg)
+      );
+
+    }
+
+
+    /* =====================================================
+       YOUTUBE
+       ===================================================== */
+
+    function getYouTubeID(
+      url = ""
+    ) {
+
+      if (!url) {
+
+        return "";
+
+      }
+
+
+      try {
+
+        const parsed =
+          new URL(
+            url,
+            window.location.href
+          );
+
+
+        const host =
+          parsed.hostname
+            .replace(
+              /^www\./,
+              ""
+            );
+
+
+        if (
+          host === "youtu.be"
+        ) {
+
+          return (
+            parsed.pathname
+              .replace(
+                /^\/+/,
+                ""
+              )
+              .split("/")[0]
+            || ""
+          );
+
+        }
+
+
+        if (
+          host.includes(
+            "youtube.com"
+          )
+        ) {
+
+          if (
+            parsed.pathname ===
+            "/watch"
+          ) {
+
+            return (
+              parsed.searchParams
+                .get("v")
+              || ""
+            );
+
+          }
+
+
+          if (
+            parsed.pathname
+              .startsWith(
+                "/shorts/"
+              )
+          ) {
+
+            return (
+              parsed.pathname
+                .split("/")[2]
+              || ""
+            );
+
+          }
+
+
+          if (
+            parsed.pathname
+              .startsWith(
+                "/embed/"
+              )
+          ) {
+
+            return (
+              parsed.pathname
+                .split("/")[2]
+              || ""
+            );
+
+          }
+
+        }
+
+      }
+
+      catch (error) {
+
+        return "";
+
+      }
+
+
+      return "";
+
+    }
+
+
+    /* =====================================================
+       RENDER
+       ===================================================== */
+
+    function render(list) {
+
+      GRID.innerHTML =
+        "";
+
+
+      COUNT.textContent =
+
+        list.length === 1
+
+          ? "1 proyecto"
+
+          : `${list.length} proyectos`;
+
+
+      if (!list.length) {
+
+        GRID.innerHTML = `
+
+          <div class="empty">
+
+            No encontré proyectos
+            que coincidan con tu búsqueda.
+
           </div>
+
         `;
 
-        img.addEventListener('click',(e)=>{ e.preventDefault(); openViewer(idx); });
-        wrap.querySelector('a.btn').addEventListener('click',(e)=>{ e.preventDefault(); openViewer(idx); });
+        return;
 
-        card.appendChild(img);
-        card.appendChild(wrap);
-        GRID.appendChild(card);
+      }
+
+
+      list.forEach(project => {
+
+
+        const card =
+          document.createElement(
+            "article"
+          );
+
+
+        card.className =
+          "card";
+
+
+        /* ===============================================
+           IMAGEN
+           =============================================== */
+
+        const posterWrap =
+          document.createElement(
+            "div"
+          );
+
+
+        posterWrap.className =
+          "poster-wrap";
+
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+
+        image.className =
+          "poster";
+
+
+        image.src =
+
+          project.cover
+
+          ||
+
+          placeholder(
+            project.title
+          );
+
+
+        image.alt =
+          project.title;
+
+
+        image.loading =
+          "lazy";
+
+
+        image.decoding =
+          "async";
+
+
+        image.onerror =
+          () => {
+
+            image.onerror =
+              null;
+
+            image.src =
+              placeholder(
+                project.title
+              );
+
+          };
+
+
+        posterWrap.appendChild(
+          image
+        );
+
+
+        posterWrap.addEventListener(
+          "click",
+          () => openViewer(
+            project
+          )
+        );
+
+
+        /* ===============================================
+           CONTENT
+           =============================================== */
+
+        const content =
+          document.createElement(
+            "div"
+          );
+
+
+        content.className =
+          "card-content";
+
+
+        content.innerHTML = `
+
+          <span class="project-tag">
+            Modelado 3D
+          </span>
+
+          <h3 class="title">
+            ${escapeHTML(
+              project.title
+            )}
+          </h3>
+
+          <p class="desc">
+            ${escapeHTML(
+              project.desc
+            )}
+          </p>
+
+        `;
+
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.className =
+          "view-project";
+
+
+        button.type =
+          "button";
+
+
+        button.innerHTML =
+          `Ver proyecto <span>→</span>`;
+
+
+        button.addEventListener(
+          "click",
+          () => openViewer(
+            project
+          )
+        );
+
+
+        content.appendChild(
+          button
+        );
+
+
+        card.appendChild(
+          posterWrap
+        );
+
+
+        card.appendChild(
+          content
+        );
+
+
+        GRID.appendChild(
+          card
+        );
+
       });
+
     }
 
-    /* Filtro por texto */
-    function applyFilter(){
-      const q = (Q.value||"").toLowerCase();
-      const list = projects.filter(p =>
-        (p.title||"").toLowerCase().includes(q) || (p.desc||"").toLowerCase().includes(q)
+
+    /* =====================================================
+       FILTER
+       ===================================================== */
+
+    function applyFilter() {
+
+      const query =
+        (
+          SEARCH.value ||
+          ""
+        )
+          .trim()
+          .toLowerCase();
+
+
+      const filtered =
+        projects.filter(
+          project => {
+
+            const title =
+              (
+                project.title ||
+                ""
+              ).toLowerCase();
+
+
+            const description =
+              (
+                project.desc ||
+                ""
+              ).toLowerCase();
+
+
+            return (
+              title.includes(query)
+              ||
+              description.includes(query)
+            );
+
+          }
+        );
+
+
+      render(
+        filtered
       );
-      render(list);
+
     }
-    Q.addEventListener('input', applyFilter);
 
-    /* Visor con media + links + acciones (igual a tu 3D) */
-    function openViewer(i){
-      const p = projects[i];
-      if(!p) return;
-      mTitle.textContent = p.title || "Proyecto";
-      mDesc.textContent  = p.desc || "";
 
-      // links
-      mLinks.innerHTML = "";
-      (p.links||[]).forEach(l=>{
-        if(!l || !l.href) return;
-        const a = document.createElement('a');
-        a.href = l.href; a.target="_blank"; a.rel="noopener";
-        a.textContent = l.label || new URL(l.href, location.href).hostname.replace(/^www\./,'');
-        mLinks.appendChild(a);
+    SEARCH.addEventListener(
+      "input",
+      applyFilter
+    );
+
+
+    /* =====================================================
+       OPEN VIEWER
+       ===================================================== */
+
+    function openViewer(project) {
+
+      if (!project) {
+
+        return;
+
+      }
+
+
+      MODAL_TITLE.textContent =
+        project.title ||
+        "Proyecto";
+
+
+      MODAL_DESCRIPTION.textContent =
+        project.desc ||
+        "Sin descripción.";
+
+
+      /* ===============================================
+         LINKS
+         =============================================== */
+
+      MODAL_LINKS.innerHTML =
+        "";
+
+
+      (
+        project.links ||
+        []
+      ).forEach(link => {
+
+
+        if (
+          !link ||
+          !link.href
+        ) {
+
+          return;
+
+        }
+
+
+        const anchor =
+          document.createElement(
+            "a"
+          );
+
+
+        anchor.href =
+          link.href;
+
+
+        anchor.target =
+          "_blank";
+
+
+        anchor.rel =
+          "noopener noreferrer";
+
+
+        anchor.textContent =
+
+          link.label
+
+          ||
+
+          "Enlace externo";
+
+
+        MODAL_LINKS.appendChild(
+          anchor
+        );
+
       });
 
-      // media
-      mMedia.innerHTML = "";
-      const media = [];
-      if(p.cover) media.push({type:'img', src:p.cover});
-      (p.gallery||[]).forEach(src=> media.push({type:'img', src}));
-      if(p.video){
-        if(p.video.includes("youtube")||p.video.includes("youtu.be")){
-          const id=p.video.split("v=")[1]?.split("&")[0]||p.video.split("youtu.be/")[1];
-          media.push({type:'yt', src:`https://www.youtube.com/embed/${id}`});
-        }else if(/\.(mp4|webm|mov)$/i.test(p.video)){
-          media.push({type:'vid', src:p.video});
-        }
-      }
-      if(!media.length && p.cover===undefined){
-        media.push({type:'img', src:placeholder(p.title||"Proyecto")});
+
+      /* ===============================================
+         MEDIA
+         =============================================== */
+
+      MODAL_MEDIA.innerHTML =
+        "";
+
+
+      const media =
+        [];
+
+
+      if (
+        project.cover
+      ) {
+
+        media.push({
+
+          type:
+            "image",
+
+          src:
+            project.cover
+
+        });
+
       }
 
-      media.forEach(m=>{
-        if(m.type==='img'){
-          const el=document.createElement('img');
-          el.className='shot'; el.src=m.src; el.alt=p.title||"Proyecto"; el.loading="lazy";
-          mMedia.appendChild(el);
-        }else if(m.type==='yt'){
-          const el=document.createElement('iframe');
-          el.className='shot'; el.src=m.src; el.frameBorder="0"; el.allowFullscreen=true;
-          mMedia.appendChild(el);
-        }else if(m.type==='vid'){
-          const el=document.createElement('video');
-          el.className='shot'; el.src=m.src; el.controls=true;
-          mMedia.appendChild(el);
+
+      (
+        project.gallery ||
+        []
+      ).forEach(src => {
+
+        if (!src) {
+
+          return;
+
         }
+
+
+        media.push({
+
+          type:
+            "image",
+
+          src
+
+        });
+
       });
 
-      // acciones
-      mActs.innerHTML = "";
-      if(p.href){
-        const a = document.createElement('a');
-        a.className = 'btn';
-        a.href = p.href; a.target="_blank"; a.rel="noopener"; a.textContent = "Abrir página";
-        mActs.appendChild(a);
-      }
-      if(p.cover){
-        const a2 = document.createElement('a');
-        a2.className = 'btn secondary';
-        a2.href = p.cover; a2.target="_blank"; a2.rel="noopener"; a2.textContent = "Ver imagen";
-        mActs.appendChild(a2);
+
+      if (
+        project.video
+      ) {
+
+        const youtubeID =
+          getYouTubeID(
+            project.video
+          );
+
+
+        if (
+          youtubeID
+        ) {
+
+          media.push({
+
+            type:
+              "youtube",
+
+            src:
+              `https://www.youtube.com/embed/${youtubeID}`
+
+          });
+
+        }
+
+        else if (
+          /\.(mp4|webm|mov)$/i
+            .test(
+              project.video
+            )
+        ) {
+
+          media.push({
+
+            type:
+              "video",
+
+            src:
+              project.video
+
+          });
+
+        }
+
       }
 
-      MODAL.classList.add('open');
-      MODAL.setAttribute('aria-hidden','false');
-      mClose.focus();
+
+      if (
+        !media.length
+      ) {
+
+        media.push({
+
+          type:
+            "image",
+
+          src:
+            placeholder(
+              project.title
+            )
+
+        });
+
+      }
+
+
+      media.forEach(item => {
+
+
+        if (
+          item.type ===
+          "image"
+        ) {
+
+          const image =
+            document.createElement(
+              "img"
+            );
+
+
+          image.className =
+            "shot";
+
+
+          image.src =
+            item.src;
+
+
+          image.alt =
+            project.title;
+
+
+          image.loading =
+            "lazy";
+
+
+          MODAL_MEDIA.appendChild(
+            image
+          );
+
+        }
+
+
+        if (
+          item.type ===
+          "youtube"
+        ) {
+
+          const iframe =
+            document.createElement(
+              "iframe"
+            );
+
+
+          iframe.className =
+            "shot";
+
+
+          iframe.src =
+            item.src;
+
+
+          iframe.allow =
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+
+
+          iframe.allowFullscreen =
+            true;
+
+
+          MODAL_MEDIA.appendChild(
+            iframe
+          );
+
+        }
+
+
+        if (
+          item.type ===
+          "video"
+        ) {
+
+          const video =
+            document.createElement(
+              "video"
+            );
+
+
+          video.className =
+            "shot";
+
+
+          video.src =
+            item.src;
+
+
+          video.controls =
+            true;
+
+
+          MODAL_MEDIA.appendChild(
+            video
+          );
+
+        }
+
+      });
+
+
+      /* ===============================================
+         ACTIONS
+         =============================================== */
+
+      MODAL_ACTIONS.innerHTML =
+        "";
+
+
+      if (
+        project.href
+      ) {
+
+        const open =
+          document.createElement(
+            "a"
+          );
+
+
+        open.className =
+          "modal-btn";
+
+
+        open.href =
+          project.href;
+
+
+        open.target =
+          "_blank";
+
+
+        open.rel =
+          "noopener noreferrer";
+
+
+        open.textContent =
+          "Abrir proyecto";
+
+
+        MODAL_ACTIONS.appendChild(
+          open
+        );
+
+      }
+
+
+      if (
+        project.cover
+      ) {
+
+        const imageLink =
+          document.createElement(
+            "a"
+          );
+
+
+        imageLink.className =
+          "modal-btn secondary";
+
+
+        imageLink.href =
+          project.cover;
+
+
+        imageLink.target =
+          "_blank";
+
+
+        imageLink.rel =
+          "noopener noreferrer";
+
+
+        imageLink.textContent =
+          "Ver imagen";
+
+
+        MODAL_ACTIONS.appendChild(
+          imageLink
+        );
+
+      }
+
+
+      MODAL.classList.add(
+        "open"
+      );
+
+
+      MODAL.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+
+      document.body.style.overflow =
+        "hidden";
+
+
+      MODAL_CLOSE.focus();
+
     }
 
-    function closeViewer(){
-      MODAL.classList.remove('open');
-      MODAL.setAttribute('aria-hidden','true');
-    }
-    document.getElementById('mClose').addEventListener('click', closeViewer);
-    MODAL.addEventListener('click', e=>{ if(e.target===MODAL) closeViewer(); });
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeViewer(); });
 
-    /* Carga del catálogo (mantengo tu ruta de 3D) */
-    async function load(){
-      try{
-        const r = await fetch("Modelado/manifest.json",{cache:"no-store"});
-        const data = await r.json();
-        projects = (data.projects||[]).map(p=>({
-          title: p.title || "Proyecto",
-          cover: p.cover || "",
-          desc:  p.desc  || "",
-          href:  p.href  || "",
-          links: Array.isArray(p.links)? p.links : [],
-          gallery: Array.isArray(p.gallery)? p.gallery : [],
-          video: p.video || ""
-        }));
+    /* =====================================================
+       CLOSE
+       ===================================================== */
+
+    function closeViewer() {
+
+      MODAL.classList.remove(
+        "open"
+      );
+
+
+      MODAL.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      document.body.style.overflow =
+        "";
+
+    }
+
+
+    MODAL_CLOSE.addEventListener(
+      "click",
+      closeViewer
+    );
+
+
+    MODAL.addEventListener(
+      "click",
+      event => {
+
+        if (
+          event.target ===
+          MODAL
+        ) {
+
+          closeViewer();
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+
+          closeViewer();
+
+        }
+
+      }
+    );
+
+
+    /* =====================================================
+       LOAD MANIFEST
+       ===================================================== */
+
+    async function loadProjects() {
+
+      try {
+
+        const response =
+          await fetch(
+
+            `Modelado/manifest.json?v=${Date.now()}`,
+
+            {
+              cache:
+                "no-store"
+            }
+
+          );
+
+
+        if (
+          !response.ok
+        ) {
+
+          throw new Error(
+            `HTTP ${response.status}`
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        projects =
+          (
+            data.projects ||
+            []
+          ).map(project => ({
+
+            title:
+              project.title ||
+              "Proyecto",
+
+            cover:
+              project.cover ||
+              "",
+
+            desc:
+              project.desc ||
+              "",
+
+            href:
+              project.href ||
+              "",
+
+            links:
+              Array.isArray(
+                project.links
+              )
+                ? project.links
+                : [],
+
+            gallery:
+              Array.isArray(
+                project.gallery
+              )
+                ? project.gallery
+                : [],
+
+            video:
+              project.video ||
+              ""
+
+          }));
+
+
         applyFilter();
-      }catch{
-        projects = [];
-        render([]);
+
       }
+
+      catch (error) {
+
+        console.error(
+          "Error cargando Modelado/manifest.json:",
+          error
+        );
+
+
+        projects =
+          [];
+
+
+        render([]);
+
+      }
+
     }
-    load();
+
+
+    loadProjects();
+
+
   </script>
+
+
 </body>
+
 </html>
