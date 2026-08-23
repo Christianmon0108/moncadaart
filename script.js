@@ -4,6 +4,10 @@
    ========================================================= */
 
 
+/* =========================================================
+   CATEGORÍAS
+   ========================================================= */
+
 const CATEGORY_CONFIG = [
 
   {
@@ -63,7 +67,6 @@ const GRID =
   );
 
 
-
 /* =========================================================
    ESCAPAR HTML
    ========================================================= */
@@ -102,7 +105,6 @@ function escapeHTML(
 }
 
 
-
 /* =========================================================
    PLACEHOLDER
    ========================================================= */
@@ -126,22 +128,19 @@ function placeholderSVG(
       <rect
         width="100%"
         height="100%"
-        fill="#ebe4dc"
+        fill="#eee5da"
       />
-
 
       <text
         x="50%"
         y="50%"
+        fill="#6c5b50"
         text-anchor="middle"
         dominant-baseline="middle"
-        fill="#6b5d53"
         font-family="Arial"
         font-size="28"
       >
-
         ${safeTitle}
-
       </text>
 
     </svg>
@@ -157,7 +156,6 @@ function placeholderSVG(
 }
 
 
-
 /* =========================================================
    FETCH
    ========================================================= */
@@ -167,7 +165,6 @@ async function fetchJSON(
 ){
 
   try{
-
 
     const response =
       await fetch(
@@ -192,15 +189,14 @@ async function fetchJSON(
 
     return await response.json();
 
-
   }
 
   catch(error){
 
-
     console.warn(
       "No se pudo cargar:",
-      url
+      url,
+      error
     );
 
 
@@ -211,9 +207,8 @@ async function fetchJSON(
 }
 
 
-
 /* =========================================================
-   YOUTUBE ID
+   YOUTUBE
    ========================================================= */
 
 function getYouTubeID(
@@ -228,7 +223,6 @@ function getYouTubeID(
 
 
   try{
-
 
     const parsed =
       new URL(url);
@@ -270,10 +264,7 @@ function getYouTubeID(
       return (
 
         parsed.pathname
-          .replace(
-            /^\/+/,
-            ""
-          )
+          .replace(/^\/+/,"")
           .split("/")[0]
 
         || ""
@@ -312,7 +303,6 @@ function getYouTubeID(
 
     }
 
-
   }
 
   catch(error){
@@ -327,9 +317,8 @@ function getYouTubeID(
 }
 
 
-
 /* =========================================================
-   MINIATURAS YOUTUBE
+   YOUTUBE THUMBNAIL
    ========================================================= */
 
 function getYouTubeThumbnail(
@@ -349,7 +338,6 @@ function getYouTubeThumbnail(
 }
 
 
-
 function getYouTubeFallback(
   url
 ){
@@ -367,9 +355,8 @@ function getYouTubeFallback(
 }
 
 
-
 /* =========================================================
-   NORMALIZAR
+   NORMALIZAR PROYECTO
    ========================================================= */
 
 function normalizeItem(
@@ -387,24 +374,15 @@ function normalizeItem(
     );
 
 
-  let image = "";
+  const image =
 
+    youtubeThumbnail ||
 
-  if(youtubeThumbnail){
+    project.cover ||
 
-    image =
-      youtubeThumbnail;
+    project.img ||
 
-  }
-
-  else{
-
-    image =
-      project.cover ||
-      project.img ||
-      "";
-
-  }
+    "";
 
 
   return{
@@ -441,19 +419,15 @@ function normalizeItem(
       config.dir,
 
     categoryPage:
-      config.page,
-
-    categoryLabel:
-      config.label
+      config.page
 
   };
 
 }
 
 
-
 /* =========================================================
-   SHUFFLE DETERMINÍSTICO
+   SHUFFLE
    ========================================================= */
 
 function seededShuffle(
@@ -465,7 +439,7 @@ function seededShuffle(
     array.slice();
 
 
-  let currentSeed =
+  let s =
     seed >>> 0;
 
 
@@ -478,10 +452,9 @@ function seededShuffle(
     i--
   ){
 
-    currentSeed = (
+    s = (
 
-      currentSeed *
-      1664525
+      s * 1664525
 
       +
 
@@ -491,7 +464,7 @@ function seededShuffle(
 
 
     const j =
-      currentSeed %
+      s %
       (i + 1);
 
 
@@ -515,9 +488,8 @@ function seededShuffle(
 }
 
 
-
 /* =========================================================
-   ROTACIÓN
+   ROTATION BUCKET
    ========================================================= */
 
 function getRotationBucket(){
@@ -532,9 +504,8 @@ function getRotationBucket(){
 }
 
 
-
 /* =========================================================
-   CARGAR CATEGORÍA
+   LOAD CATEGORY
    ========================================================= */
 
 async function loadCategory(
@@ -589,9 +560,8 @@ async function loadCategory(
 }
 
 
-
 /* =========================================================
-   CARGAR TODO
+   LOAD ALL
    ========================================================= */
 
 async function loadAll(){
@@ -607,9 +577,8 @@ async function loadAll(){
 }
 
 
-
 /* =========================================================
-   ID PROYECTO
+   PROJECT KEY
    ========================================================= */
 
 function projectKey(
@@ -619,9 +588,7 @@ function projectKey(
   return [
 
     project.categoryDir,
-
     project.title,
-
     project.href
 
   ].join("::");
@@ -629,9 +596,8 @@ function projectKey(
 }
 
 
-
 /* =========================================================
-   SELECCIONAR PROYECTOS
+   SELECT PROJECTS
    ========================================================= */
 
 function selectProjects(
@@ -650,11 +616,7 @@ function selectProjects(
     new Set();
 
 
-
-  /*
-    Intentar elegir
-    uno de cada categoría
-  */
+  /* Uno de cada categoría */
 
   groups.forEach(
     (
@@ -698,23 +660,16 @@ function selectProjects(
         )
       );
 
-
     }
   );
 
 
-
-  /*
-    Si alguna categoría
-    está vacía,
-    completar hasta 6
-  */
+  /* Rellenar espacios */
 
   if(
     selected.length <
     HOME_COUNT
   ){
-
 
     const remaining =
       groups
@@ -753,7 +708,6 @@ function selectProjects(
       of shuffled
     ){
 
-
       if(
         selected.length >=
         HOME_COUNT
@@ -769,15 +723,16 @@ function selectProjects(
       );
 
 
+      used.add(
+        projectKey(
+          project
+        )
+      );
+
     }
 
   }
 
-
-
-  /*
-    Mezclar posición
-  */
 
   return seededShuffle(
 
@@ -792,7 +747,6 @@ function selectProjects(
   );
 
 }
-
 
 
 /* =========================================================
@@ -822,12 +776,10 @@ function renderCards(
         style="
           grid-column:1/-1;
           text-align:center;
-          opacity:.7;
+          opacity:.65;
         "
       >
-
         No hay proyectos disponibles.
-
       </p>
 
     `;
@@ -836,7 +788,6 @@ function renderCards(
     return;
 
   }
-
 
 
   projects.forEach(
@@ -851,7 +802,6 @@ function renderCards(
 
       card.className =
         "card";
-
 
 
       const img =
@@ -885,47 +835,45 @@ function renderCards(
         "async";
 
 
-
-      let fallback =
+      let fallbackUsed =
         false;
 
 
-      img.onerror = () => {
+      img.onerror =
+        () => {
 
 
-        if(
+          if(
 
-          !fallback &&
+            !fallbackUsed &&
 
-          project.youtubeFallback
+            project.youtubeFallback
 
-        ){
+          ){
 
-          fallback =
-            true;
+            fallbackUsed =
+              true;
+
+
+            img.src =
+              project.youtubeFallback;
+
+
+            return;
+
+          }
+
+
+          img.onerror =
+            null;
 
 
           img.src =
-            project.youtubeFallback;
+            placeholderSVG(
+              project.title
+            );
 
-
-          return;
-
-        }
-
-
-        img.onerror =
-          null;
-
-
-        img.src =
-          placeholderSVG(
-            project.title
-          );
-
-
-      };
-
+        };
 
 
       const content =
@@ -938,48 +886,35 @@ function renderCards(
         "content";
 
 
-
       content.innerHTML = `
 
         <span class="pill">
-
           ${escapeHTML(
             project.tag
           )}
-
         </span>
 
-
         <h3>
-
           ${escapeHTML(
             project.title
           )}
-
         </h3>
 
-
         <p>
-
           ${escapeHTML(
             project.desc
           )}
-
         </p>
-
 
         <a
           href="${escapeHTML(
             project.href
           )}"
         >
-
           Ver proyecto →
-
         </a>
 
       `;
-
 
 
       img.style.cursor =
@@ -1004,10 +939,8 @@ function renderCards(
 
           }
 
-
         }
       );
-
 
 
       card.appendChild(
@@ -1024,16 +957,14 @@ function renderCards(
         card
       );
 
-
     }
   );
 
 }
 
 
-
 /* =========================================================
-   INICIO
+   INIT
    ========================================================= */
 
 let loadedGroups =
@@ -1042,7 +973,6 @@ let loadedGroups =
 
 let lastBucket =
   null;
-
 
 
 function renderCurrent(){
@@ -1076,7 +1006,6 @@ function renderCurrent(){
 }
 
 
-
 async function init(){
 
   if(!GRID){
@@ -1095,9 +1024,7 @@ async function init(){
         opacity:.6;
       "
     >
-
       Cargando proyectos...
-
     </p>
 
   `;
@@ -1120,7 +1047,6 @@ async function init(){
   );
 
 }
-
 
 
 init();
