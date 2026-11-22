@@ -74,7 +74,8 @@
     polilla: { w: 12, h: 10, pisable: true },
     dron:    { w: 14, h: 10, pisable: false },
     cuervo:  { w: 14, h: 10, pisable: false },
-    laser:   { w: 16, h: 4,  pisable: false }
+    laser:   { w: 16, h: 4,  pisable: false },
+    gota:    { w: 10, h: 10, pisable: false }
   };
 
   function posicion(e, px, vel) {
@@ -103,6 +104,15 @@
       case "dron":
         y = e.y + Math.sin(t * 2.4 + e.fase) * 18;
         break;
+      case "gota": {
+        // Gota de tinta: cae del cielo cuando Monky se acerca y queda como charco
+        const caida = Math.max(0, (px - (e.x - 150)) / vel);
+        const yTope = -24;
+        const yFin = e.suelo - 10;
+        y = Math.min(yFin, yTope + 0.5 * 900 * caida * caida);
+        if (y >= yFin) return { x: e.x - 3, y: e.suelo - 4, w: 16, h: 4, t: t, charco: true, caida: caida };
+        return { x: x, y: y, w: e.w, h: e.h, t: t, caida: caida };
+      }
       case "cuervo": {
         x = e.x - t * 70;
         const rel = (x - px - 34) / 34;
@@ -150,6 +160,10 @@
     e.cx = c; e.cy = f;
     this.entidades.push(e);
     return e;
+  };
+  /* Superficie donde Monky debe pararse (ruta superior obligatoria) */
+  Constructor.prototype.objetivo = function (cy, c0, c1) {
+    (this.objetivos = this.objetivos || []).push({ cy: cy, c0: c0, c1: c1 });
   };
   Constructor.prototype.mapa = function () {
     return this.filas.map((f) => f.join(""));
@@ -331,6 +345,46 @@
       return { c: c + largo, h: h };
     },
 
+    /* RUTA DOBLE: autopista de nubes arriba (con monedas) y
+       suelo con púas abajo. Las dos rutas se validan. */
+    dosRutas(k, c, h, ctx) {
+      const s = superficie(h);
+      const largo = 14;
+      k.suelo(c, c + largo + 3, h);
+      const fila = s - 3;
+      for (let i = 4; i < largo; i++) k.poner(c + i, fila, "-");
+      k.objetivo(fila, c + 4, c + largo - 1);
+      // Abajo: púas separadas que se saltan una por una
+      k.poner(c + 7, s - 1, "^");
+      k.poner(c + 12, s - 1, "^");
+      if (ctx.d > 0.5) k.poner(c + 13, s - 1, "^");
+      k.alternativa = { quitarNubes: true, deslizar: false };
+      return { c: c + largo + 4, h: h };
+    },
+
+    /* TÚNEL: subir sobre los bloques o pasar deslizándose por debajo */
+    tunel(k, c, h, ctx) {
+      const s = superficie(h);
+      const largo = ctx.azar.entre(5, 7);
+      k.suelo(c, c + largo + 9, h);
+      // Una fila de bloques a 16 px del suelo: arriba se sube de un salto,
+      // abajo solo se pasa deslizándose
+      for (let i = 0; i < largo; i++) k.poner(c + 5 + i, s - 2, "B");
+      k.objetivo(s - 2, c + 5, c + 4 + largo);
+      k.alternativa = { quitarNubes: false, deslizar: true };
+      return { c: c + largo + 10, h: h, deslizar: true };
+    },
+
+    /* Gota de tinta: se anuncia con su sombra y cae antes de que pase Monky */
+    gota(k, c, h, ctx) {
+      const s = superficie(h);
+      const largo = 11;
+      k.suelo(c, c + largo - 1, h);
+      const x = (c + 7) * T + 3;
+      k.entidad("gota", c + 7, s - 1, { x: x, y: -24, suelo: s * T });
+      return { c: c + largo, h: h };
+    },
+
     laser(k, c, h, ctx) {
       const s = superficie(h);
       const ySuelo = s * T;
@@ -357,6 +411,10 @@
     if (metros > 220) lista.push(["techo", 2]);
     if (metros > 280) lista.push(["volador", 3]);
     if (tema === "digital") lista.push(["laser", 4]);
+    if (metros > 200) lista.push(["dosRutas", 2]);
+    if (metros > 320) lista.push(["tunel", 2]);
+    if (tema === "pesadilla") lista.push(["gota", 3]);
+    else if (metros > 1000) lista.push(["gota", 1]);
     return lista;
   }
 
@@ -392,11 +450,14 @@
 
   /* Grupos de nubes de un tramo (casillas "-" contiguas en una fila) */
   function gruposNubes(tramo) {
-    const grupos = [];
+    const grupos = (tramo.objetivos || []).map((o) => ({ cy: o.cy, c0: o.c0, c1: o.c1, extra: true }));
+    if (tramo.sinObjetivos) return [];
     tramo.mapa.forEach((fila, cy) => {
       for (let c = 0; c < fila.length; c++) {
         if (fila[c] !== "-") continue;
-        const g = grupos.find((g) => g.cy === cy && g.c1 === tramo.x0 + c - 1);
+        // Las nubes que ya cubre un objetivo no se cuentan dos veces
+        if (grupos.some((g) => g.extra && g.cy === cy && tramo.x0 + c >= g.c0 && tramo.x0 + c <= g.c1)) continue;
+        const g = grupos.find((g) => !g.extra && g.cy === cy && g.c1 === tramo.x0 + c - 1);
         if (g) g.c1++;
         else grupos.push({ cy: cy, c0: tramo.x0 + c, c1: tramo.x0 + c });
       }
@@ -688,7 +749,7 @@
   /* Espacio en metros tras un grupo de n monedas: proporcional al grupo,
      así la cantidad total se mantiene estable aunque los grupos crezcan */
   function espacioMonedas(n, azar) {
-    return n * (12 + azar() * 6);
+    return n * (15.5 + azar() * 6);
   }
 
   /* Altura (centro del cuerpo de Monky) del recorrido en la posición x */
@@ -759,6 +820,11 @@
       return true;
     };
 
+    // ¿Este tramo de recorrido va sobre una ruta superior (ruta doble)?
+    const superiores = (tramo.objetivos || []).map((o) => ({ x0: o.c0 * T - 4, x1: (o.c1 + 1) * T + 4, y: o.cy * T }));
+    const enRutaSuperior = (sg) => sg.puntos.some((p) => p.suelo === 2) &&
+      superiores.some((o) => sg.x0 >= o.x0 - 8 && sg.x0 <= o.x1);
+
     // Candidatos en orden de avance
     const candidatos = [];
     segmentosDeRuta(puntos).forEach((sg) => {
@@ -770,6 +836,10 @@
         const maximo = Math.min(7, 4 + Math.round(3 * d));
         const n = Math.max(3, Math.min(maximo, Math.round(largo / 19) + 1));
         candidatos.push({ forma: forma, x0: sg.x0, x1: sg.x1, puntos: sg.puntos, n: n, guia: sg.nube || abismo });
+      } else if (enRutaSuperior(sg) && largo >= 40) {
+        // Sobre una nube o la ruta superior: siempre se marca (es la recompensa de ir arriba)
+        const n = Math.max(3, Math.min(5, Math.floor((largo - 8) / 17) + 1));
+        candidatos.push({ forma: "linea", x0: sg.x0 + 4, x1: sg.x0 + 4 + (n - 1) * 17, puntos: sg.puntos, n: n, guia: true, arriba: true });
       } else if (largo >= 72) {
         // Línea sobre el suelo; deja libre el final, donde puede empezar un salto
         const n = Math.max(3, Math.min(6 - Math.round(2 * d), Math.floor((largo - 24) / 17)));
@@ -780,10 +850,10 @@
     candidatos.forEach((cand) => {
       const m0 = cand.x0 / T;
       // Las guías (nubes y abismos) pueden adelantarse un poco al turno; el resto espera su turno
-      const turno = m0 >= plan.siguiente || (cand.guia && m0 >= plan.ultimo + 22 && azar() < 0.7);
+      const turno = cand.arriba || m0 >= plan.siguiente || (cand.guia && m0 >= plan.ultimo + 30 && azar() < 0.5);
       if (!turno) return;
       // Las líneas son más comunes al principio; luego dominan los arcos
-      if (cand.forma === "linea" && azar() > 0.75 - 0.4 * d) return;
+      if (cand.forma === "linea" && !cand.arriba && azar() > 0.75 - 0.4 * d) return;
       const grupo = [];
       for (let i = 0; i < cand.n; i++) {
         let x;
@@ -885,6 +955,7 @@
       k.filas = k.filas.map((f) => f.slice(0, c));
       k.hSalida = hh;
       k.deslizar = deslizar;
+      k.objetivos = k.objetivos || [];
       return k;
     }
 
@@ -899,7 +970,12 @@
 
       for (let intento = 0; intento < 6; intento++) {
         const nombres = [elegirPatron(ctx)];
-        if (d > 0.35 && azar() < 0.25 + d * 0.35) nombres.push(elegirPatron(ctx));
+        // Las rutas dobles van solas: ya son un tramo largo y se validan dos veces
+        const doble = (n) => n === "dosRutas" || n === "tunel";
+        if (!doble(nombres[0]) && d > 0.35 && azar() < 0.25 + d * 0.35) {
+          const otro = elegirPatron(ctx);
+          if (!doble(otro)) nombres.push(otro);
+        }
         const k = construir(nombres, estado.h, ctx);
 
         const candidato = {
@@ -909,19 +985,37 @@
             xmin: e.xmin !== undefined ? e.xmin + estado.columna * T : undefined,
             xmax: e.xmax !== undefined ? e.xmax + estado.columna * T : undefined
           })),
-          deslizar: k.deslizar
+          deslizar: k.deslizar,
+          objetivos: k.objetivos.map((o) => ({ cy: o.cy, c0: o.c0 + estado.columna, c1: o.c1 + estado.columna }))
         };
         const solucion = resolver(candidato, vel, { inicio: estado.salida || undefined });
         if (!solucion) { estado.descartados++; continue; }
+        // Rutas alternativas: la de abajo también debe poder recorrerse
+        if (k.alternativa) {
+          const abajo = Object.assign({}, candidato, {
+            objetivos: [], sinObjetivos: true,
+            mapa: k.alternativa.quitarNubes ? candidato.mapa.map((f) => f.replace(/-/g, ".")) : candidato.mapa
+          });
+          if (!resolver(abajo, vel, { inicio: estado.salida || undefined, permitirDeslizar: k.alternativa.deslizar, sinCentrar: true })) { estado.descartados++; continue; }
+        }
 
         candidato.vel = vel;
         const monedas = colocarMonedas(candidato, solucion.camino, azar, estado.monedas);
         const tramo = terminar(k, nombres.join("+"), monedas, solucion.camino);
         tramo.entidades = candidato.entidades;
+        tramo.objetivos = candidato.objetivos;
+        tramo.rutaDoble = !!k.alternativa;
         tramo.plan = solucion.decisiones;
         tramo.xInicio = solucion.entrada.x;
         tramo.entrada = solucion.entrada;
         estado.salida = solucion.salida;
+
+        // Estrella fugaz (evento): sobre el recorrido, lejos de las monedas
+        if (estado.estrella && solucion.camino.length > 6) {
+          const camino = solucion.camino;
+          const q = camino.slice(Math.floor(camino.length * 0.3)).find((p) => tramo.monedas.every((m) => Math.abs(m.x + 6 - (p[0] + 5)) > 26));
+          if (q) { tramo.poderes.push({ tipo: "estrella", x: q[0] - 2, y: q[1] - 2 }); estado.estrella = false; }
+        }
 
         // Poderes: cada cierta distancia, sobre el recorrido seguro
         if (metros >= estado.siguientePoder) {
@@ -955,7 +1049,7 @@
       return tramo;
     }
 
-    return { siguiente: siguiente, estado: estado };
+    return { siguiente: siguiente, estado: estado, pedirEstrella: () => { estado.estrella = true; } };
   }
 
   raiz.MonkyGenerador = {

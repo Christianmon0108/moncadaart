@@ -15,28 +15,52 @@
   const HUD = window.MonkyHUD;
   const ESC = window.MonkyEscenario;
   const S = window.MonkySprites.construir();
+  const D = window.MonkyDatos;
+  const PJ = window.MonkyPersonajes;
+  // El personaje equipado reemplaza a Monky en todos los modos
+  function aplicarEquipo() { S.mono = PJ.construir(D.equipado()); }
+  aplicarEquipo();
+
+  /* Íconos pixel para la interfaz HTML (moneda, bandera y rayo) */
+  (function () {
+    const raiz = document.documentElement.style;
+    raiz.setProperty("--img-moneda", "url(" + S.moneda[0].der.toDataURL() + ")");
+    const icono = (filas, colores) => {
+      const c = S.crearCanvas(filas[0].length, filas.length), g = c.getContext("2d");
+      filas.forEach((f, y) => { for (let x = 0; x < f.length; x++) if (colores[f[x]]) { g.fillStyle = colores[f[x]]; g.fillRect(x, y, 1, 1); } });
+      return "url(" + c.toDataURL() + ")";
+    };
+    raiz.setProperty("--img-bandera", icono([
+      ".kkkkkk..", ".kooooak.", ".kooaaak.", ".koooook.", ".kkkkkk..", ".k.......", ".k.......", ".k.......", "kkk......"
+    ], { k: "#16152a", o: "#e8792e", a: "#ffe08a" }));
+    raiz.setProperty("--img-rayo", icono([
+      "....kkkk.", "...kyyk..", "..kyyk...", ".kyyykkk.", ".kkkyyyk.", "...kyyk..", "..kyyk...", "..kyk....", "..kk....."
+    ], { k: "#16152a", y: "#ffe08a" }));
+  })();
 
   const lienzo = document.getElementById("juego");
   const ctx = lienzo.getContext("2d");
 
   /* -------------------------------------------------------
-     RÉCORD (localStorage, con respaldo si no está disponible)
+     RÉCORD: vive en datos.js (que también lee el récord de
+     versiones anteriores). Se guarda una copia para dibujar.
      ------------------------------------------------------- */
-  const CLAVE_RECORD = "monky-dreams-record";
-  let record = { metros: 0, monedas: 0 };
-  try {
-    const guardado = JSON.parse(localStorage.getItem(CLAVE_RECORD) || "null");
-    if (guardado && typeof guardado.metros === "number") record = guardado;
-  } catch (error) { /* sin almacenamiento: el récord dura esta visita */ }
-
-  function guardarRecord() {
-    try { localStorage.setItem(CLAVE_RECORD, JSON.stringify(record)); } catch (error) { /* nada */ }
-  }
+  let record = D.record();
 
   /* -------------------------------------------------------
      MODOS
      ------------------------------------------------------- */
-  const deps = { sprites: S, entrada: E, aviso: mostrarAviso, fin: alTerminar, botones: P.zonaBotones };
+  const deps = {
+    sprites: S, entrada: E, aviso: mostrarAviso, fin: alTerminar, botones: P.zonaBotones,
+    mejoras: () => D.mejoras(),
+    misiones: () => D.misiones(),
+    // Próximo artículo que se podría comprar con lo que se junte en la partida
+    metaCompra: () => {
+      const d = D.leer();
+      const pendientes = D.CATALOGO.filter((a) => d.comprados.indexOf(a.id) < 0 && a.precio > d.saldo).sort((a, b) => a.precio - b.precio);
+      return pendientes.length ? { nombre: pendientes[0].nombre, precio: pendientes[0].precio, saldo: d.saldo } : null;
+    }
+  };
   const modos = {
     carrera: window.MonkyCarrera(deps),
     aventura: window.MonkyAventura(deps)
@@ -44,6 +68,8 @@
   let modo = null;
   let estado = "menu";
   let tiempo = 0;
+  let partida = null; // partida de la Carrera en curso (se cobra una sola vez)
+  const tienda = window.MonkyTienda({ sprites: S, alCambiarEquipo: () => { aplicarEquipo(); actualizarMenu(); } });
 
   /* -------------------------------------------------------
      PORTADA (dibujada en el lienzo)
@@ -66,7 +92,8 @@
   let zetas = [];
   let relojZetas = 0;
 
-  function actualizarMenu(dt) {
+  function animarMenu(dt) {
+    if (estado === "tienda") tienda.dibujar(dt);
     relojZetas -= dt;
     if (relojZetas <= 0) { relojZetas = 0.9; zetas.push({ x: 10, y: 0, vida: 2.6, fase: Math.random() * 6 }); }
     zetas.forEach((z) => { z.vida -= dt; z.y -= 11 * dt; z.x += (6 + Math.sin(tiempo * 2 + z.fase) * 8) * dt; });
@@ -100,6 +127,8 @@
   const $ = (id) => document.getElementById(id);
   const ui = {
     inicio: $("pantalla-inicio"),
+    tienda: $("pantalla-tienda"),
+    misiones: $("pantalla-misiones"),
     pausa: $("pantalla-pausa"),
     finCarrera: $("pantalla-fin-carrera"),
     victoria: $("pantalla-victoria"),
@@ -109,13 +138,14 @@
     pausar: $("btn-pausa"),
     pantalla: $("btn-pantalla")
   };
-  const pantallas = [ui.inicio, ui.pausa, ui.finCarrera, ui.victoria, ui.derrota];
+  const pantallas = [ui.inicio, ui.tienda, ui.misiones, ui.pausa, ui.finCarrera, ui.victoria, ui.derrota];
 
   function mostrarPantalla(pantalla) {
     pantallas.forEach((p) => { p.hidden = p !== pantalla; });
     ui.pausar.hidden = !(estado === "jugando" || estado === "pausa");
     document.body.classList.toggle("en-juego", estado === "jugando");
     document.body.classList.toggle("en-titulo", estado === "menu");
+    document.body.classList.toggle("en-tienda", estado === "tienda");
     document.body.classList.toggle("modo-carrera", !!modo && modo.nombre === "carrera" && estado !== "menu");
     document.body.classList.toggle("modo-aventura", !!modo && modo.nombre === "aventura" && estado !== "menu");
     E.fijarJugando(estado === "jugando");
@@ -135,10 +165,27 @@
     relojAviso = setTimeout(() => ui.aviso.classList.remove("visible"), 2800);
   }
 
-  function actualizarRecordMenu() {
+  function actualizarMenu() {
+    record = D.record();
     $("record-menu").textContent = record.metros > 0
       ? "Récord: " + record.metros + " m · " + record.monedas + " monedas"
       : "¡Todavía no hay récord! Corre lo más lejos que puedas.";
+    document.querySelectorAll("[data-saldo]").forEach((el) => { el.textContent = D.saldo(); });
+    $("insignia-tienda").hidden = !tienda.hayNovedad();
+    $("nombre-personaje").textContent = D.articulo(D.equipado().personaje).nombre;
+  }
+
+  /* Cobra la partida en curso (una sola vez) */
+  function cerrarPartida(r) {
+    if (!partida) return null;
+    const resultado = D.cerrarPartida({ id: partida, metros: r.metros, monedas: r.monedas, poderes: r.poderes });
+    partida = null;
+    return resultado;
+  }
+
+  /* Si se abandona una Carrera (reiniciar o ir al menú), igual se cobra lo recogido */
+  function abandonarCarrera() {
+    if (partida && modo && modo.nombre === "carrera" && modo.resumen) cerrarPartida(modo.resumen());
   }
 
   const formatoTiempo = (s) => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
@@ -146,15 +193,30 @@
   function alTerminar(r) {
     estado = "fin";
     if (r.tipo === "carrera") {
-      const nuevo = r.metros > record.metros;
-      if (nuevo) record.metros = r.metros;
-      if (r.monedas > record.monedas) record.monedas = r.monedas;
-      guardarRecord();
+      const alcanzablesAntes = tienda.alcanzables().map((a) => a.id);
+      const g = cerrarPartida(r) || { ganadas: 0, premios: [], saldo: D.saldo(), record: D.record(), nuevoRecord: false };
+      record = g.record;
       $("fc-titulo").textContent = r.motivo === "atrapado" ? "¡La sombra te atrapó!" : "Fin de la carrera";
       $("fc-metros").textContent = r.metros + " m";
       $("fc-monedas").textContent = r.monedas;
       $("fc-record").textContent = record.metros + " m";
-      $("fc-nuevo").hidden = !nuevo;
+      $("fc-nuevo").hidden = !g.nuevoRecord;
+      $("fc-ganadas").textContent = "+" + (g.ganadas + (g.extra || 0));
+      $("fc-saldo").textContent = g.saldo;
+      const premios = $("fc-premios");
+      premios.innerHTML = "";
+      (g.premios || []).forEach((p) => {
+        const li = document.createElement("li");
+        li.innerHTML = '<span class="sello">¡Misión cumplida!</span> <span class="premio-texto"></span> <strong>+' + p.premio + "</strong>";
+        li.querySelector(".premio-texto").textContent = p.texto;
+        premios.appendChild(li);
+      });
+      // Indicador de recompensas desbloqueadas: artículos que ahora alcanza el saldo
+      const nuevos = tienda.alcanzables().filter((a) => alcanzablesAntes.indexOf(a.id) < 0);
+      const aviso = $("fc-desbloqueo");
+      aviso.hidden = !nuevos.length;
+      if (nuevos.length) aviso.textContent = "¡Ya puedes comprar " + nuevos.slice(0, 2).map((a) => a.nombre).join(" y ") + (nuevos.length > 2 ? " y más" : "") + " en la tienda!";
+      if ((g.premios || []).length || nuevos.length) Snd.reproducir("mision");
       mostrarPantalla(ui.finCarrera);
     } else if (r.tipo === "victoria") {
       $("res-monedas").textContent = r.monedas + "/" + r.total;
@@ -173,19 +235,46 @@
     Snd.activar();
     Snd.reproducir("boton");
     E.soltarTodo();
+    abandonarCarrera();
+    aplicarEquipo();
+    record = D.record();
     modo = modos[nombre];
     estado = "jugando";
+    partida = nombre === "carrera" ? D.nuevaPartida() : null;
     modo.iniciar();
     mostrarPantalla(null);
     requestAnimationFrame(P.medir);
   }
 
   function irAlMenu() {
+    abandonarCarrera();
     estado = "menu";
     modo = null;
     E.soltarTodo();
-    actualizarRecordMenu();
+    actualizarMenu();
     mostrarPantalla(ui.inicio);
+  }
+
+  function abrirTienda(categoria, titulo) {
+    abandonarCarrera();
+    estado = "tienda";
+    modo = null;
+    E.soltarTodo();
+    Snd.activar();
+    Snd.reproducir("boton");
+    tienda.abrir(categoria, titulo);
+    mostrarPantalla(ui.tienda);
+  }
+
+  function abrirMisiones() {
+    abandonarCarrera();
+    estado = "misiones";
+    modo = null;
+    E.soltarTodo();
+    Snd.activar();
+    Snd.reproducir("boton");
+    tienda.pintarMisiones(D.misiones(), $("lista-misiones"));
+    mostrarPantalla(ui.misiones);
   }
 
   function alternarPausa() {
@@ -242,14 +331,17 @@
       else if (accion === "sonido") alternarSonido();
       else if (accion === "pantalla") alternarPantallaCompleta();
       else if (accion === "menu") irAlMenu();
+      else if (accion === "tienda") abrirTienda("personajes");
+      else if (accion === "personaje") abrirTienda("personajes", "Personajes");
+      else if (accion === "misiones") abrirMisiones();
     });
   });
 
-  E.on("pausa", alternarPausa);
+  E.on("pausa", () => { if (estado === "tienda" || estado === "misiones") irAlMenu(); else alternarPausa(); });
   E.on("sonido", alternarSonido);
   E.on("pantalla", alternarPantallaCompleta);
   E.on("enter", () => {
-    if (estado === "menu") empezar("carrera");
+    if (estado === "menu" || estado === "misiones") empezar("carrera");
     else if (estado === "fin") empezar(modo ? modo.nombre : "carrera");
     else if (estado === "pausa") alternarPausa();
   });
@@ -290,7 +382,7 @@
     const maxPasos = 6 * turbo;
     while (acumulado >= PASO && pasos < maxPasos) {
       tiempo += PASO;
-      if (estado === "menu") actualizarMenu(PASO);
+      if (estado === "menu" || estado === "tienda" || estado === "misiones") animarMenu(PASO);
       else if (modo && (estado === "jugando" || estado === "fin")) modo.actualizar(PASO);
       acumulado -= PASO;
       pasos++;
@@ -300,12 +392,13 @@
     const { W, H } = P.estado;
     if (estado === "menu" || !modo) dibujarMenu(W, H);
     else modo.dibujar(ctx, W, H, record.metros);
+    if (estado === "tienda" || estado === "misiones") { ctx.fillStyle = "rgba(13, 15, 38, 0.55)"; ctx.fillRect(0, 0, W, H); }
     requestAnimationFrame(bucle);
   }
 
   P.alCambiar((W, H) => { if (modos.carrera.redimensionar) modos.carrera.redimensionar(W, H); });
   P.medir();
-  actualizarRecordMenu();
+  actualizarMenu();
   mostrarPantalla(ui.inicio);
   requestAnimationFrame(bucle);
 
@@ -318,6 +411,8 @@
     modo: () => (modo ? modo.nombre : null),
     pantalla: () => Object.assign({}, P.estado),
     record: () => Object.assign({}, record),
+    datos: () => D.leer(),
+    partida: () => partida,
     pantallaCompletaDisponible: P.pantallaCompletaDisponible,
     jugador: () => actual() && actual().jugador(),
     recogidos: () => actual() && actual().recogidos && actual().recogidos(),
@@ -333,7 +428,10 @@
       teletransportar: (c, f) => modos.aventura.depuracion.teletransportar(c, f),
       quitarVida: () => actual() && actual().quitarVida(),
       turbo: (n) => { turbo = Math.max(1, n | 0); },
-      empezar: (nombre) => empezar(nombre)
+      empezar: (nombre) => empezar(nombre),
+      tienda: (cat) => abrirTienda(cat),
+      // Solo pruebas: termina la carrera actual como si Monky perdiera
+      terminar: () => modos.carrera.depuracion.terminar && modos.carrera.depuracion.terminar()
     };
   }
 })();

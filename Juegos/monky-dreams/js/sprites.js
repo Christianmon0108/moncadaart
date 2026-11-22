@@ -748,6 +748,92 @@ window.MonkySprites = (function () {
     return c;
   }
 
+  /* -------------------------------------------------------
+     TINTA: gota que cae, charco y la pesadilla de tinta
+     ------------------------------------------------------- */
+  function gotaTinta(fase) {
+    const c = crearCanvas(12, 14), g = c.getContext("2d");
+    const dentro = (x, y) => {
+      const yy = y - 1;
+      if (yy < 0) return false;
+      const r = yy < 6 ? (yy / 6) * 4.2 : Math.sqrt(Math.max(0, 16 - (yy - 8.5) * (yy - 8.5) * 0.9)) + 0.3;
+      return Math.abs(x - 5.5) <= r;
+    };
+    for (let y = 0; y < 14; y++) for (let x = 0; x < 12; x++) {
+      if (!dentro(x, y)) continue;
+      const borde = !dentro(x - 1, y) || !dentro(x + 1, y) || !dentro(x, y - 1) || !dentro(x, y + 1);
+      g.fillStyle = borde ? "#05060f" : (x <= 4 && y >= 6 && y <= 9) ? "#4a5ab8" : y > 10 ? "#0e1130" : "#1b2050";
+      g.fillRect(x, y, 1, 1);
+    }
+    g.fillStyle = "#c9d2ff"; g.fillRect(4, 7 + (fase % 2), 1, 1);
+    return c;
+  }
+
+  function charcoTinta(fase) {
+    const c = crearCanvas(18, 6), g = c.getContext("2d");
+    for (let x = 0; x < 18; x++) {
+      const alto = Math.round(2.5 + Math.sin(x * 0.7 + fase) * 0.8 + (x > 3 && x < 14 ? 1.5 : 0));
+      for (let y = 6 - alto; y < 6; y++) {
+        g.fillStyle = y === 6 - alto ? "#05060f" : y === 6 - alto + 1 ? (x % 4 === fase % 4 ? "#c9d2ff" : "#4a5ab8") : "#1b2050";
+        g.fillRect(x, y, 1, 1);
+      }
+    }
+    return c;
+  }
+
+  /* Pesadilla de tinta: una ola de tinta con ojos que persigue a Monky */
+  function olaTinta(cuadroN) {
+    const W = 72, H = 88;
+    const c = crearCanvas(W, H), g = c.getContext("2d");
+    // Cresta redondeada arriba, cuerpo ondulante abajo
+    const frente = (y) => 54 + Math.sin(y * 0.18 + cuadroN * 1.4) * 4 + Math.sin(y * 0.05 + cuadroN * 0.7) * 5 - Math.pow(Math.max(0, 22 - y), 2) * 0.09;
+    const dentro = (x, y) => y >= 4 && y < H && x >= 0 && x < frente(y);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (dentro(x, y)) {
+        const filo = !dentro(x + 1, y) || !dentro(x, y - 1);
+        g.fillStyle = filo ? "#4a5ab8" : (x * 3 + y * 5 + cuadroN * 7) % 23 === 0 ? "#2a3270" : (x + y) % 9 === 0 ? "#141838" : "#0a0c22";
+        g.fillRect(x, y, 1, 1);
+      }
+    }
+    // Gotas que salpican al frente
+    for (let i = 0; i < 4; i++) {
+      const y = 20 + ((i * 17 + cuadroN * 5) % 60), x = Math.round(frente(y) + 2 + ((i + cuadroN) % 3) * 3);
+      g.fillStyle = "#1b2050"; g.fillRect(x, y, 3, 3);
+      g.fillStyle = "#4a5ab8"; g.fillRect(x, y, 1, 1);
+    }
+    // Ojos grandes y boca dentada
+    [[40, 30], [52, 34]].forEach(([ox, oy]) => {
+      g.fillStyle = "#05060f"; g.fillRect(ox - 4, oy - 3, 9, 8);
+      g.fillStyle = "#f6efe5"; g.fillRect(ox - 3, oy - 2, 7, 6);
+      g.fillStyle = "#16152a"; g.fillRect(ox + (cuadroN % 2), oy - 1, 3, 4);
+    });
+    g.fillStyle = "#05060f"; g.fillRect(34, 46, 20, 7);
+    g.fillStyle = "#f6efe5";
+    for (let x = 35; x < 53; x += 3) { g.fillRect(x, 46, 2, 2); g.fillRect(x + 1, 51, 2, 2); }
+    return c;
+  }
+
+  /* Estrella fugaz (recompensa de evento) */
+  function estrella(fase) {
+    const c = crearCanvas(16, 16), g = c.getContext("2d");
+    const puntas = 5, rExt = 7.4, rInt = 3.2, cx = 7.5, cy = 8;
+    const dentro = (x, y) => {
+      const ang = Math.atan2(y - cy, x - cx) + Math.PI / 2 + fase * 0.12;
+      const d = Math.hypot(x - cx, y - cy);
+      const k = ((ang / (Math.PI * 2)) * puntas % 1 + 1) % 1;
+      const r = rInt + (rExt - rInt) * Math.abs(1 - 2 * k);
+      return d <= r;
+    };
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      if (!dentro(x, y)) continue;
+      const borde = !dentro(x - 1, y) || !dentro(x + 1, y) || !dentro(x, y - 1) || !dentro(x, y + 1);
+      g.fillStyle = borde ? "#7a3a12" : (x < cx && y < cy) ? "#fff8c8" : y > cy + 1 ? "#f2a93b" : "#ffe08a";
+      g.fillRect(x, y, 1, 1);
+    }
+    g.fillStyle = "#16152a"; g.fillRect(6, 7, 1, 2); g.fillRect(9, 7, 1, 2);
+    return c;
+  }
+
   function construir() {
     const m = {
       quieto: [cuadro(monky("normal", "quieto", 0)), cuadro(monky("normal", "respira", 1))],
@@ -806,6 +892,10 @@ window.MonkySprites = (function () {
       tronco: [0, 1, 2, 3].map((i) => desdeLienzo(tronco(i))),
       bichoDigital: BICHO_PATAS.map((patas) => cuadro(BICHO_CUERPO.concat(patas), { u: "#2bb8d8", U: "#5ff0ff", V: "#1a6f8f", v: "#0c3550", r: "#ff6bd5" })),
       sombra: [0, 1, 2, 3].map((i) => desdeLienzo(sombraGigante(i))),
+      gota: [0, 1].map((i) => desdeLienzo(gotaTinta(i))),
+      charco: [0, 1, 2, 3].map((i) => desdeLienzo(charcoTinta(i))),
+      tinta: [0, 1, 2, 3].map((i) => desdeLienzo(olaTinta(i))),
+      estrella: [0, 1, 2, 3, 4, 5].map((i) => desdeLienzo(estrella(i))),
       polvo: [0, 1, 2, 3].map((i) => desdeLienzo(polvo(i))),
       crearCanvas: crearCanvas
     };
@@ -814,6 +904,8 @@ window.MonkySprites = (function () {
   return {
     PALETA: PALETA,
     construir: construir,
-    _datos: { CABEZA, CUERPO, BICHO_CUERPO, BICHO_PATAS, PESADILLA, CORAZON, LAMPARA, DESPERTADOR }
+    _datos: { CABEZA, CUERPO, BICHO_CUERPO, BICHO_PATAS, PESADILLA, CORAZON, LAMPARA, DESPERTADOR },
+    // Piezas para armar personajes y artículos de la tienda (personajes.js)
+    piezas: { CABEZA: CABEZA, CUERPO: CUERPO, cuadro: cuadro, pintar: pintar, desdeLienzo: desdeLienzo, crearCanvas: crearCanvas }
   };
 })();

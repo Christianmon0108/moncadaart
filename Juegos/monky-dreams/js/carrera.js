@@ -20,9 +20,16 @@ window.MonkyCarrera = function (deps) {
   const FIS = F.FIS;
   const ALTO_MUNDO = G.FILAS * T;
   const VIDAS = 3;
-  const DURACION = { escudo: 10, iman: 10, doble: 12, impulso: 5 };
+  // Duraciones base; las mejoras de la tienda alargan el escudo y el imán
+  let DURACION = { escudo: 10, iman: 10, doble: 12, impulso: 5 };
+  let radioIman = 96;
+  let escudoReforzado = false;
   const NOMBRES_MUNDO = { noche: "Sueño nocturno", bosque: "Bosque mágico", digital: "Mundo digital", pesadilla: "Pesadilla" };
   const NOMBRES_PODER = { escudo: "Escudo", iman: "Imán", doble: "Doble salto", impulso: "Impulso" };
+  const COLORES_MUNDO = {
+    noche: ["#ffe08a", "#b9a7e0", "#fff7e8"], bosque: ["#8be38b", "#ffa860", "#e9fff0"],
+    digital: ["#5ff0ff", "#ff6bd5", "#d6fdff"], pesadilla: ["#ff4d6d", "#b9a7e0", "#ffd6dd"]
+  };
 
   let ctx = null;
   let W = 320, H = 180;
@@ -42,6 +49,9 @@ window.MonkyCarrera = function (deps) {
   let jugador = null;
   let inicioX = 0;
   let metros = 0, monedas = 0, metrosMax = 0;
+  let poderesUsados = 0;
+  let misiones = [];        // misiones al empezar (para avisar al cumplirlas)
+  let metaCompra = null;    // artículo que se alcanzará a comprar en esta partida
   let particulas = [], efectos = [];
   let poderes = { escudo: 0, iman: 0, doble: 0, impulso: 0 };
   let invulPostImpulso = 0;
@@ -50,6 +60,13 @@ window.MonkyCarrera = function (deps) {
   let camX = 0;
   let temaVisible = "noche";
   let cartel = null;
+  let cartelMision = null;
+  let cartelEvento = null;
+  let evento = null;          // evento aleatorio en curso: tinta, dobles o estrella
+  let proximoEvento = 300;    // metros
+  let racha = 0, ultimaMoneda = -9;
+  let destelloMundo = 0, colorMundo = "#ffffff";
+  let manchaTinta = 0;
   let avisosVistos = {};
   let piloto = false;
   let accionPiloto = null;
@@ -98,21 +115,99 @@ window.MonkyCarrera = function (deps) {
      TRAMOS: generar por delante y descartar los de atrás
      ------------------------------------------------------- */
   function prepararTramo(t) {
-    if (pruebaSinPoderes) t.poderes = t.poderes.filter((p) => Array.isArray(pruebaSinPoderes) && !pruebaSinPoderes.includes(p.tipo));
+    if (pruebaSinPoderes) t.poderes = t.poderes.filter((p) => p.tipo === "estrella" || (Array.isArray(pruebaSinPoderes) && !pruebaSinPoderes.includes(p.tipo)));
     t.mapa = t.mapa.slice();
     t.entidades.forEach((e) => { e.vivo = true; e.aplastado = 0; e.anim = Math.random() * 10; e.pos = null; });
     t.monedas.forEach((m) => { m.tomada = false; m.vx = 0; m.vy = 0; });
+    t.gruposRestantes = {};
+    t.monedas.forEach((m) => { if (m.grupo) t.gruposRestantes[m.grupo] = (t.gruposRestantes[m.grupo] || 0) + 1; });
     t.poderes.forEach((p) => { p.tomado = false; });
     t.puas = G.zonasPuas(t);
     t.lienzo = ESC.construirCapaNivel(t.mapa, { tema: t.tema, extender: true, semilla: t.x0 });
     t.planHecho = new Set();
   }
 
+  /* -------------------------------------------------------
+     FUENTE DE TRAMOS
+     Los tramos se generan en un Web Worker (trabajador.js) para
+     que validar no trabe el juego. El generador es determinista:
+     el hilo principal arma los primeros tramos al empezar y el
+     trabajador sigue la misma secuencia desde ahí. Si no hay
+     Worker (por ejemplo abriendo el archivo sin servidor), todo
+     se genera aquí mismo como antes.
+     ------------------------------------------------------- */
+  let trabajador = null;
+  let numeroFuente = 0;
+  const conTrabajador = typeof Worker !== "undefined" && location.protocol !== "file:" &&
+    !/[?&]sintrabajador/.test(location.search);
+
+  function recibirTramos(e) {
+    const m = e.data || {};
+    const f = generador;
+    if (!f || m.tipo !== "tramos" || m.partida !== f.numero) return;
+    f.pedidos -= m.lista.length;
+    f.cola.push.apply(f.cola, m.lista);
+  }
+
+  function crearFuente(semilla) {
+    const local = G.crearGenerador(semilla);
+    const f = {
+      numero: ++numeroFuente, local: local, estado: local.estado, cola: [], pedidos: 0,
+      hechos: 0, locales: 0, enTrabajador: false
+    };
+    const pedirMas = () => {
+      if (f.enTrabajador && f.cola.length + f.pedidos < 3) {
+        f.pedidos += 2;
+        trabajador.postMessage({ tipo: "pedir", cantidad: 2, partida: f.numero });
+      }
+    };
+    // Si el trabajador falla, el generador local se pone al día y sigue
+    f.alHilo = () => {
+      f.enTrabajador = false;
+      while (f.locales < f.hechos) { local.siguiente(); f.locales++; }
+    };
+    f.tomar = () => {
+      if (!f.enTrabajador) {
+        if (f.locales < f.hechos) f.alHilo();
+        f.hechos++; f.locales++;
+        return local.siguiente();
+      }
+      const t = f.cola.shift() || null;
+      if (t) f.hechos++;
+      pedirMas();
+      return t;
+    };
+    f.pasarATrabajador = () => {
+      if (!conTrabajador) return;
+      try {
+        if (!trabajador) {
+          trabajador = new Worker("js/trabajador.js");
+          trabajador.onmessage = recibirTramos;
+          trabajador.onerror = () => { trabajador = null; if (generador && generador.enTrabajador) generador.alHilo(); };
+        }
+        trabajador.postMessage({ tipo: "iniciar", semilla: semilla, saltar: f.hechos });
+        f.enTrabajador = true;
+        pedirMas();
+      } catch (error) {
+        trabajador = null;
+        f.enTrabajador = false;
+      }
+    };
+    f.pedirEstrella = () => {
+      if (f.enTrabajador && trabajador) trabajador.postMessage({ tipo: "estrella" });
+      else local.pedirEstrella();
+    };
+    // ¿Se acaba el camino por delante y el trabajador todavía no respondió?
+    f.esperando = () => f.enTrabajador && !f.cola.length;
+    return f;
+  }
+
   function asegurarTramos(todos) {
     const limite = Math.floor((camX + W + 420) / T);
     let generados = 0;
     while (!tramos.length || tramos[tramos.length - 1].x0 + tramos[tramos.length - 1].ancho < limite) {
-      const t = generador.siguiente();
+      const t = generador.tomar();
+      if (!t) break;
       prepararTramo(t);
       tramos.push(t);
       if (++generados >= (todos ? 20 : 1)) break; // como máximo un tramo por cuadro
@@ -124,21 +219,32 @@ window.MonkyCarrera = function (deps) {
      INICIO
      ------------------------------------------------------- */
   function iniciar(semilla) {
-    generador = G.crearGenerador(semilla || (Date.now() ^ (Math.random() * 1e9)) >>> 0);
+    generador = crearFuente(semilla || (Date.now() ^ (Math.random() * 1e9)) >>> 0);
     tramos = [];
     camX = 0;
     asegurarTramos(true);
     asegurarTramos(true);
+    generador.pasarATrabajador();
     jugador = Object.assign(F.crearCorredor(5 * T, (G.FILA_BASE) * T), {
-      vidas: VIDAS, invul: 0, estirar: 0, aplastar: 0, relojPolvo: 0, distancia: 0, ultimoGolpe: 0
+      vidas: VIDAS, invul: 0, estirar: 0, aplastar: 0, relojPolvo: 0, distancia: 0, ultimoGolpe: 0, combo: 0
     });
     inicioX = jugador.x;
     metros = 0; monedas = 0; metrosMax = 0;
+    poderesUsados = 0;
+    const mejoras = deps.mejoras ? deps.mejoras() : {};
+    DURACION = { escudo: mejoras.escudo ? 15 : 10, iman: mejoras.iman ? 15 : 10, doble: 12, impulso: 5 };
+    radioIman = mejoras.iman ? 150 : 96;
+    escudoReforzado = !!mejoras.escudo;
+    misiones = (deps.misiones ? deps.misiones() : []).map((m) => Object.assign({ avisada: false }, m));
+    metaCompra = deps.metaCompra ? deps.metaCompra() : null;
     registroGolpes = [];
     particulas = []; efectos = [];
     poderes = { escudo: 0, iman: 0, doble: 0, impulso: 0 };
     invulPostImpulso = 0;
-    sombra = { activa: false, distancia: 140, anim: 0, alfa: 0, arremetida: 0, reloj: 7 };
+    sombra = { activa: false, distancia: 140, anim: 0, alfa: 0, arremetida: 0, reloj: 7, tipo: "sombra" };
+    evento = null; cartelEvento = null; cartelMision = null;
+    proximoEvento = 260 + Math.random() * 140;
+    racha = 0; ultimaMoneda = -9; destelloMundo = 0;
     rescate = null;
     temaVisible = "noche";
     cartel = { texto: NOMBRES_MUNDO.noche, t: 2.6 };
@@ -220,7 +326,12 @@ window.MonkyCarrera = function (deps) {
         efectos.push({ tipo: "anillo", x: j.x + 5, y: j.y + j.h, vida: 0.35, total: 0.35, color: "#e7dcf6" });
       }
       if (ev.aterrizo && ev.vyAterrizaje > 150) { j.aplastar = 0.12; polvo(j.x, j.y + j.h, -1); polvo(j.x + 10, j.y + j.h, 1); }
-      if (ev.deslizo) polvo(j.x + 2, j.y + j.h, -1);
+      if (ev.deslizo) {
+        polvo(j.x + 2, j.y + j.h, -1);
+        Snd.reproducir("deslizar");
+        for (let i = 0; i < 4; i++) particulas.push({ x: j.x + 2, y: j.y + j.h - 1, vx: -40 - Math.random() * 40, vy: -20 - Math.random() * 30, vida: 0.3, total: 0.3, color: "#fff1d0", grav: 200, tam: 1 });
+      }
+      if (j.enSuelo) j.combo = 0;
       if (ev.choque) choque();
     }
 
@@ -317,7 +428,101 @@ window.MonkyCarrera = function (deps) {
     Snd.reproducir("dolor");
     chispas(j.x + 5, j.y + j.h / 2, ["#e8473c", "#ff9b8a", "#fff7e8"], 12);
     if (sombra.activa) sombra.distancia -= 55;
+    j.combo = 0;
     if (j.vidas <= 0) morir("golpe");
+  }
+
+  /* -------------------------------------------------------
+     EVENTOS ALEATORIOS (breves y avisados)
+     - tinta: una pesadilla de tinta persigue a Monky unos
+       segundos; si escapa, gana monedas. Si lo alcanza, quita
+       una vida (no termina la partida, salvo la última).
+     - dobles: cada moneda vale 2 durante 10 s.
+     - estrella: aparece una estrella fugaz sobre la ruta.
+     ------------------------------------------------------- */
+  const valorMoneda = () => (evento && evento.tipo === "dobles" ? 2 : 1);
+  const DURACION_EVENTO = { tinta: 13, dobles: 10, estrella: 12 };
+
+  function anunciar(texto, color) {
+    cartelEvento = { texto: texto, t: 2.4, color: color || "#ffe08a" };
+    Snd.reproducir("evento");
+  }
+
+  function iniciarEvento() {
+    // Sin tinta cerca de la Pesadilla (ahí ya persigue la sombra gigante)
+    const tintaPosible = temaVisible !== "pesadilla" && G.mundoEn(metros + 220) !== "pesadilla" && metros > 400;
+    const r = Math.random();
+    const tipo = tintaPosible && r < 0.4 ? "tinta" : r < 0.72 ? "dobles" : "estrella";
+    evento = { tipo: tipo, t: DURACION_EVENTO[tipo], fase: "aviso", aviso: 1.6, atrapado: false };
+    if (tipo === "tinta") {
+      anunciar("PESADILLA DE TINTA", "#9fb0ff");
+      Snd.reproducir("tinta");
+      deps.aviso("¡Una pesadilla de tinta te persigue! Corre sin tropezar");
+    } else if (tipo === "dobles") {
+      evento.fase = "activo";
+      anunciar("MONEDAS DOBLES", "#ffe08a");
+    } else {
+      evento.fase = "activo";
+      generador.pedirEstrella();
+      anunciar("ESTRELLA FUGAZ", "#ffe08a");
+      deps.aviso("¡Cayó una estrella fugaz más adelante! Atrápala");
+    }
+  }
+
+  function terminarEvento() {
+    if (evento.tipo === "tinta" && !evento.atrapado && estado === "jugando") {
+      const premio = 15 * (evento.tipo === "dobles" ? 2 : 1);
+      monedas += premio;
+      anunciar("ESCAPASTE +" + premio, "#8be38b");
+      Snd.reproducir("mision");
+      chispas(jugador.x + 5, jugador.y + 4, ["#8be38b", "#fff7e8", "#ffe08a"], 14);
+    }
+    evento = null;
+    proximoEvento = metros + 320 + Math.random() * 260;
+  }
+
+  function actualizarEventos(dt) {
+    if (!evento) {
+      if (metros >= proximoEvento && !rescate) iniciarEvento();
+      return;
+    }
+    if (evento.fase === "aviso") {
+      evento.aviso -= dt;
+      if (evento.aviso <= 0) evento.fase = "activo";
+      return;
+    }
+    evento.t -= dt;
+    if (evento.t <= 0) terminarEvento();
+  }
+
+  /* La tinta alcanzó a Monky: pierde una vida y la tinta se retira */
+  function tintaAlcanza() {
+    const j = jugador;
+    evento.atrapado = true;
+    sombra.distancia = 150;
+    temblor = 0.4;
+    manchaTinta = 0.9;
+    if (poderes.escudo > 0) {
+      poderes.escudo = 0;
+      deps.aviso("¡El escudo te salvó de la tinta!");
+    } else {
+      j.vidas--;
+      Snd.reproducir("dolor");
+      j.invul = 1.5;
+      if (j.vidas <= 0) { morir("tinta"); return; }
+      deps.aviso("¡La tinta te alcanzó! Perdiste una vida");
+    }
+    terminarEvento();
+  }
+
+  function tomarEstrella(p) {
+    const premio = 15 * valorMoneda();
+    monedas += premio;
+    Snd.reproducir("comprar");
+    temblor = 0.15;
+    chispas(p.x + 6, p.y + 6, ["#ffe08a", "#fff8c8", "#f2a93b", "#ffffff"], 22);
+    efectos.push({ tipo: "anillo", x: p.x + 6, y: p.y + 6, vida: 0.6, total: 0.6, color: "#ffe08a" });
+    efectos.push({ tipo: "texto", x: p.x - 10, y: p.y - 10, vida: 1.1, total: 1.1, contenido: "ESTRELLA +" + premio });
   }
 
   function caerAlVacio() {
@@ -412,6 +617,14 @@ window.MonkyCarrera = function (deps) {
           Snd.reproducir("aplastar");
           efectos.push({ tipo: "destello", x: e.pos.x + e.w / 2, y: e.pos.y + 2, vida: 0.3, total: 0.3 });
           chispas(e.pos.x + e.w / 2, e.pos.y + 4, ["#b294f0", "#fff7e8", "#f2c14e"], 10);
+          // Combo: pisar varios enemigos sin tocar el suelo da monedas extra
+          j.combo++;
+          if (j.combo >= 2) {
+            const extra = (j.combo - 1) * valorMoneda();
+            monedas += extra;
+            efectos.push({ tipo: "texto", x: e.pos.x - 6, y: e.pos.y - 12, vida: 0.9, total: 0.9, contenido: "COMBO X" + j.combo + " +" + extra });
+            Snd.reproducir("grupo");
+          }
         } else if (poderes.escudo > 0) {
           destruir(e, ["#7aa6cf", "#fff7e8"]);
           herir(0);
@@ -434,14 +647,24 @@ window.MonkyCarrera = function (deps) {
         if (poderes.iman > 0) {
           const dx = j.x + 5 - (m.x + 6), dy = j.y + j.h / 2 - (m.y + 6);
           const d = Math.hypot(dx, dy);
-          if (d < 96) { m.x += (dx / d) * Math.min(d, 260 * dt); m.y += (dy / d) * Math.min(d, 260 * dt); }
+          if (d < radioIman) { m.x += (dx / d) * Math.min(d, 260 * dt); m.y += (dy / d) * Math.min(d, 260 * dt); }
         }
         if (solapan(caja, { x: m.x, y: m.y, w: 12, h: 12 })) {
           m.tomada = true;
-          monedas++;
-          Snd.reproducir("recoger");
+          monedas += valorMoneda();
+          // Racha: cada moneda seguida suena un poco más aguda
+          racha = tiempo - ultimaMoneda < 0.55 ? Math.min(racha + 1, 9) : 0;
+          ultimaMoneda = tiempo;
+          Snd.reproducir("recoger", racha);
           efectos.push({ tipo: "destello", x: m.x + 6, y: m.y + 6, vida: 0.3, total: 0.3 });
-          if (monedas % 10 === 0) efectos.push({ tipo: "texto", x: m.x - 4, y: m.y - 4, vida: 0.8, total: 0.8, contenido: String(monedas) });
+          // Grupo completo: premio extra
+          if (m.grupo && t.gruposRestantes[m.grupo] !== undefined && --t.gruposRestantes[m.grupo] === 0) {
+            const extra = 2 * valorMoneda();
+            monedas += extra;
+            Snd.reproducir("grupo");
+            chispas(m.x + 6, m.y + 6, ["#ffe08a", "#fff7e8", "#f2c14e"], 12);
+            efectos.push({ tipo: "texto", x: m.x - 8, y: m.y - 8, vida: 0.9, total: 0.9, contenido: "GRUPO +" + extra });
+          }
         }
       });
 
@@ -449,7 +672,8 @@ window.MonkyCarrera = function (deps) {
         if (p.tomado) return;
         if (solapan(caja, { x: p.x - 2, y: p.y - 2, w: 16, h: 16 })) {
           p.tomado = true;
-          activarPoder(p.tipo);
+          if (p.tipo === "estrella") tomarEstrella(p);
+          else activarPoder(p.tipo);
         }
       });
     });
@@ -463,6 +687,7 @@ window.MonkyCarrera = function (deps) {
 
   function activarPoder(tipo) {
     poderes[tipo] = DURACION[tipo];
+    poderesUsados++;
     Snd.reproducir("control");
     efectos.push({ tipo: "anillo", x: jugador.x + 5, y: jugador.y + 9, vida: 0.5, total: 0.5, color: "#fff1b0" });
     deps.aviso("¡" + NOMBRES_PODER[tipo] + "!");
@@ -473,24 +698,32 @@ window.MonkyCarrera = function (deps) {
      ------------------------------------------------------- */
   function actualizarSombra(dt) {
     const enPesadilla = temaVisible === "pesadilla";
-    if (enPesadilla && !sombra.activa) {
+    const tinta = !enPesadilla && evento && evento.tipo === "tinta" && evento.fase === "activo";
+    const debe = enPesadilla || tinta;
+    if (debe && !sombra.activa) {
       sombra.activa = true;
+      sombra.tipo = enPesadilla ? "sombra" : "tinta";
       sombra.distancia = 150;
-      sombra.reloj = 6;
-      deps.aviso("¡Una sombra gigante te persigue! No te detengas");
+      sombra.reloj = enPesadilla ? 6 : 3.5;
+      if (enPesadilla) deps.aviso("¡Una sombra gigante te persigue! No te detengas");
     }
-    if (!enPesadilla && sombra.activa) sombra.activa = false;
+    if (!debe && sombra.activa) sombra.activa = false;
     sombra.alfa = limitar(sombra.alfa + (sombra.activa ? dt : -dt) * 1.5, 0, 1);
     sombra.anim += dt;
     if (!sombra.activa) { sombra.distancia = Math.min(150, sombra.distancia + 40 * dt); return; }
 
     // Se acerca en arremetidas y se aleja si Monky corre sin tropezar
     sombra.reloj -= dt;
-    if (sombra.reloj <= 0) { sombra.arremetida = 1.2; sombra.reloj = 7 + Math.random() * 4; temblor = 0.2; }
+    if (sombra.reloj <= 0) {
+      sombra.arremetida = 1.2;
+      sombra.reloj = sombra.tipo === "tinta" ? 4.5 + Math.random() * 2 : 7 + Math.random() * 4;
+      temblor = 0.2;
+    }
     if (sombra.arremetida > 0) { sombra.arremetida -= dt; sombra.distancia -= 22 * dt; }
     else sombra.distancia = Math.min(150, sombra.distancia + 7 * dt);
     if (poderes.impulso > 0) sombra.distancia = Math.min(150, sombra.distancia + 30 * dt);
 
+    if (sombra.distancia <= 0 && estado === "jugando" && !rescate && sombra.tipo === "tinta") { tintaAlcanza(); return; }
     if (sombra.distancia <= 0 && estado === "jugando" && !rescate) {
       if (poderes.escudo > 0) {
         poderes.escudo = 0;
@@ -499,6 +732,29 @@ window.MonkyCarrera = function (deps) {
         deps.aviso("¡El escudo te salvó de la sombra!");
       } else {
         morir("atrapado");
+      }
+    }
+  }
+
+  /* -------------------------------------------------------
+     MISIONES: aviso en vivo (el premio se cobra al terminar)
+     ------------------------------------------------------- */
+  function revisarMisiones() {
+    // Recompensa desbloqueada: lo juntado ya alcanza para algo de la tienda
+    if (metaCompra && metaCompra.saldo + monedas >= metaCompra.precio) {
+      deps.aviso("¡Ya te alcanza para " + metaCompra.nombre + "! Búscalo en la tienda");
+      Snd.reproducir("grupo");
+      metaCompra = null;
+    }
+    for (const m of misiones) {
+      if (m.avisada || m.lista) continue;
+      const valor = m.tipo === "distancia" ? metros : m.tipo === "poderes" ? poderesUsados : m.progreso + monedas;
+      if (valor >= m.meta) {
+        m.avisada = true;
+        Snd.reproducir("mision");
+        efectos.push({ tipo: "anillo", x: jugador.x + 5, y: jugador.y + 9, vida: 0.6, total: 0.6, color: "#ffe08a" });
+        chispas(jugador.x + 5, jugador.y + 4, ["#ffe08a", "#fff7e8", "#e8792e"], 14);
+        cartelMision = { texto: "MISION CUMPLIDA +" + m.premio, t: 2.2 };
       }
     }
   }
@@ -537,7 +793,16 @@ window.MonkyCarrera = function (deps) {
     if (enCamara !== temaVisible) {
       temaVisible = enCamara;
       cartel = { texto: NOMBRES_MUNDO[enCamara], t: 2.6 };
-      Snd.reproducir("control");
+      Snd.reproducir("portal");
+      // Destello del portal con los colores del mundo nuevo
+      const colores = COLORES_MUNDO[enCamara];
+      colorMundo = colores[0];
+      destelloMundo = 0.55;
+      for (let i = 0; i < 40; i++) {
+        const a = Math.random() * Math.PI * 2, v = 60 + Math.random() * 120;
+        particulas.push({ x: jugador.x + 5, y: jugador.y + 8, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vida: 0.7 + Math.random() * 0.5, total: 1.2, color: colores[i % colores.length], grav: 0, tam: Math.random() < 0.4 ? 2 : 1 });
+      }
+      efectos.push({ tipo: "anillo", x: jugador.x + 5, y: jugador.y + 9, vida: 0.7, total: 0.7, color: colores[1] });
     }
   }
 
@@ -555,9 +820,22 @@ window.MonkyCarrera = function (deps) {
     temblor = Math.max(0, temblor - dt);
     fundido = Math.max(0, fundido - dt * 2.5);
     if (cartel) { cartel.t -= dt; if (cartel.t <= 0) cartel = null; }
+    if (cartelMision) { cartelMision.t -= dt; if (cartelMision.t <= 0) cartelMision = null; }
+    if (cartelEvento) { cartelEvento.t -= dt; if (cartelEvento.t <= 0) cartelEvento = null; }
+    destelloMundo = Math.max(0, destelloMundo - dt);
+    manchaTinta = Math.max(0, manchaTinta - dt * 0.8);
 
+    // Si el trabajador se atrasa (muy raro), el juego espera en lugar de dejar caer a Monky
+    if (estado === "jugando" && generador.esperando() && tramos.length &&
+        (tramos[tramos.length - 1].x0 + tramos[tramos.length - 1].ancho) * T < jugador.x + W * 0.75) {
+      asegurarTramos(false);
+      actualizarParticulas(dt);
+      return;
+    }
     if (estado === "jugando") {
       tiempoPartida += dt;
+      // Escudo reforzado: al terminar protege un segundo más
+      if (escudoReforzado && poderes.escudo > 0 && poderes.escudo <= dt) jugador.invul = Math.max(jugador.invul, 1);
       for (const k in poderes) poderes[k] = Math.max(0, poderes[k] - dt);
       actualizarJugador(dt);
       if (estado !== "jugando") return;
@@ -565,8 +843,13 @@ window.MonkyCarrera = function (deps) {
       asegurarTramos(false);
       actualizarObjetos(dt);
       actualizarMundo();
+      actualizarEventos(dt);
       actualizarSombra(dt);
+      // Primera ruta doble: explicarla
+      const doble = tramos.find((t) => t.rutaDoble && t.x0 * T > jugador.x && t.x0 * T < jugador.x + W);
+      if (doble && !avisosVistos.doble) { avisosVistos.doble = true; deps.aviso("¡Dos caminos! Arriba hay más monedas"); }
       metros = Math.max(metros, Math.floor((jugador.x - inicioX) / T));
+      revisarMisiones();
 
       // Aviso la primera vez que aparece un techo bajo
       const proximo = tramos.find((t) => t.deslizar && t.x0 * T > jugador.x && t.x0 * T < jugador.x + W);
@@ -581,7 +864,7 @@ window.MonkyCarrera = function (deps) {
       if (motivoFin === "atrapado") sombra.distancia = Math.max(-60, sombra.distancia - 60 * dt);
       if (temporizador <= 0) {
         estado = "fin";
-        deps.fin({ tipo: "carrera", metros: metros, monedas: monedas, motivo: motivoFin, tiempo: tiempoPartida });
+        deps.fin({ tipo: "carrera", metros: metros, monedas: monedas, poderes: poderesUsados, motivo: motivoFin, tiempo: tiempoPartida });
       }
     }
     actualizarParticulas(dt);
@@ -642,6 +925,19 @@ window.MonkyCarrera = function (deps) {
 
       t.poderes.forEach((p) => {
         if (p.tomado) return;
+        if (p.tipo === "estrella") {
+          const x = Math.round(p.x - cx), y = Math.round(p.y - cy + Math.sin(tiempo * 3) * 2);
+          // Estela brillante
+          for (let k = 1; k <= 5; k++) {
+            ctx.fillStyle = k % 2 ? "#fff8c8" : "#f2a93b";
+            ctx.globalAlpha = 0.7 - k * 0.12;
+            ctx.fillRect(x + 6 + k * 3, y + 6 - k * 2 + ((Math.floor(tiempo * 10) + k) % 2), 2, 1);
+          }
+          ctx.globalAlpha = 1;
+          ctx.drawImage(haloPoder, x + 6 - 12, y + 6 - 12);
+          ctx.drawImage(S.estrella[Math.floor(tiempo * 10) % 6].der, x - 2, y - 2);
+          return;
+        }
         const x = Math.round(p.x - cx), y = Math.round(p.y - cy + Math.sin(tiempo * 2.5) * 2);
         ctx.drawImage(haloPoder, x + 6 - 12, y + 6 - 12);
         ctx.drawImage(S.poderes[p.tipo].der, x - 2, y - 2);
@@ -651,6 +947,10 @@ window.MonkyCarrera = function (deps) {
         if (!e.vivo) return;
         const p = e.pos || G.posicion(e, jugador.x, t.vel);
         const x = Math.round(p.x - cx), y = Math.round(p.y - cy);
+        // Aviso "!" en el borde para los enemigos rápidos que todavía no se ven
+        if ((e.tipo === "tronco" || e.tipo === "cuervo") && x > W - 2 && x < W + 190 && estado === "jugando") {
+          avisoBorde(limitar(y + 2, 26, H - 30), x - W);
+        }
         if (x < -40 || x > W + 40) return;
         const f = Math.floor(e.anim * 8);
         switch (e.tipo) {
@@ -679,6 +979,24 @@ window.MonkyCarrera = function (deps) {
           case "cuervo":
             ctx.drawImage(S.cuervo[Math.floor(e.anim * 9) % 2].izq, x - 2, y - 1);
             break;
+          case "gota": {
+            if (p.charco) {
+              ctx.drawImage(S.charco[Math.floor(tiempo * 6) % 4].der, x - 1, y - 2);
+            } else {
+              // Sombra en el suelo que crece mientras la gota se acerca (aviso)
+              const suelo = Math.round(e.suelo - cy);
+              const cerca = limitar(1 - (e.suelo - p.y) / 200, 0.15, 1);
+              const ancho = Math.round(4 + cerca * 10);
+              ctx.globalAlpha = 0.35 + cerca * 0.4;
+              ctx.fillStyle = "#05060f";
+              ctx.fillRect(x + 5 - Math.round(ancho / 2), suelo - 2, ancho, 2);
+              ctx.fillRect(x + 6 - Math.round(ancho / 2), suelo - 3, ancho - 2, 1);
+              ctx.globalAlpha = 1;
+              if (y > -16) ctx.drawImage(S.gota[Math.floor(tiempo * 8) % 2].der, x - 1, y - 2);
+              else if (Math.floor(tiempo * 6) % 2) { ctx.fillStyle = "#4a5ab8"; ctx.fillRect(x + 4, 0, 2, 3); }
+            }
+            break;
+          }
           case "laser": {
             const brillo = Math.floor(tiempo * 20) % 3;
             ctx.fillStyle = "#16152a"; ctx.fillRect(x - 3, y - 3, 4, 9); ctx.fillRect(x + e.w - 1, y - 3, 4, 9);
@@ -693,6 +1011,15 @@ window.MonkyCarrera = function (deps) {
         }
       });
     });
+  }
+
+  function avisoBorde(y, lejos) {
+    if (Math.floor(tiempo * 8) % 2 && lejos > 60) return;
+    const x = W - 13;
+    HUD.panel(ctx, x, y - 1, 10, 12);
+    ctx.fillStyle = "#ff6b6b";
+    ctx.fillRect(x + 4, y + 1, 2, 5);
+    ctx.fillRect(x + 4, y + 7, 2, 2);
   }
 
   function cuadroJugador() {
@@ -757,16 +1084,28 @@ window.MonkyCarrera = function (deps) {
       ctx.fillStyle = "rgba(5, 2, 8, 0.6)";
       ctx.fillRect(0, 0, W, H);
     }
+    const esTinta = sombra.tipo === "tinta";
+    const oscuro = esTinta ? "10, 12, 34" : "5, 2, 8";
     if (frente - 50 > 0) {
-      ctx.fillStyle = "rgba(5, 2, 8, 0.85)";
+      ctx.fillStyle = "rgba(" + oscuro + ", 0.85)";
       ctx.fillRect(0, 0, frente - 50, H);
     }
     for (let x = Math.max(0, frente - 50); x < frente - 30; x += 2) {
-      ctx.fillStyle = "rgba(5, 2, 8, " + ((frente - 30 - x) / 20 * 0.8).toFixed(2) + ")";
+      ctx.fillStyle = "rgba(" + oscuro + ", " + ((frente - 30 - x) / 20 * 0.8).toFixed(2) + ")";
       ctx.fillRect(x, 0, 2, H);
     }
-    const sprite = S.sombra[Math.floor(sombra.anim * 6) % 4].der;
-    ctx.drawImage(sprite, frente - 54, suelo - 90 + Math.round(Math.sin(sombra.anim * 2) * 2));
+    if (esTinta) {
+      const sprite = S.tinta[Math.floor(sombra.anim * 7) % 4].der;
+      ctx.drawImage(sprite, frente - 58, suelo - 84 + Math.round(Math.sin(sombra.anim * 3) * 2));
+      // Gotas que caen de la ola
+      for (let i = 0; i < 5; i++) {
+        const fx = frente - 50 + ((i * 13) % 40), fy = (sombra.anim * 70 + i * 37) % H;
+        ctx.fillStyle = "#1b2050"; ctx.fillRect(Math.round(fx), Math.round(fy), 2, 3);
+      }
+    } else {
+      const sprite = S.sombra[Math.floor(sombra.anim * 6) % 4].der;
+      ctx.drawImage(sprite, frente - 54, suelo - 90 + Math.round(Math.sin(sombra.anim * 2) * 2));
+    }
     // Viñeta roja cuando está muy cerca
     if (sombra.distancia < 50 && Math.floor(tiempo * 4) % 2) {
       ctx.fillStyle = "rgba(255, 40, 70, 0.10)";
@@ -821,7 +1160,14 @@ window.MonkyCarrera = function (deps) {
     HUD.panel(ctx, 39, 3, anchoM, 13);
     ctx.drawImage(S.moneda[Math.floor(tiempo * 8) % 8].der, 40, 3);
     texto(etiqueta, 55, 7, "#fff7e8", "#16152a");
-    const finIzq = 39 + anchoM + 4;
+    let finIzq = 39 + anchoM + 4;
+    if (evento && evento.tipo === "dobles") {
+      const brilla = Math.floor(tiempo * 5) % 2 || evento.t > 2.5;
+      HUD.panel(ctx, finIzq - 1, 3, 17, 13);
+      texto("X2", finIzq + 2, 7, brilla ? "#ffe08a" : "#ff6b6b", "#16152a");
+      ctx.fillStyle = "#ffe08a"; ctx.fillRect(finIzq + 1, 13, Math.max(1, Math.round(13 * evento.t / DURACION_EVENTO.dobles)), 1);
+      finIzq += 20;
+    }
 
     // Distancia y récord (centrados, sin tocar la zona izquierda ni los botones)
     const dist = metros + " M";
@@ -855,6 +1201,29 @@ window.MonkyCarrera = function (deps) {
       y += 15;
     });
 
+    // Evento (debajo del cartel de mundo si lo hay)
+    if (cartelEvento) {
+      const t = cartelEvento.texto;
+      const a = HUD.anchoTexto(t, 2);
+      const yEv = cartel ? 64 : 40;
+      ctx.globalAlpha = Math.min(1, (2.4 - cartelEvento.t) * 6, cartelEvento.t * 3);
+      HUD.panel(ctx, Math.round(W / 2 - a / 2 - 8), yEv, a + 16, 20);
+      texto(t, Math.round(W / 2 - a / 2), yEv + 5, Math.floor(tiempo * 6) % 2 ? cartelEvento.color : "#fff7e8", "#16152a", 2);
+      ctx.globalAlpha = 1;
+    }
+
+    // Misión cumplida (debajo del récord)
+    if (cartelMision) {
+      const t = cartelMision.texto;
+      const a = HUD.anchoTexto(t);
+      const sube = Math.min(1, (2.2 - cartelMision.t) * 6);
+      ctx.globalAlpha = Math.min(1, cartelMision.t * 3);
+      HUD.panel(ctx, Math.round(W / 2 - a / 2 - 6), Math.round(24 + 8 * sube), a + 12, 11);
+      ctx.drawImage(S.moneda[Math.floor(tiempo * 8) % 8].der, Math.round(W / 2 - a / 2 - 18), Math.round(23 + 8 * sube));
+      texto(t, Math.round(W / 2 - a / 2), Math.round(27 + 8 * sube), "#ffe08a", "#16152a");
+      ctx.globalAlpha = 1;
+    }
+
     // Cartel de mundo nuevo (debajo del récord)
     if (cartel) {
       const t = cartel.texto.toUpperCase();
@@ -879,6 +1248,22 @@ window.MonkyCarrera = function (deps) {
     dibujarParticulas(cx, cy);
     dibujarSombra(cx, cy);
     fondoDe(f.actual, f.ciclo).dibujarFrente(ctx, cx, tiempo, W, H);
+    if (destelloMundo > 0) {
+      ctx.globalAlpha = Math.min(0.45, destelloMundo);
+      ctx.fillStyle = colorMundo;
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 1;
+    }
+    if (manchaTinta > 0) {
+      // Salpicaduras de tinta en los bordes
+      ctx.globalAlpha = Math.min(0.85, manchaTinta);
+      ctx.fillStyle = "#0a0c22";
+      for (let i = 0; i < 14; i++) {
+        const r = 10 + (i * 7) % 18, ax = (i * 53) % W, ay = i % 2 ? (i * 31) % 40 : H - (i * 23) % 40;
+        ctx.fillRect(Math.round(ax - r / 2), Math.round(ay - r / 2), r, r);
+      }
+      ctx.globalAlpha = 1;
+    }
     dibujarHUD(record);
     if (fundido > 0) { ctx.fillStyle = "rgba(13, 15, 38, " + fundido.toFixed(2) + ")"; ctx.fillRect(0, 0, W, H); }
   }
@@ -893,6 +1278,8 @@ window.MonkyCarrera = function (deps) {
     dibujar(c, ancho, alto, record) { ctx = c; W = ancho; H = alto; if (jugador) dibujar(record); },
     redimensionar(ancho, alto) { W = ancho; H = alto; if (jugador) actualizarCamara(); },
     estado: () => estado,
+    // Lo recogido hasta ahora (para cobrar si se abandona la partida)
+    resumen: () => ({ metros: metros, monedas: monedas, poderes: poderesUsados }),
     depuracion: {
       estado: () => estado,
       jugador: () => jugador && ({ x: jugador.x, y: jugador.y, vy: jugador.vy, h: jugador.h, enSuelo: jugador.enSuelo, deslizando: jugador.deslizando, vidas: jugador.vidas, invul: jugador.invul }),
@@ -905,8 +1292,15 @@ window.MonkyCarrera = function (deps) {
       poderes: () => Object.assign({}, poderes),
       sombra: () => ({ activa: sombra.activa, distancia: Math.round(sombra.distancia) }),
       mundo: () => temaVisible,
-      generador: () => Object.assign({}, generador.estado),
+      generador: () => Object.assign({ trabajador: generador.enTrabajador, cola: generador.cola.length }, generador.estado),
       piloto(valor) { piloto = !!valor; },
+      terminar() { if (estado === "jugando") morir("prueba"); },
+      poderesUsados: () => poderesUsados,
+      duracion: () => Object.assign({ radioIman: radioIman }, DURACION),
+      evento: () => evento && Object.assign({}, evento),
+      estrellas: () => tramos.reduce((l, t) => l.concat(t.poderes.filter((p) => p.tipo === "estrella").map((p) => ({ x: Math.round(p.x), tomado: p.tomado }))), []),
+      forzarEvento(tipo) { proximoEvento = metros; const r = Math.random; if (tipo) Math.random = () => (tipo === "tinta" ? 0.1 : tipo === "dobles" ? 0.6 : 0.9); iniciarEvento(); Math.random = r; },
+      sinEventos(v) { proximoEvento = v ? 1e9 : metros + 50; },
       sinPoderes(valor) { pruebaSinPoderes = Array.isArray(valor) ? valor : !!valor; },
       activarPoder(tipo) { activarPoder(tipo); },
       quitarVida() { jugador.invul = 0; herir(0, "prueba"); },
@@ -916,6 +1310,10 @@ window.MonkyCarrera = function (deps) {
         jugador.x += m * T;
         camX = jugador.x - Math.round(W * 0.3);
         tramos = [];
+        // (solo pruebas) el salto se genera en este hilo
+        generador.alHilo();
+        generador.numero = ++numeroFuente;
+        generador.cola = [];
         generador.estado.columna = Math.floor(jugador.x / T) - 8;
         asegurarTramos(true); asegurarTramos(true);
         const t = tramoEnColumna(Math.floor(jugador.x / T));

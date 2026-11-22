@@ -487,3 +487,221 @@ body.tactil.modo-aventura.en-juego .controles {
   .aviso { transition: none; }
   .nuevo-record { animation: none; }
 }
+
+/* =========================================================
+   ECONOMÍA: saldo, tienda, misiones y resultados (v4)
+   ========================================================= */
+
+.icono-moneda {
+  display: inline-block;
+  width: 1.05em;
+  height: 1.05em;
+  vertical-align: -0.15em;
+  background: var(--img-moneda) center / contain no-repeat;
+  image-rendering: pixelated;
+}
+
+.saldo {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--px) * 1.5);
+  padding: calc(var(--px) * 1.5) calc(var(--px) * 4);
+  background: rgba(22, 21, 42, .85);
+  color: var(--dorado);
+  font-size: clamp(14px, calc(var(--px) * 5), 24px);
+  font-weight: 700;
+  text-shadow: 0 var(--px) 0 var(--tinta);
+  box-shadow: 0 calc(var(--px) * -1) 0 0 var(--noche-3), 0 var(--px) 0 0 var(--noche-3), calc(var(--px) * -1) 0 0 0 var(--noche-3), var(--px) 0 0 0 var(--noche-3);
+}
+
+.menu-arriba {
+  position: absolute;
+  top: max(calc(var(--px) * 4), var(--seg-sup));
+  left: max(calc(var(--px) * 5), var(--seg-izq));
+  display: flex;
+  align-items: center;
+  gap: calc(var(--px) * 3);
+}
+.btn-personaje { margin: 0; --relleno: #2a3270; --luz: #3b4478; --sombra: #1d2248; color: var(--crema-2); }
+
+.fila-botones { display: flex; flex-wrap: wrap; gap: calc(var(--px) * 2); }
+.fila-botones .btn { padding-left: calc(var(--px) * 5); padding-right: calc(var(--px) * 5); font-size: clamp(13px, calc(var(--px) * 4.4), 21px); }
+
+.btn { position: relative; }
+.btn-tienda { --relleno: #ffe08a; --luz: #fff4c8; --sombra: #c9952c; }
+
+.insignia {
+  position: absolute;
+  top: calc(var(--px) * -4);
+  right: calc(var(--px) * -3);
+  padding: calc(var(--px) * .8) calc(var(--px) * 1.6);
+  background: #ff4d6d;
+  color: #fff7e8;
+  font-size: clamp(9px, calc(var(--px) * 2.8), 13px);
+  line-height: 1;
+  box-shadow: 0 0 0 var(--px) var(--tinta);
+  animation: latido .45s steps(2) infinite alternate;
+}
+
+.btn-chico { min-height: 32px; padding: calc(var(--px) * 1.5) calc(var(--px) * 5) calc(var(--px) * 2); font-size: clamp(12px, calc(var(--px) * 4), 19px); }
+.btn.apagado { --relleno: #8c8aa6; --luz: #b6b4cc; --sombra: #5c5a78; color: #ebe8f5; text-shadow: none; }
+.btn:disabled { --relleno: #3b4478; --luz: #4d5890; --sombra: #262c55; color: #cfc6e6; text-shadow: none; cursor: default; transform: none; }
+.sacude { animation: sacudir .3s steps(6); }
+@keyframes sacudir { 25% { transform: translateX(calc(var(--px) * -2)); } 75% { transform: translateX(calc(var(--px) * 2)); } }
+
+/* ---------- Tienda ---------- */
+.pantalla-tienda { padding: max(calc(var(--px) * 3), var(--seg-sup)) max(calc(var(--px) * 4), var(--seg-der)) max(calc(var(--px) * 3), var(--seg-inf)) max(calc(var(--px) * 4), var(--seg-izq)); background: rgba(13, 15, 38, .5); }
+
+.tienda {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: calc(var(--px) * 2.5);
+  width: min(100%, 980px);
+  height: 100%;
+  padding: calc(var(--px) * 3) calc(var(--px) * 4);
+  background: var(--noche-2);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--tinta), 0 var(--px) 0 0 var(--tinta),
+    calc(var(--px) * -1) 0 0 0 var(--tinta), var(--px) 0 0 0 var(--tinta),
+    inset 0 var(--px) 0 0 var(--noche-3), inset 0 calc(var(--px) * -2) 0 0 #121633;
+}
+
+.tienda-cabecera { display: flex; align-items: center; gap: calc(var(--px) * 4); }
+.tienda-cabecera h2 { font-size: clamp(18px, calc(var(--px) * 8), 40px); margin-right: auto; }
+.tienda-cabecera .btn { margin: 0 var(--px); }
+
+.pestanas { display: flex; gap: calc(var(--px) * 1.5); overflow-x: auto; touch-action: pan-x; }
+
+.pestana {
+  flex: 1 0 auto;
+  padding: calc(var(--px) * 1.5) calc(var(--px) * 3);
+  border: 0;
+  background: #141838;
+  color: #cfc6e6;
+  font: 600 clamp(11px, calc(var(--px) * 3.6), 17px) / 1.1 var(--fuente);
+  cursor: pointer;
+  box-shadow: inset 0 calc(var(--px) * -1) 0 0 var(--noche-3);
+}
+.pestana.activa { background: var(--naranja); color: var(--crema-2); box-shadow: inset 0 var(--px) 0 0 var(--naranja-claro), inset 0 calc(var(--px) * -1) 0 0 var(--naranja-oscuro); }
+.pestana:focus-visible, .articulo:focus-visible { outline: var(--px) solid var(--dorado); outline-offset: calc(var(--px) * -1); }
+
+.tienda-cuerpo {
+  display: grid;
+  grid-template-columns: minmax(140px, 38%) minmax(0, 1fr);
+  gap: calc(var(--px) * 4);
+  min-height: 0;
+}
+
+.vitrina {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--px) * 1.5);
+  min-height: 0;
+  overflow-y: auto;
+  touch-action: pan-y;
+  text-align: center;
+}
+
+.vitrina-lienzo {
+  width: 100%;
+  max-width: calc(var(--px) * 64 * 1.6);
+  aspect-ratio: 4 / 3;
+  flex-shrink: 1;
+  min-height: 60px;
+  box-shadow: 0 0 0 var(--px) var(--tinta), 0 0 0 calc(var(--px) * 2) var(--noche-3);
+}
+
+.vitrina-nombre { margin: calc(var(--px) * 1) 0 0; color: var(--dorado); font-size: clamp(14px, calc(var(--px) * 5), 24px); line-height: 1.1; }
+.vitrina-desc { margin: 0; color: #e9dcc6; font-size: clamp(11px, calc(var(--px) * 3.4), 16px); line-height: 1.3; }
+.btn-accion { margin-top: calc(var(--px) * 1); font-size: clamp(13px, calc(var(--px) * 4.4), 21px); padding: calc(var(--px) * 2) calc(var(--px) * 5) calc(var(--px) * 2.5); }
+.vitrina-nota { min-height: 1.2em; margin: 0; color: #8be38b; font-size: clamp(11px, calc(var(--px) * 3.4), 16px); }
+
+.articulos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(92px, calc(var(--px) * 40), 150px), 1fr));
+  align-content: start;
+  gap: calc(var(--px) * 3);
+  min-height: 0;
+  margin: 0;
+  padding: calc(var(--px) * 2);
+  overflow-y: auto;
+  list-style: none;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+.articulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--px);
+  width: 100%;
+  padding: calc(var(--px) * 2) var(--px) calc(var(--px) * 2.5);
+  border: 0;
+  background: #141838;
+  color: var(--crema-2);
+  font: 600 clamp(10px, calc(var(--px) * 3.2), 15px) / 1.15 var(--fuente);
+  cursor: pointer;
+  box-shadow: 0 calc(var(--px) * -1) 0 0 var(--noche-3), 0 var(--px) 0 0 var(--noche-3), calc(var(--px) * -1) 0 0 0 var(--noche-3), var(--px) 0 0 0 var(--noche-3);
+}
+.articulo canvas { width: calc(var(--px) * 26 * 1.5); max-width: 78px; min-width: 39px; aspect-ratio: 26 / 24; image-rendering: pixelated; }
+.articulo.bloqueado canvas { filter: brightness(.55) saturate(.6); }
+.articulo.elegido { background: #2a3270; box-shadow: 0 calc(var(--px) * -1) 0 0 var(--dorado), 0 var(--px) 0 0 var(--dorado), calc(var(--px) * -1) 0 0 0 var(--dorado), var(--px) 0 0 0 var(--dorado); }
+.articulo-nombre { text-align: center; }
+.articulo-estado { display: inline-flex; align-items: center; gap: calc(var(--px) * 1); padding: 0 calc(var(--px) * 2); font-weight: 700; }
+.articulo-estado.precio { color: var(--dorado); }
+.articulo-estado.caro { color: #9a95b8; }
+.articulo-estado.tuyo { color: #8be38b; }
+.articulo-estado.equipado, .articulo-estado.activa { background: #2f7a4a; color: #e8ffe8; }
+
+/* Tienda en pantallas bajas (celular horizontal): vitrina compacta */
+@media (max-height: 420px) {
+  .tienda { gap: calc(var(--px) * 1.5); padding: calc(var(--px) * 2) calc(var(--px) * 3); }
+  .vitrina-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .tienda-cabecera h2 { font-size: clamp(16px, calc(var(--px) * 7), 30px); }
+}
+
+/* ---------- Misiones ---------- */
+.misiones { display: flex; flex-direction: column; gap: calc(var(--px) * 2.5); width: min(560px, 100%); margin: 0; padding: 0; list-style: none; }
+
+.mision {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-areas: "icono texto texto premio" "icono barra cuenta premio";
+  align-items: center;
+  column-gap: calc(var(--px) * 3);
+  row-gap: var(--px);
+  padding: calc(var(--px) * 2) calc(var(--px) * 3);
+  background: #141838;
+  box-shadow: 0 calc(var(--px) * -1) 0 0 var(--noche-3), 0 var(--px) 0 0 var(--noche-3), calc(var(--px) * -1) 0 0 0 var(--noche-3), var(--px) 0 0 0 var(--noche-3);
+}
+.mision-icono { grid-area: icono; width: calc(var(--px) * 9); height: calc(var(--px) * 9); min-width: 22px; min-height: 22px; background: center / contain no-repeat; image-rendering: pixelated; }
+.icono-bandera { background-image: var(--img-bandera); }
+.icono-moneda.mision-icono { background-image: var(--img-moneda); }
+.icono-rayo { background-image: var(--img-rayo); }
+.mision-texto { grid-area: texto; color: var(--crema-2); font-size: clamp(12px, calc(var(--px) * 4), 18px); }
+.mision-barra { grid-area: barra; height: calc(var(--px) * 3); min-height: 6px; background: var(--tinta); box-shadow: 0 0 0 var(--px) var(--noche-3); }
+.mision-barra span { display: block; height: 100%; background: var(--dorado); box-shadow: inset 0 var(--px) 0 0 #fff1b0; }
+.mision-cuenta { grid-area: cuenta; color: #cfc6e6; font-size: clamp(10px, calc(var(--px) * 3.2), 15px); }
+.mision-premio { grid-area: premio; color: var(--dorado); font-weight: 700; font-size: clamp(12px, calc(var(--px) * 4), 18px); }
+.mision.cumplida .mision-barra span { background: #8be38b; }
+
+/* ---------- Resultados ---------- */
+.marco-resultados { gap: calc(var(--px) * 2.5); }
+.ganancia { display: flex; flex-direction: column; align-items: center; gap: calc(var(--px) * 1.5); }
+.ganancia-linea { margin: 0; color: var(--crema-2); font-size: clamp(13px, calc(var(--px) * 4.4), 20px); }
+.ganancia-linea strong { color: var(--dorado); }
+.premios { display: flex; flex-direction: column; gap: var(--px); margin: 0; padding: 0; list-style: none; font-size: clamp(11px, calc(var(--px) * 3.6), 17px); color: var(--crema-2); text-align: center; }
+.premios strong { color: var(--dorado); }
+.sello { padding: 0 calc(var(--px) * 1.5); background: #2f7a4a; color: #e8ffe8; }
+.desbloqueo { margin: 0; padding: calc(var(--px) * 1.5) calc(var(--px) * 4); background: #ffe08a; color: var(--tinta); font-weight: 700; font-size: clamp(11px, calc(var(--px) * 3.6), 17px); animation: latido .5s steps(2) infinite alternate; }
+
+@media (max-height: 420px) {
+  .marco-resultados { padding: calc(var(--px) * 3) calc(var(--px) * 6); gap: calc(var(--px) * 1.5); }
+  .marco-resultados h2 { font-size: clamp(18px, calc(var(--px) * 8), 40px); }
+  .marco-resultados .resultados dd { font-size: clamp(14px, calc(var(--px) * 5), 24px); }
+}
+
+/* En la tienda los botones de arriba taparían la cabecera */
+body.en-tienda .hud-botones { display: none; }

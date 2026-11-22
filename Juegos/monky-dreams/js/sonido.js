@@ -62,9 +62,11 @@ window.MonkySonido = (function () {
     saltar() {
       tono(260, 0.14, { hasta: 620, volumen: 0.04 });
     },
-    recoger() {
-      tono(988, 0.07, { volumen: 0.04 });
-      tono(1480, 0.12, { volumen: 0.04, retraso: 0.06 });
+    recoger(racha) {
+      // Cada moneda de una racha sube un semitono
+      const k = Math.pow(2, (racha || 0) / 12);
+      tono(988 * k, 0.07, { volumen: 0.04 });
+      tono(1480 * k, 0.12, { volumen: 0.04, retraso: 0.06 });
     },
     aplastar() {
       tono(220, 0.12, { tipo: "triangle", hasta: 80, volumen: 0.09 });
@@ -92,12 +94,44 @@ window.MonkySonido = (function () {
     },
     boton() {
       tono(660, 0.06, { volumen: 0.03 });
+    },
+    comprar() {
+      [784, 988, 1175, 1568].forEach((f, i) => tono(f, 0.1, { volumen: 0.05, retraso: i * 0.07 }));
+      tono(2093, 0.25, { tipo: "triangle", volumen: 0.04, retraso: 0.3 });
+    },
+    equipar() {
+      tono(523, 0.08, { tipo: "triangle", volumen: 0.06 });
+      tono(784, 0.12, { tipo: "triangle", volumen: 0.06, retraso: 0.07 });
+    },
+    error() {
+      tono(196, 0.12, { tipo: "square", volumen: 0.03 });
+      tono(165, 0.16, { tipo: "square", volumen: 0.03, retraso: 0.1 });
+    },
+    mision() {
+      [659, 784, 1046, 1318].forEach((f, i) => tono(f, 0.12, { volumen: 0.045, retraso: i * 0.09 }));
+    },
+    grupo() {
+      tono(1318, 0.08, { volumen: 0.035 });
+      tono(1760, 0.14, { volumen: 0.035, retraso: 0.07 });
+    },
+    portal() {
+      tono(330, 0.5, { tipo: "triangle", hasta: 990, volumen: 0.06 });
+      tono(660, 0.4, { volumen: 0.025, hasta: 1320, retraso: 0.1 });
+    },
+    evento() {
+      [440, 554, 659].forEach((f, i) => tono(f, 0.09, { tipo: "square", volumen: 0.03, retraso: i * 0.06 }));
+    },
+    tinta() {
+      tono(110, 0.6, { tipo: "sawtooth", hasta: 70, volumen: 0.05 });
+    },
+    deslizar() {
+      tono(180, 0.1, { tipo: "triangle", hasta: 120, volumen: 0.04 });
     }
   };
 
-  function reproducir(nombre) {
+  function reproducir(nombre, valor) {
     if (efectos[nombre]) {
-      efectos[nombre]();
+      efectos[nombre](valor);
     }
   }
 

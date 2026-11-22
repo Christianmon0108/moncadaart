@@ -3,8 +3,8 @@
 Videojuego 2D en **pixel art** para **MoncadaArt**. Monky, la mascota que duerme en la portada
 del portafolio, sueña que corre por un mundo que se genera solo y nunca termina.
 
-> **Versión 3.1 — Carrera infinita.** Incluye también el modo **Aventura** de la versión 2.0.
-> La 3.1 corrige la cantidad de monedas, las nubes en las que no se podía aterrizar y el HUD de ambos modos.
+> **Versión 4.0 — Más divertido.** Tienda, personajes, misiones, eventos y rutas dobles en la
+> Carrera infinita. Incluye también el modo **Aventura**.
 
 ## Dónde se juega
 
@@ -13,10 +13,12 @@ GitHub Pages publica MoncadaArt desde la rama `main` del repositorio `moncadaart
 - Apartado Juegos: <https://christianmon0108.github.io/moncadaart/juegos.html> → tarjeta **Monky Dreams** → **Jugar / Abrir proyecto →**
 - Juego directo: <https://christianmon0108.github.io/moncadaart/Juegos/monky-dreams/>
 
-### Respaldo de la versión anterior
+### Respaldos de versiones anteriores
 
-La versión 2.0 publicada se conserva en la rama **`claude/monky-dreams-v2-respaldo`**
-(y en el historial de `main`). Para recuperarla, basta con restaurar la carpeta
+- Versión 3.1 (antes de la tienda): rama **`claude/monky-dreams-v3.1-respaldo`**.
+- Versión 2.0: rama **`claude/monky-dreams-v2-respaldo`**.
+
+Ambas siguen también en el historial de `main`. Para recuperar una, basta con restaurar la carpeta
 `Juegos/monky-dreams/` desde esa rama.
 
 ---
@@ -53,6 +55,54 @@ La versión 2.0 publicada se conserva en la rama **`claude/monky-dreams-v2-respa
 - **HUD:** distancia y récord arriba al centro; corazones y monedas arriba a la izquierda; debajo,
   los poderes activos con barra y segundos restantes. Nada queda bajo los botones.
 - **Récord personal** guardado en el navegador (`localStorage`): distancia y monedas.
+
+### Novedades de la 4.0 en la Carrera
+
+- **Rutas dobles:** *autopista de nubes* (arriba, con monedas; abajo, púas que se saltan) y
+  *túnel* (subir a los bloques o pasar deslizándose). Las dos rutas se validan con la física real.
+- **Gota de tinta:** cae del cielo cuando Monky se acerca; su sombra en el suelo avisa antes y
+  queda un charco que hay que saltar.
+- **Avisos:** un "!" en el borde derecho anuncia troncos y cuervos que todavía no se ven.
+- **Eventos aleatorios** (breves, anunciados y justos):
+  - *Pesadilla de tinta:* una ola de tinta persigue a Monky unos 13 s. Si escapa sin tropezar,
+    gana 15 monedas; si lo alcanza, pierde una vida (no la partida, salvo la última).
+  - *Monedas dobles:* durante 10 s cada moneda vale 2 (indicador ×2 en el HUD).
+  - *Estrella fugaz:* aparece sobre la ruta y vale 15 monedas.
+- **Recompensas:** cada moneda de una racha suena más aguda; completar un grupo de monedas da +2;
+  pisar varios enemigos sin tocar el suelo da un combo con monedas extra.
+- **Cambio de mundo:** destello y partículas con los colores del mundo nuevo y un sonido de portal.
+- Los tramos se generan en un **Web Worker** (`js/trabajador.js`): el juego no se traba en celulares lentos.
+
+### Tienda, economía y misiones
+
+- Las monedas de cada Carrera se suman al **saldo** al terminar (también si se reinicia o se vuelve
+  al menú). Cada partida se cobra **una sola vez**: recargar o repetir no duplica monedas.
+- **Tienda** (botón *Tienda* o el nombre del personaje en el menú). Cada artículo tiene vista previa
+  animada, precio, estado (bloqueado, tuyo o equipado) y el botón que corresponde:
+
+  | Categoría | Artículo | Precio | Notas |
+  |---|---|---|---|
+  | Personajes | Monky | gratis | El original |
+  | Personajes | Monky Explorador | 120 | Casco de safari y chaleco |
+  | Personajes | Monky Cyber | 280 | Visor de neón y antena |
+  | Personajes | Nubi | 450 | Ovejita de nube; al deslizarse se hace bolita |
+  | Vestimentas | Pijama estelar | 90 | Solo Monky |
+  | Vestimentas | Sudadera atardecer | 150 | Solo Monky |
+  | Accesorios | Gorro de dormir | 80 | Solo Monky (reemplaza la gorra) |
+  | Accesorios | Bufanda cometa | 110 | Todos los personajes |
+  | Mejoras | Imán potente | 200 | Imán de 15 s (antes 10) y mayor alcance |
+  | Mejoras | Escudo reforzado | 300 | Escudo de 15 s (antes 10) y 1 s extra de protección al terminar |
+
+  Solo se equipa un personaje y lo que ese personaje puede usar; al cambiar de personaje lo
+  incompatible se quita, pero sigue comprado. El personaje elegido también juega la Aventura.
+- **Misiones** (se renuevan al cumplirlas, cada vez un poco más difíciles): recorrer cierta distancia
+  en una partida, reunir monedas en total y usar poderes en una partida. Se ven en el menú
+  *Misiones*, se avisan en la carrera al cumplirse y su premio se cobra al terminar.
+- **Resultados:** distancia, monedas, récord, monedas ganadas, saldo, misiones cumplidas y aviso de
+  lo que ya alcanza para comprar.
+- Todo se guarda en `localStorage` (`monky-dreams-datos`): saldo, compras, equipo, récord,
+  estadísticas y misiones. Los datos se validan al leerlos (valores inválidos o manipulados se
+  corrigen) y se conserva el récord de versiones anteriores. No hay pagos ni dinero real.
 
 ### Aventura
 
@@ -94,12 +144,14 @@ python3 -m http.server 8000
 | Parámetro | Para qué sirve |
 |---|---|
 | `?tactil` | Fuerza los controles táctiles en la computadora. |
-| `?depurar` | Herramientas de prueba en la consola (`MonkyDreams.depurar` y `MonkyDreams.carrera`: piloto automático, saltar metros, activar poderes, turbo). |
+| `?depurar` | Herramientas de prueba en la consola (`MonkyDreams.depurar` y `MonkyDreams.carrera`: piloto automático, saltar metros, activar poderes, forzar eventos, turbo). |
+| `?sintrabajador` | Genera los tramos en el hilo principal (sin Web Worker). |
 
 ### Pruebas automáticas (Node)
 
 ```bash
 node Juegos/monky-dreams/pruebas/carrera.js 6000 10   # generador + recorrido encadenado
+node Juegos/monky-dreams/pruebas/tienda.js            # saldo, compras, equipo, misiones y datos dañados
 node Juegos/monky-dreams/pruebas/alcance.js           # nivel del modo Aventura
 ```
 
@@ -139,7 +191,11 @@ Juegos/monky-dreams/
 └── js/
     ├── fisica.js     Física de Monky (plataformas y corredor), compartida con las pruebas
     ├── generador.js  Tramos, mundos, dificultad y validador
+    ├── trabajador.js Genera los tramos en segundo plano (Web Worker)
     ├── carrera.js    Modo Carrera infinita
+    ├── datos.js      Saldo, compras, equipo, récord y misiones (localStorage)
+    ├── tienda.js     Tienda, vista previa y panel de misiones
+    ├── personajes.js Personajes, vestimentas y accesorios
     ├── aventura.js   Modo Aventura
     ├── sprites.js    Monky, enemigos, poderes, monedas y efectos
     ├── escenario.js  Casillas y fondos con parallax de los 4 mundos
