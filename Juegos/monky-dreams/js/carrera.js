@@ -746,7 +746,8 @@ window.MonkyCarrera = function (deps) {
     if (sombra.alfa <= 0) return;
     const jx = jugador.x - cx;
     // Siempre asoma por la izquierda y se acerca a Monky cuando la distancia baja
-    const frente = Math.round(jx - 18 - sombra.distancia * 0.55);
+    // Siempre asoma (con sus ojos) y llega a Monky cuando la distancia es 0, en cualquier ancho de pantalla
+    const frente = Math.round(jx - 8 - (sombra.distancia / 150) * (jx - 40));
     const suelo = G.FILA_BASE * T - cy;
     ctx.globalAlpha = sombra.alfa;
     // Oscuridad que trae detrás
@@ -763,7 +764,7 @@ window.MonkyCarrera = function (deps) {
       ctx.fillRect(x, 0, 2, H);
     }
     const sprite = S.sombra[Math.floor(sombra.anim * 6) % 4].der;
-    ctx.drawImage(sprite, frente - 60, suelo - 90 + Math.round(Math.sin(sombra.anim * 2) * 2));
+    ctx.drawImage(sprite, frente - 54, suelo - 90 + Math.round(Math.sin(sombra.anim * 2) * 2));
     // Viñeta roja cuando está muy cerca
     if (sombra.distancia < 50 && Math.floor(tiempo * 4) % 2) {
       ctx.fillStyle = "rgba(255, 40, 70, 0.10)";
