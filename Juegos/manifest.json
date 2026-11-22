@@ -1,9 +1,9 @@
 {
   "projects": [
     {
-      "title": "🐒 Monky Dreams – Plataformas en Pixel Art",
+      "title": "🐒 Monky Dreams – Carrera infinita en Pixel Art",
       "categoria": "Videojuego",
-      "desc": "Videojuego de plataformas 2D creado con HTML5 Canvas y JavaScript. Monky, la mascota de MoncadaArt, se queda dormido en su escritorio y sueña con un mundo pixelado: corre, salta, reúne monedas, esquiva bichos y pesadillas, y llega al despertador para despertar. Pixel art, física, enemigos y sonidos creados desde cero. Se juega en el navegador con teclado o con controles táctiles en el celular.",
+      "desc": "Videojuego endless runner 2D creado con HTML5 Canvas y JavaScript. Monky, la mascota de MoncadaArt, corre a través de un sueño que se genera solo y nunca termina: salta, deslízate, reúne monedas y poderes (escudo, imán, doble salto e impulso), esquiva enemigos y escapa de una sombra gigante. El mundo cambia mientras avanzas: Sueño nocturno, Bosque mágico, Mundo digital y Pesadilla. Cada tramo se valida con la física real del juego para que siempre sea superable. Incluye el modo Aventura clásico. Pixel art, sonidos y animaciones creados desde cero; se juega con teclado o con controles táctiles a pantalla completa.",
       "cover": "Juegos/monky-dreams/media/portada.png",
       "gallery": [
         "Juegos/monky-dreams/media/captura-1.png",

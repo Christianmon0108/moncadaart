@@ -175,6 +175,103 @@
     return ev;
   }
 
+  /* =======================================================
+     CARRERA INFINITA: Monky corre solo hacia la derecha.
+     entrada: { pulsoSalto, saltoSostenido, abajo }
+     Alturas: de pie 18 px, deslizándose 12 px.
+     ======================================================= */
+  const ALTO_PIE = 18;
+  const ALTO_DESLIZ = 12;
+
+  function cabeLevantarse(j, mundo) {
+    const prueba = { x: j.x, y: j.y + j.h - ALTO_PIE, w: j.w, h: ALTO_PIE };
+    const x0 = Math.floor(prueba.x / T), x1 = Math.floor((prueba.x + prueba.w - 0.001) / T);
+    const y0 = Math.floor(prueba.y / T), y1 = Math.floor((prueba.y + prueba.h - 0.001) / T);
+    for (let cy = y0; cy <= y1; cy++) {
+      for (let cx = x0; cx <= x1; cx++) {
+        if (mundo.esSolida(mundo.casilla(cx, cy))) return false;
+      }
+    }
+    return true;
+  }
+
+  function cambiarAltura(j, alto) {
+    j.y += j.h - alto;
+    j.h = alto;
+  }
+
+  function pasoCorredor(j, entrada, dt, mundo, vel) {
+    const ev = { salto: false, dobleSalto: false, aterrizo: false, vyAterrizaje: 0, choque: false, deslizo: false };
+
+    // Deslizarse (en el suelo) o caer rápido (en el aire)
+    if (entrada.abajo && j.enSuelo) {
+      if (!j.deslizando) { cambiarAltura(j, ALTO_DESLIZ); j.deslizando = true; ev.deslizo = true; }
+    } else if (j.deslizando && cabeLevantarse(j, mundo)) {
+      cambiarAltura(j, ALTO_PIE);
+      j.deslizando = false;
+    }
+    if (entrada.abajo && !j.enSuelo && j.vy < 240) j.vy = Math.max(j.vy, 240);
+
+    j.coyote = j.enSuelo ? FIS.coyote : j.coyote - dt;
+    j.buffer -= dt;
+    if (entrada.pulsoSalto) j.buffer = FIS.buffer;
+
+    const puedeSaltar = !j.deslizando || cabeLevantarse(j, mundo);
+    if (j.buffer > 0 && puedeSaltar) {
+      if (j.coyote > 0) {
+        if (j.deslizando) { cambiarAltura(j, ALTO_PIE); j.deslizando = false; }
+        j.vy = FIS.salto;
+        j.enSuelo = false;
+        j.coyote = 0;
+        j.buffer = 0;
+        ev.salto = true;
+      } else if (j.saltosExtra > 0 && entrada.pulsoSalto) {
+        j.vy = FIS.salto * 0.88;
+        j.saltosExtra--;
+        j.buffer = 0;
+        ev.dobleSalto = true;
+      }
+    }
+
+    if (!entrada.saltoSostenido && j.vy < FIS.corte) j.vy = FIS.corte;
+    let gravedad = j.vy > 0 ? FIS.gravCaida : FIS.grav;
+    if (entrada.saltoSostenido && Math.abs(j.vy) < 60) gravedad = FIS.gravApice;
+    j.vy = Math.min(FIS.caidaMax, j.vy + gravedad * dt);
+
+    j.vx = vel;
+    const dx = vel * dt;
+    const xAntes = j.x;
+    j.x += dx;
+    resolverX(j, dx, mundo);
+    if (j.x < xAntes + dx - 0.01) ev.choque = true;
+    j.vx = vel;
+
+    const pieAntes = j.y + j.h;
+    const vyAntes = j.vy;
+    const estaba = j.enSuelo;
+    j.y += j.vy * dt;
+    j.enSuelo = false;
+    resolverY(j, pieAntes, mundo, null);
+    if (j.enSuelo) {
+      j.saltosExtra = j.dobleSalto ? 1 : 0;
+      if (!estaba) { ev.aterrizo = true; ev.vyAterrizaje = vyAntes; }
+    }
+    return ev;
+  }
+
+  function crearCorredor(x, ySuelo) {
+    return {
+      x: x, y: ySuelo - ALTO_PIE, w: 10, h: ALTO_PIE,
+      vx: 0, vy: 0, dir: 1, enSuelo: true, sobre: null,
+      coyote: FIS.coyote, buffer: 0, dolor: 0,
+      deslizando: false, saltosExtra: 0, dobleSalto: false
+    };
+  }
+
+  function clonar(j) {
+    return Object.assign({}, j);
+  }
+
   function crearJugador(x, y) {
     return {
       x: x, y: y, w: JUGADOR.w, h: JUGADOR.h,
@@ -192,6 +289,12 @@
     crearJugador: crearJugador,
     resolverX: resolverX,
     resolverY: resolverY,
-    pasoJugador: pasoJugador
+    pasoJugador: pasoJugador,
+    pasoCorredor: pasoCorredor,
+    crearCorredor: crearCorredor,
+    cabeLevantarse: cabeLevantarse,
+    clonar: clonar,
+    ALTO_PIE: ALTO_PIE,
+    ALTO_DESLIZ: ALTO_DESLIZ
   };
 })(typeof window !== "undefined" ? window : globalThis);
