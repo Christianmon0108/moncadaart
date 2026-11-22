@@ -1,0 +1,16 @@
+{
+  "name": "Monky Dreams — MoncadaArt",
+  "short_name": "Monky Dreams",
+  "description": "Juego de plataformas en pixel art protagonizado por Monky, la mascota de MoncadaArt.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0d0f26",
+  "theme_color": "#0d0f26",
+  "lang": "es",
+  "icons": [
+    { "src": "media/icono-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "media/icono-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

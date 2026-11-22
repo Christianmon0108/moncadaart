@@ -1,299 +1,348 @@
 /* =========================================================
-   MONKY DREAMS — SPRITES PIXEL ART
-   Todo el arte se dibuja con código: cada sprite es una
-   lista de filas de texto y cada letra es un color de la
-   paleta. "." significa transparente.
+   MONKY DREAMS — SPRITES PIXEL ART (16 bits)
+   Todo el arte se dibuja con código. Los personajes son
+   filas de texto: cada carácter es un color de la PALETA
+   y "." es transparente. Los objetos redondos (monedas,
+   destellos) se generan con geometría pixel a pixel.
    ========================================================= */
 
 window.MonkySprites = (function () {
   "use strict";
 
   /* -------------------------------------------------------
-     PALETA (inspirada en MoncadaArt: crema, naranja y azul)
+     PALETA: rampas de 3-4 tonos por material.
+     Azul noche, naranja MoncadaArt, dorado y crema.
      ------------------------------------------------------- */
   const PALETA = {
-    k: "#1b1a2a", // contorno azul-negro
+    k: "#16152a", // contorno azul noche
 
-    // Monky
-    c: "#24486e", // gorra
-    C: "#183352", // gorra sombra
-    l: "#3f6d98", // gorra brillo
-    b: "#8b4a26", // pelaje
-    d: "#6a3418", // pelaje oscuro
-    f: "#f0b27c", // cara durazno
-    n: "#b8683c", // nariz
-    w: "#fff7e8", // blanco ojos
-    e: "#1b1a2a", // pupila
-    m: "#e8792e", // lengua naranja
-    h: "#f3e4c8", // sudadera crema
-    H: "#d4bc96", // sudadera sombra
-    p: "#3b3a52", // pantalón
-    s: "#e8792e", // tenis naranja
+    // Gorra azul (sombra → brillo)
+    C: "#142a45", c: "#24486e", l: "#3f6d98", L: "#7aa6cf",
 
-    // Bicho (enemigo)
-    g: "#5b3f8c",
-    G: "#8a6bc4",
-    y: "#fff7e8",
+    // Pelaje
+    d: "#4e2614", b: "#7e4022", B: "#a8602f",
 
-    // Pesadilla (enemigo)
-    v: "#33264f",
-    V: "#55417f",
-    r: "#ff9a3c",
+    // Cara
+    F: "#c98756", f: "#f0b27c", g: "#ffd6a8", n: "#8a4524",
 
-        // Corazón
-    x: "#e8473c",
-    X: "#ff9b8a",
-    q: "#5a5470",
+    // Ojos y boca
+    w: "#fff7e8", e: "#16152a", m: "#ff8a3d", M: "#7a2e1a",
 
-    // Lámpara (punto de control)
-    j: "#315d78",
-    J: "#8a8aa0",
+    // Sudadera crema y cordón naranja
+    H: "#b49a74", h: "#ead7b5", j: "#fff4de", o: "#e8792e",
 
-    // Moneda MoncadaArt
-    "1": "#f2c14e",
-    "2": "#c98a1e",
-    "3": "#fff1b0",
+    // Pantalón y tenis
+    p: "#2c2b46", P: "#46456e", s: "#e8792e", S: "#a94d17", x: "#fff1d6",
 
-    // Despertador (meta)
-    z: "#e8792e",
-    Z: "#b9551c",
-    o: "#f2c14e"
+    // Bicho
+    v: "#2f1f52", V: "#55398f", u: "#7e5cc4", U: "#b294f0", y: "#fff4de", r: "#ff9a3c",
+
+    // Pesadilla
+    N: "#120f24", q: "#2a2147", Q: "#43356f",
+
+    // Corazón
+    R: "#8f1d2c", z: "#e8473c", Z: "#ff9b8a",
+
+    // Lámpara
+    a: "#24486e", A: "#3f6d98", i: "#8b8aa6", I: "#c9c8dc", t: "#e8792e", T: "#ffc46b",
+
+    // Despertador
+    G: "#b9551c", O: "#f2c14e", W: "#fff1b0", K: "#ffe9a8",
+
+    // Almohada voladora
+    "1": "#fff4de", "2": "#d9c7a6", "3": "#a98f6c", "4": "#4f8bab", "5": "#2f5f7e", "6": "#ffffff"
   };
 
   /* -------------------------------------------------------
-     MONKY 16x16 (mira a la derecha)
+     MONKY 18x20 — cabeza (13 filas) + cuerpo (7 filas)
+     Mira a la derecha. Gorra hacia atrás, como la mascota.
      ------------------------------------------------------- */
-  const CABEZA_ABIERTA = [
-    "....kkkkkkk.....",
-    "...kcllllcck....",
-    "..kccccccccck...",
-    "kkkCCCCCCCCCk...",
-    "..kbbfffbfffbk..",
-    ".kbbfwwffwwffk..",
-    "kfkbfweffweffk..",
-    "kfkbffffnnfffk..",
-    ".kbbffkffffkfk..",
-    "..kbfffkmmkffk..",
-    "...kkffffffkk..."
-  ];
-
-  const CABEZA_CERRADA = [
-    "....kkkkkkk.....",
-    "...kcllllcck....",
-    "..kccccccccck...",
-    "kkkCCCCCCCCCk...",
-    "..kbbfffbfffbk..",
-    ".kbbffffffffk...",
-    "kfkbfkkffkkffk..",
-    "kfkbffffnnfffk..",
-    ".kbbffffffffk...",
-    "..kbfffkkkfffk..",
-    "...kkffffffkk..."
-  ];
-
-  const CABEZA_DOLOR = [
-    "....kkkkkkk.....",
-    "...kcllllcck....",
-    "..kccccccccck...",
-    "kkkCCCCCCCCCk...",
-    "..kbbfffbfffbk..",
-    ".kbbkfkfkfkffk..",
-    "kfkbfkffffkffk..",
-    "kfkbkfkfnnkffk..",
-    ".kbbfffffffffk..",
-    "..kbffkmmmkffk..",
-    "...kkffffffkk..."
-  ];
-
-  const TORSO = [
-    "...khhhhhhhhk...",
-    "..kbhhHhhhhhbk..",
-    "bb.khhhhhhhhk..."
-  ];
-
-  const TORSO_BRAZOS_ARRIBA = [
-    "..bkhhhhhhhhkb..",
-    "..khhHhhhhhhhk..",
-    "bb.khhhhhhhhk..."
-  ];
-
-  const TORSO_BRAZO_ADELANTE = [
-    "...khhhhhhhhk...",
-    "..khhHhhhhhhhbk.",
-    "bb.khhhhhhhhk..."
-  ];
-
-  const TORSO_BRAZO_ATRAS = [
-    "...khhhhhhhhk...",
-    ".kbhhHhhhhhhhk..",
-    "bb.khhhhhhhhk..."
-  ];
-
-  const PIERNAS = {
-    quieto: [".bbkpppkpppk....", "...ksssk.ksssk.."],
-    paso1: [".bbkppk..kppk...", "..kssk....ksssk."],
-    paso2: [".bbkkpppppk.....", "....ksssssk....."],
-    paso3: [".bb.kppkkppk....", "...ksssk.kssk..."],
-    salto: [".bbkpppppk......", "..kssk.ksssk...."]
+  const CABEZA = {
+    normal: [
+      "......kkkkkk......",
+      "....kkcllLLlkk....",
+      "...kcllllLLllck...",
+      "..kccccllllllcck..",
+      "kkkCccccccccccCk..",
+      "kCCCkddbbbbbbbdk..",
+      "kkk.kbbffffbfffbk.",
+      ".kkkbffewffewfffk.",
+      "kffkbffeeffeefffk.",
+      "kfFkbffeeffeeffFk.",
+      ".kkkbFffgggkkFk...",
+      "...kbbFFggkmmkk...",
+      "....kkbFFFFkkk...."
+    ],
+    parpadeo: [
+      "......kkkkkk......",
+      "....kkcllLLlkk....",
+      "...kcllllLLllck...",
+      "..kccccllllllcck..",
+      "kkkCccccccccccCk..",
+      "kCCCkddbbbbbbbdk..",
+      "kkk.kbbffffbfffbk.",
+      ".kkkbfffffffffffk.",
+      "kffkbffkkffkkfffk.",
+      "kfFkbffffffffffFk.",
+      ".kkkbFffgggkkFk...",
+      "...kbbFFggkmmkk...",
+      "....kkbFFFFkkk...."
+    ],
+    feliz: [
+      "......kkkkkk......",
+      "....kkcllLLlkk....",
+      "...kcllllLLllck...",
+      "..kccccllllllcck..",
+      "kkkCccccccccccCk..",
+      "kCCCkddbbbbbbbdk..",
+      "kkk.kbbffffbfffbk.",
+      ".kkkbffkkffkkfffk.",
+      "kffkbfkffkkffkffk.",
+      "kfFkbffffffffffFk.",
+      ".kkkbFffgkMMMkk...",
+      "...kbbFFgkmmmkk...",
+      "....kkbFFFFkkk...."
+    ],
+    dolor: [
+      "......kkkkkk......",
+      "....kkcllLLlkk....",
+      "...kcllllLLllck...",
+      "..kccccllllllcck..",
+      "kkkCccccccccccCk..",
+      "kCCCkddbbbbbbbdk..",
+      "kkk.kbbffffbfffbk.",
+      ".kkkbffkffffkfffk.",
+      "kffkbfffkffkffffk.",
+      "kfFkbffkffffkffFk.",
+      ".kkkbFffgkMMMkk...",
+      "...kbbFFgkmmmkk...",
+      "....kkbFFFFkkk...."
+    ],
+    dormido: [
+      "......kkkkkk......",
+      "....kkcllLLlkk....",
+      "...kcllllLLllck...",
+      "..kccccllllllcck..",
+      "kkkCccccccccccCk..",
+      "kCCCkddbbbbbbbdk..",
+      "kkk.kbbffffbfffbk.",
+      ".kkkbfffffffffffk.",
+      "kffkbffkkffkkfffk.",
+      "kfFkbffffffffffFk.",
+      ".kkkbFffgggfkFk...",
+      "...kbbFFggkkkkk...",
+      "....kkbFFFFkkk...."
+    ]
   };
 
-  function mono(cabeza, torso, piernas) {
-    return cabeza.concat(torso, piernas);
+  /* Cuerpo: 7 filas (13 a 19) */
+  const CUERPO = {
+    quieto: [
+      ".....khhhhhhhk....",
+      "....khjjhohhohk...",
+      "...kBkjhhhhhhhkBk.",
+      "bb.kkHhhhhhhHkk...",
+      ".bb.kpppkpppPk....",
+      "....ksssk.ksssk...",
+      "....kxxxk.kxxxxk.."
+    ],
+    respira: [
+      ".....khhhhhhhk....",
+      "....khjjhohhohk...",
+      "...kBkjhhhhhhhkBk.",
+      "bb.kkHhhhhhhHkk...",
+      ".bb.kpppkpppPk....",
+      "....ksssk.ksssk...",
+      "....kxxxk.kxxxxk.."
+    ],
+    paso1: [
+      ".....khhhhhhhk....",
+      "....khjjhohhohkBk.",
+      "...kBkjhhhhhhhk...",
+      "bb.kkHhhhhhhHk....",
+      ".bbkppk...kpppk...",
+      "..kssk.....kssssk.",
+      "..kxxk.....kxxxxk."
+    ],
+    paso2: [
+      ".....khhhhhhhk....",
+      "....khjjhohhohk...",
+      "...kBkjhhhhhhhkBk.",
+      "bb.kkHhhhhhhHk....",
+      ".bb.kpppPpk.......",
+      "....kssssssk......",
+      "....kxxxxxxk......"
+    ],
+    paso3: [
+      ".....khhhhhhhk....",
+      "...kBkjjhohhohk...",
+      "....khjhhhhhhhkBk.",
+      "bb.kkHhhhhhhHk....",
+      ".bb.kpk....kppk...",
+      ".kssk.....ksssk...",
+      ".kxxk.....kxxxk..."
+    ],
+    salto: [
+      "...kBkhhhhhhhkBk..",
+      "....khjjhohhohk...",
+      "....khhhhhhhhhk...",
+      "bb..kHhhhhhhHk....",
+      ".bb.kpppkpppk.....",
+      "....kssk.kssk.....",
+      "....kxxk.kxxk....."
+    ],
+    caida: [
+      "...kBkhhhhhhhkBk..",
+      "....khjjhohhohk...",
+      "....khhhhhhhhhk...",
+      "bb..kHhhhhhhHk....",
+      ".bb.kppk..kppk....",
+      "...kssk....kssk...",
+      "...kxxk....kxxk..."
+    ],
+    festejo: [
+      "..kBk.khhhhhk.kBk.",
+      "...kkkhjjhohokk...",
+      "....khhhhhhhhhk...",
+      "bb..kHhhhhhhHk....",
+      ".bb.kpppkpppk.....",
+      "....kssk.kssk.....",
+      "....kxxk.kxxk....."
+    ]
+  };
+
+  /* Combina cabeza y cuerpo; dy mueve la cabeza (rebote al correr) */
+  function monky(cabeza, cuerpo, dy) {
+    const filas = [];
+    for (let i = 0; i < 20; i++) filas.push("..................".split(""));
+    CUERPO[cuerpo].forEach((fila, i) => {
+      for (let x = 0; x < 18; x++) if (fila[x] !== ".") filas[13 + i][x] = fila[x];
+    });
+    CABEZA[cabeza].forEach((fila, i) => {
+      const y = i + (dy || 0);
+      if (y < 0 || y >= 20) return;
+      for (let x = 0; x < 18; x++) if (fila[x] !== ".") filas[y][x] = fila[x];
+    });
+    return filas.map((f) => f.join(""));
   }
 
   /* -------------------------------------------------------
      ENEMIGOS
      ------------------------------------------------------- */
-  const BICHO_A = [
-    "..k........k....",
-    "...k......k.....",
-    "...kkkkkkkk.....",
-    "..kgGGgggggk....",
-    ".kgGGggggggggk..",
-    ".kgGgggyeggyegk.",
-    ".kggggggggggggk.",
-    ".kgggkkkkkkgggk.",
-    "..kgggggggggk...",
-    "...kkkkkkkkk....",
-    "...k.k...k.k....",
-    "..k.k.....k.k..."
+  const BICHO_CUERPO = [
+    "...k........k...",
+    "....k......k....",
+    "....kkkkkkkk....",
+    "...kuUUuuuuuk...",
+    "..kuUUuuuuuuuk..",
+    ".kuUuuuuyykyykk.",
+    ".kVuuuuuyykyykk.",
+    ".kVVuuuuuuuuuuk.",
+    ".kvVVkrrrrrrkVk.",
+    "..kvVVkkkkkkVk..",
+    "...kkkkkkkkkk..."
   ];
 
-  const BICHO_B = BICHO_A.slice(0, 10).concat([
-    "....k.k.k.k.....",
-    "....k.k.k.k....."
-  ]);
-
-  const PESADILLA_A = [
-    ".....kkkkkk.....",
-    "...kkvvvvvvkk...",
-    "..kvVVvvvvvvvk..",
-    ".kvVVvvvvvvvvvk.",
-    ".kvVvvvvvvvvvvk.",
-    "kvvvrrvvvvrrvvvk",
-    "kvvvrkvvvvrkvvvk",
-    "kvvvvvvvvvvvvvvk",
-    "kvvvvkkkkkkvvvvk",
-    "kvvvkwkwkwkvvvvk",
-    "kvvvvvvvvvvvvvvk",
-    "kvvvvvvvvvvvvvvk",
-    "kvvVvvvvvvvVvvvk",
-    ".kvvvkvvvvkvvvk.",
-    "..kvk.kvvk.kvk..",
-    "...k...kk...k..."
+  const BICHO_PATAS = [
+    ["...k.k....k.k...", "..k...k..k...k.."],
+    ["....k.k..k.k....", "....k.k..k.k...."],
+    ["..k.k......k.k..", ".k...k....k...k."]
   ];
 
-  const PESADILLA_B = PESADILLA_A.slice(0, 13).concat([
-    ".kvvvvkvvkvvvvk.",
-    ".kvk..kvvk..kvk.",
-    "..k....kk....k.."
-  ]);
-
-  /* -------------------------------------------------------
-     MONEDA MONCADAART 12x12 (gira en 4 cuadros)
-     ------------------------------------------------------- */
-  const MONEDA_FRENTE = [
-    "...kkkkkk...",
-    ".kk111111kk.",
-    ".k13111112k.",
-    "k1311111112k",
-    "k1321112112k",
-    "k1322122112k",
-    "k1321212112k",
-    "k1121112112k",
-    "k1121112112k",
-    ".k11111122k.",
-    ".kk222222kk.",
-    "...kkkkkk..."
-  ];
-
-  const MONEDA_GIRO = [
-    "....kkkk....",
-    "...k1111k...",
-    "..k131112k..",
-    "..k131112k..",
-    "..k132122k..",
-    "..k131212k..",
-    "..k132122k..",
-    "..k131212k..",
-    "..k132122k..",
-    "..k111122k..",
-    "...k2222k...",
-    "....kkkk...."
-  ];
-
-  const MONEDA_CANTO = [
-    ".....kk.....",
-    "....k32k....",
-    "....k32k....",
-    "....k32k....",
-    "....k32k....",
-    "....k32k....",
-    "....k32k....",
-    "....k32k....",
-    "....k32k....",
-    "....k32k....",
-    "....k32k....",
-    ".....kk....."
+  const PESADILLA = [
+    [
+      "......kkkkk.....",
+      "....kkqqqqqkk...",
+      "...kqQQqqqqqqk..",
+      "..kqQQqqqqqqqqk.",
+      "..kqQqqqqqqqqqk.",
+      ".kqqqrrqqqqrrqqk",
+      ".kqqrrkqqqrrkqqk",
+      ".kqqqqqqqqqqqqqk",
+      ".kqqqkkkkkkkqqqk",
+      ".kqqkwkwkwkwkqqk",
+      ".kqqqkkkkkkkqqqk",
+      ".kqqqqqqqqqqqqqk",
+      ".kqQqqqqqqqqQqqk",
+      "..kqqqkqqqkqqqk.",
+      "..kqk.kqqk.kqk..",
+      "...k...kk...k..."
+    ],
+    [
+      "......kkkkk.....",
+      "....kkqqqqqkk...",
+      "...kqQQqqqqqqk..",
+      "..kqQQqqqqqqqqk.",
+      "..kqQqqqqqqqqqk.",
+      ".kqqqrrqqqqrrqqk",
+      ".kqqrrkqqqrrkqqk",
+      ".kqqqqqqqqqqqqqk",
+      ".kqqqkkkkkkkqqqk",
+      ".kqqkwkwkwkwkqqk",
+      ".kqqqkkkkkkkqqqk",
+      ".kqqqqqqqqqqqqqk",
+      ".kqQqqqqqqqqQqqk",
+      ".kqqqqkqqkqqqqk.",
+      ".kqk..kqqk..kqk.",
+      "..k....kk....k.."
+    ]
   ];
 
   /* -------------------------------------------------------
-     INTERFAZ Y OBJETOS DEL NIVEL
+     INTERFAZ Y OBJETOS
      ------------------------------------------------------- */
   const CORAZON = [
-    ".kk.kk.",
-    "kxXkxxk",
-    "kxxxxxk",
-    ".kxxxk.",
-    "..kxk..",
-    "...k..."
-  ];
-
-  const CORAZON_VACIO = [
-    ".kk.kk.",
-    "kqqkqqk",
-    "kqqqqqk",
-    ".kqqqk.",
-    "..kqk..",
-    "...k..."
+    ".kk.kk..",
+    "kzZkzzk.",
+    "kzzzzzk.",
+    "kRzzzRk.",
+    ".kRzRk..",
+    "..kRk...",
+    "...k...."
   ];
 
   const LAMPARA = [
-    "......kkkkk.....",
-    ".....kJJJJJk....",
-    "....kJJJJJJJk...",
-    "....kkkkkkkkk...",
-    ".......kjk......",
-    "......kjk.......",
-    ".....kjk........",
-    "....kjk.........",
-    "....kjk.........",
-    ".....kjk........",
-    "......kjk.......",
-    ".......kjk......",
-    ".......kjk......",
-    ".......kjk......",
-    "....kkkkkkkk....",
-    "...kjjjjjjjjk..."
+    "......kkkkkk....",
+    ".....kttTTttk...",
+    "....kttttTtttk..",
+    "...ktttttttttk..",
+    "...kkkkkkkkkkk..",
+    "......kIk.......",
+    ".....kIik.......",
+    "....kIik........",
+    "...kIik.........",
+    "...kIik.........",
+    "....kIik........",
+    ".....kIik.......",
+    "......kIik......",
+    "......kIik......",
+    "......kIik......",
+    "...kkkkkkkkk....",
+    "..kAAAAAAAAAk...",
+    "..kaaaaaaaaak...",
+    "...kkkkkkkkk...."
   ];
 
   const DESPERTADOR = [
-    "..kkk......kkk..",
-    ".koook....koook.",
-    ".kook.kkkk.kook.",
-    "..kkkkzzzzkkkk..",
-    "...kzzzzzzzzk...",
-    "..kzzwwwwwwzzk..",
-    ".kzzwwwwewwwzzk.",
-    ".kzwwwwwewwwwzk.",
-    ".kzwwwwweeeewzk.",
-    ".kzwwwwwwwwwwzk.",
-    ".kzzwwwwwwwwzzk.",
-    "..kZzzwwwwzzZk..",
-    "...kZZzzzzZZk...",
-    "....kkkkkkkk....",
-    "...kk......kk...",
-    "..kk........kk.."
+    "...kkk.......kkk....",
+    "..kOWOk.....kOWOk...",
+    ".kOOOk.kkkkk.kOOOk..",
+    ".kkkkkkGzzzGkkkkkk..",
+    "...kkzzzzzzzzzkk....",
+    "..kzzzzzzzzzzzzzk...",
+    ".kzzzWWWWWWWWzzzzk..",
+    ".kzzWWWWWkWWWWWzzk..",
+    "kzzWWWWWWkWWWWWWzzk.",
+    "kzzWWWWWWkWWWWWWzzk.",
+    "kzzWWWWWWkkkkkWWzzk.",
+    "kzzWWWWWWWWWWWWWzzk.",
+    ".kzzWWWWWWWWWWWzzk..",
+    ".kGzzWWWWWWWWWzzGk..",
+    "..kGzzzWWWWWzzzGk...",
+    "...kGGzzzzzzzGGk....",
+    "....kkkkkkkkkkk.....",
+    "...kGk.......kGk....",
+    "..kkk.........kkk..."
   ];
 
   /* -------------------------------------------------------
@@ -312,11 +361,8 @@ window.MonkySprites = (function () {
     const ancho = filas.reduce((max, fila) => Math.max(max, fila.length), 0);
     const lienzo = crearCanvas(ancho, alto);
     const ctx = lienzo.getContext("2d");
-
     filas.forEach((fila, y) => {
-      if (fila.length !== ancho) {
-        console.warn("Monky Dreams: fila de sprite con ancho distinto", fila);
-      }
+      if (fila.length !== ancho) console.warn("Monky Dreams: fila de sprite irregular", fila);
       for (let x = 0; x < fila.length; x++) {
         const color = paleta[fila[x]];
         if (color) {
@@ -325,7 +371,6 @@ window.MonkySprites = (function () {
         }
       }
     });
-
     return lienzo;
   }
 
@@ -338,59 +383,141 @@ window.MonkySprites = (function () {
     return copia;
   }
 
-  /* Cada cuadro tiene versión derecha (der) e izquierda (izq) */
+  /* Silueta de un color (destello blanco al recibir daño) */
+  function silueta(lienzo, color) {
+    const copia = crearCanvas(lienzo.width, lienzo.height);
+    const ctx = copia.getContext("2d");
+    ctx.drawImage(lienzo, 0, 0);
+    ctx.globalCompositeOperation = "source-in";
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, copia.width, copia.height);
+    return copia;
+  }
+
   function cuadro(filas, cambios) {
     const der = pintar(filas, cambios);
-    return { der: der, izq: espejo(der) };
+    return { der: der, izq: espejo(der), blanco: silueta(der, "#fff7e8"), blancoIzq: silueta(espejo(der), "#fff7e8") };
+  }
+
+  function desdeLienzo(lienzo) {
+    return { der: lienzo, izq: espejo(lienzo) };
+  }
+
+  /* Moneda MoncadaArt: 8 cuadros de giro generados con geometría */
+  function moneda(angulo) {
+    const T = 12;
+    const c = crearCanvas(T, T);
+    const ctx = c.getContext("2d");
+    const ancho = Math.max(1.6, 5.4 * Math.abs(Math.cos(angulo)));
+    const alto = 5.6;
+    const frente = Math.cos(angulo) >= 0;
+    const px = (x, y, color) => { ctx.fillStyle = color; ctx.fillRect(x, y, 1, 1); };
+    const dentro = (x, y) => ((x + 0.5 - 6) / ancho) ** 2 + ((y + 0.5 - 6) / alto) ** 2 <= 1;
+
+    for (let y = 0; y < T; y++) {
+      for (let x = 0; x < T; x++) {
+        if (!dentro(x, y)) continue;
+        const borde = !dentro(x - 1, y) || !dentro(x + 1, y) || !dentro(x, y - 1) || !dentro(x, y + 1);
+        if (borde) { px(x, y, "#16152a"); continue; }
+        const rel = (x + 0.5 - 6) / ancho; // -1 izquierda, 1 derecha
+        let color = "#f2c14e";
+        if (rel < -0.35 || y < 4) color = "#ffe08a";
+        if (rel > 0.4 || y > 8) color = "#c98a1e";
+        if (ancho < 2.2) color = y % 3 === 0 ? "#ffe08a" : "#d9a032";
+        px(x, y, color);
+      }
+    }
+
+    // Emblema "M" cuando la moneda mira de frente
+    if (ancho > 4) {
+      const tono = frente ? "#9a5f10" : "#b3761a";
+      [[4, 4], [4, 5], [4, 6], [4, 7], [5, 5], [6, 6], [7, 5], [8, 4], [8, 5], [8, 6], [8, 7]].forEach(([x, y]) => px(x, y, tono));
+      px(3, 3, "#fff7d6");
+    }
+    return c;
+  }
+
+  /* Destello de 4 puntas (recoger monedas, brillo) */
+  function destello(radio, color) {
+    const t = radio * 2 + 1;
+    const c = crearCanvas(t, t);
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = color;
+    for (let i = -radio; i <= radio; i++) {
+      ctx.fillRect(radio + i, radio, 1, 1);
+      ctx.fillRect(radio, radio + i, 1, 1);
+    }
+    if (radio > 1) {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(radio, radio, 1, 1);
+    }
+    return c;
+  }
+
+  /* Nube de polvo: 4 cuadros que crecen y se deshacen por el borde */
+  function polvo(i) {
+    const c = crearCanvas(8, 8);
+    const ctx = c.getContext("2d");
+    const r = [2.2, 3, 3.5, 3.8][i];
+    for (let y = 0; y < 8; y++) {
+      for (let x = 0; x < 8; x++) {
+        const d = Math.hypot(x + 0.5 - 4, y + 0.5 - 4.5);
+        if (d > r) continue;
+        const exterior = d > r - 1.2;
+        if (i >= 2 && exterior && (x + y) % 2 === 0) continue;
+        if (i === 3 && !exterior && (x * 3 + y) % 4 === 0) continue;
+        ctx.fillStyle = exterior ? "#cdbb9b" : y < 4 ? "#fff4de" : "#f3e4c8";
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+    return c;
   }
 
   function construir() {
+    const m = {
+      quieto: [cuadro(monky("normal", "quieto", 0)), cuadro(monky("normal", "respira", 1))],
+      parpadeo: cuadro(monky("parpadeo", "quieto", 0)),
+      correr: [
+        cuadro(monky("normal", "paso1", 1)),
+        cuadro(monky("normal", "paso1", 1)),
+        cuadro(monky("normal", "paso2", 0)),
+        cuadro(monky("normal", "paso3", 1)),
+        cuadro(monky("normal", "paso3", 1)),
+        cuadro(monky("normal", "paso2", 0))
+      ],
+      saltar: cuadro(monky("normal", "salto", 0)),
+      caer: cuadro(monky("normal", "caida", 0)),
+      dolor: cuadro(monky("dolor", "caida", 0)),
+      festejo: [cuadro(monky("feliz", "festejo", 0)), cuadro(monky("feliz", "salto", 1))],
+      dormido: [cuadro(monky("dormido", "quieto", 0)), cuadro(monky("dormido", "respira", 1))]
+    };
+
+    const bicho = BICHO_PATAS.map((patas) => cuadro(BICHO_CUERPO.concat(patas)));
+    const monedas = [];
+    for (let i = 0; i < 8; i++) {
+      const lienzo = moneda((i / 8) * Math.PI * 2);
+      monedas.push({ der: lienzo, izq: lienzo });
+    }
+
     return {
-      mono: {
-        quieto: [
-          cuadro(mono(CABEZA_ABIERTA, TORSO, PIERNAS.quieto)),
-          cuadro(mono(["................"].concat(CABEZA_ABIERTA), TORSO.slice(1), PIERNAS.quieto))
-        ],
-        parpadeo: cuadro(mono(CABEZA_CERRADA, TORSO, PIERNAS.quieto)),
-        correr: [
-          cuadro(mono(CABEZA_ABIERTA, TORSO_BRAZO_ADELANTE, PIERNAS.paso1)),
-          cuadro(mono(CABEZA_ABIERTA, TORSO, PIERNAS.paso2)),
-          cuadro(mono(CABEZA_ABIERTA, TORSO_BRAZO_ATRAS, PIERNAS.paso3)),
-          cuadro(mono(CABEZA_ABIERTA, TORSO, PIERNAS.paso2))
-        ],
-        saltar: cuadro(mono(CABEZA_ABIERTA, TORSO_BRAZOS_ARRIBA, PIERNAS.salto)),
-        caer: cuadro(mono(CABEZA_ABIERTA, TORSO_BRAZOS_ARRIBA, PIERNAS.paso1)),
-        dolor: cuadro(mono(CABEZA_DOLOR, TORSO_BRAZOS_ARRIBA, PIERNAS.salto)),
-        dormido: cuadro(mono(CABEZA_CERRADA, TORSO, PIERNAS.quieto))
-      },
-      bicho: [cuadro(BICHO_A), cuadro(BICHO_B)],
-      pesadilla: [cuadro(PESADILLA_A), cuadro(PESADILLA_B)],
-      moneda: (function () {
-        const giro = cuadro(MONEDA_GIRO);
-        return [
-          cuadro(MONEDA_FRENTE),
-          giro,
-          cuadro(MONEDA_CANTO),
-          { der: giro.izq, izq: giro.der }
-        ];
-      })(),
+      mono: m,
+      bicho: bicho,
+      pesadilla: PESADILLA.map((f) => cuadro(f)),
+      moneda: monedas,
       corazon: cuadro(CORAZON),
-      corazonVacio: cuadro(CORAZON_VACIO),
-      lamparaApagada: cuadro(LAMPARA),
-      lamparaEncendida: cuadro(LAMPARA, { J: "#e8792e", j: "#3f6d98" }),
-      despertador: cuadro(DESPERTADOR)
+      corazonVacio: cuadro(CORAZON, { z: "#3a3656", Z: "#4d4870", R: "#2a2742" }),
+      lamparaApagada: cuadro(LAMPARA, { t: "#6d6a8a", T: "#8f8cab" }),
+      lamparaEncendida: cuadro(LAMPARA),
+      despertador: cuadro(DESPERTADOR),
+      destello: [destello(1, "#fff1b0"), destello(2, "#ffe08a"), destello(3, "#f2c14e")].map(desdeLienzo),
+      polvo: [0, 1, 2, 3].map((i) => desdeLienzo(polvo(i))),
+      crearCanvas: crearCanvas
     };
   }
 
   return {
     PALETA: PALETA,
     construir: construir,
-    // Datos crudos expuestos para pruebas de integridad
-    _datos: {
-      CABEZA_ABIERTA, CABEZA_CERRADA, CABEZA_DOLOR, TORSO, TORSO_BRAZOS_ARRIBA,
-      TORSO_BRAZO_ADELANTE, TORSO_BRAZO_ATRAS, PIERNAS, BICHO_A, BICHO_B,
-      PESADILLA_A, PESADILLA_B, MONEDA_FRENTE, MONEDA_GIRO, MONEDA_CANTO, CORAZON, CORAZON_VACIO,
-      LAMPARA, DESPERTADOR
-    }
+    _datos: { CABEZA, CUERPO, BICHO_CUERPO, BICHO_PATAS, PESADILLA, CORAZON, LAMPARA, DESPERTADOR }
   };
 })();
