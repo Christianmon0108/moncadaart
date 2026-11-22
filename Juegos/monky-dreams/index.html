@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Monky Dreams — MoncadaArt</title>
+  <meta name="description" content="Monky Dreams: un pequeño juego de plataformas en pixel art protagonizado por Monky, la mascota de MoncadaArt.">
+  <meta name="theme-color" content="#141831">
+  <link rel="icon" href="../../assets/img/perfil.jpeg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+  <main class="app">
+
+    <!-- ===================================================
+         ESCENARIO: lienzo del juego + pantallas encima
+         =================================================== -->
+    <div class="escenario">
+
+      <canvas
+        id="juego"
+        width="320"
+        height="180"
+        tabindex="-1"
+        aria-label="Monky Dreams, juego de plataformas"
+      ></canvas>
+
+      <!-- Botones superiores -->
+      <div class="hud-botones" id="hud-botones">
+        <button class="btn-icono" id="btn-pausa" type="button" data-accion="pausa" aria-label="Pausar" hidden>
+          <span aria-hidden="true">II</span>
+        </button>
+        <button class="btn-icono" id="btn-sonido" type="button" data-accion="sonido" aria-label="Silenciar sonido" aria-pressed="false">
+          <span aria-hidden="true">♪</span>
+        </button>
+      </div>
+
+      <p class="aviso" id="aviso" role="status" aria-live="polite"></p>
+
+      <!-- INICIO -->
+      <section class="pantalla pantalla-inicio" id="pantalla-inicio" aria-labelledby="titulo-juego">
+        <div class="inicio-arriba">
+          <p class="etiqueta">Un juego de MoncadaArt</p>
+          <h1 id="titulo-juego">
+            Monky <span>Dreams</span>
+          </h1>
+          <p class="bajada">Monky se quedó dormido en su escritorio… y despertó dentro de un sueño pixelado.</p>
+        </div>
+        <div class="inicio-abajo">
+          <button class="btn btn-principal" type="button" data-accion="jugar" data-principal>
+            Jugar
+          </button>
+          <p class="ayuda ayuda-teclado">
+            <kbd>←</kbd> <kbd>→</kbd> moverse · <kbd>Espacio</kbd> saltar · <kbd>P</kbd> pausa
+          </p>
+          <p class="ayuda ayuda-tactil">
+            Flechas para moverte · botón grande para saltar
+          </p>
+          <a class="volver" href="../../juegos.html">← Volver a MoncadaArt</a>
+        </div>
+      </section>
+
+      <!-- PAUSA -->
+      <section class="pantalla" id="pantalla-pausa" aria-labelledby="titulo-pausa" hidden>
+        <h2 id="titulo-pausa">Pausa</h2>
+        <p class="bajada">Monky sigue soñando…</p>
+        <div class="acciones">
+          <button class="btn btn-principal" type="button" data-accion="continuar" data-principal>Continuar</button>
+          <button class="btn" type="button" data-accion="jugar">Reiniciar</button>
+          <button class="btn" type="button" data-accion="inicio">Salir al inicio</button>
+        </div>
+        <a class="volver" href="../../juegos.html">← Volver a MoncadaArt</a>
+      </section>
+
+      <!-- DERROTA -->
+      <section class="pantalla" id="pantalla-derrota" aria-labelledby="titulo-derrota" hidden>
+        <h2 id="titulo-derrota">Fin del sueño</h2>
+        <p class="bajada">Las pesadillas ganaron esta vez. ¡Monky quiere intentarlo otra vez!</p>
+        <div class="acciones">
+          <button class="btn btn-principal" type="button" data-accion="jugar" data-principal>Reintentar</button>
+          <button class="btn" type="button" data-accion="inicio">Salir al inicio</button>
+        </div>
+      </section>
+
+      <!-- VICTORIA -->
+      <section class="pantalla" id="pantalla-victoria" aria-labelledby="titulo-victoria" hidden>
+        <h2 id="titulo-victoria">¡Monky despertó!</h2>
+        <p class="bajada" id="res-mensaje"></p>
+        <dl class="resultados">
+          <div><dt>Monedas</dt><dd id="res-monedas">0</dd></div>
+          <div><dt>Tiempo</dt><dd id="res-tiempo">0:00</dd></div>
+          <div><dt>Vidas</dt><dd id="res-vidas">3/3</dd></div>
+        </dl>
+        <div class="acciones">
+          <button class="btn btn-principal" type="button" data-accion="jugar" data-principal>Jugar de nuevo</button>
+          <button class="btn" type="button" data-accion="inicio">Salir al inicio</button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ===================================================
+         CONTROLES TÁCTILES (solo en pantallas táctiles)
+         =================================================== -->
+    <div class="controles" aria-hidden="true">
+      <div class="cruceta" id="cruceta">
+        <span class="tecla" id="btn-izq">◀</span>
+        <span class="tecla" id="btn-der">▶</span>
+      </div>
+      <p class="girar">Gira tu teléfono para ver más del sueño</p>
+      <div class="tecla tecla-saltar" id="btn-saltar">
+        <span>⤒</span>
+        <small>Saltar</small>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="js/sprites.js"></script>
+  <script src="js/nivel.js"></script>
+  <script src="js/sonido.js"></script>
+  <script src="js/juego.js"></script>
+</body>
+</html>
