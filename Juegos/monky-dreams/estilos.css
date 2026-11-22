@@ -31,6 +31,7 @@ body {
   color: var(--crema);
   font-family: var(--fuente);
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   -webkit-user-select: none;
   user-select: none;
   overscroll-behavior: none;
@@ -283,6 +284,24 @@ body.tactil .ayuda-teclado {
   outline-offset: 3px;
 }
 
+/* Enlace para regresar al portafolio */
+.volver {
+  color: #cfc6e6;
+  font-size: clamp(12px, 1.6cqw, 17px);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.volver:hover,
+.volver:focus-visible {
+  color: var(--crema-2);
+}
+
+.volver:focus-visible {
+  outline: 3px solid #f2c14e;
+  outline-offset: 3px;
+}
+
 /* Resultados de victoria */
 .resultados {
   display: flex;
@@ -469,6 +488,14 @@ body.tactil .controles {
     width: 108px;
     height: 108px;
     background: rgba(232, 121, 46, .55);
+  }
+
+  /* El aviso va debajo del juego para no tapar a Monky */
+  body.tactil .aviso {
+    top: calc(100% + 14px);
+    bottom: auto;
+    font-size: 14px;
+    padding: 8px 14px;
   }
 
   body.tactil .girar {

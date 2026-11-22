@@ -4,9 +4,20 @@ Videojuego de plataformas 2D en pixel art para **MoncadaArt**.
 Monky, la mascota que duerme en la portada del portafolio, sueña que entra a un mundo pixelado.
 Tiene que correr, saltar, reunir monedas y llegar al despertador para despertar.
 
-> **Estado:** primera versión jugable (nivel 1). **Todavía no está enlazado al portafolio**:
-> no se modificó `juegos.html` ni ningún catálogo (`Juegos/manifest.json` no existe todavía).
-> Todo el código vive en `Juegos/monky-dreams/`.
+> **Estado:** primera versión jugable (nivel 1), integrada en el apartado **Juegos** del portafolio
+> mediante `Juegos/manifest.json`. No se modificó `juegos.html` ni ningún otro archivo existente:
+> el apartado ya sabía mostrar un botón **Jugar** para los proyectos con `href`.
+
+## Dónde se juega (una vez publicado)
+
+GitHub Pages publica MoncadaArt desde la rama `main` del repositorio `moncadaart`:
+
+- Portafolio: <https://christianmon0108.github.io/moncadaart/>
+- Apartado Juegos: <https://christianmon0108.github.io/moncadaart/juegos.html> → tarjeta **Monky Dreams** → **Jugar / Abrir proyecto →**
+- Juego directo: <https://christianmon0108.github.io/moncadaart/Juegos/monky-dreams/>
+
+> Nota: `https://christianmon0108.github.io/` (sin `/moncadaart/`) pertenece a otro repositorio
+> (`Christianmon0108.github.io`) y hoy solo muestra un README.
 
 ---
 
@@ -16,7 +27,7 @@ Tiene que correr, saltar, reunir monedas y llegar al despertador para despertar.
 Abre `Juegos/monky-dreams/index.html` con doble clic en Chrome, Edge, Firefox o Safari.
 El juego usa scripts clásicos (no módulos), así que funciona incluso desde `file://`.
 
-### Opción 2: servidor local (recomendado, y necesario para probar en el celular)
+### Opción 2: servidor local (para probar cambios antes de publicarlos)
 Desde la raíz del repositorio:
 
 ```bash
@@ -86,6 +97,7 @@ Juegos/monky-dreams/
 ├── index.html      Página del juego y pantallas (inicio, pausa, derrota, victoria)
 ├── estilos.css     Diseño de la interfaz y de los controles táctiles
 ├── README.md       Este archivo
+├── media/          Portada y capturas que usa la tarjeta de juegos.html
 └── js/
     ├── sprites.js  Pixel art definido como texto + paleta de colores
     ├── nivel.js    Mapa del nivel en caracteres (fácil de editar)
@@ -126,12 +138,12 @@ En `js/sprites.js`, cada sprite es una lista de filas de texto; cada letra es un
 - [ ] Al perder las 3 vidas aparece **Fin del sueño** y se puede reintentar.
 - [ ] Pausa con `P`/`Esc` o el botón **II**; se pausa solo al cambiar de pestaña.
 - [ ] En el celular, los botones táctiles responden, incluso moviéndote y saltando a la vez.
+- [ ] En `juegos.html` aparece la tarjeta de Monky Dreams y su botón **Jugar / Abrir proyecto →** abre el juego.
+- [ ] El enlace **← Volver a MoncadaArt** regresa al apartado Juegos.
 
 ---
 
 ## Próximos pasos posibles (requieren aprobación)
 
-- Integración con el apartado **Juegos** de MoncadaArt (crear `Juegos/manifest.json` con la ficha
-  del juego para que aparezca en `juegos.html`).
 - Más niveles: uno por área del portafolio (estudio 3D, sala de edición, taller de ropa…).
 - Música de fondo, tabla de récords local y animación de "despertar" que regrese al portafolio.
