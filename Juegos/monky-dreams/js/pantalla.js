@@ -92,9 +92,23 @@ window.MonkyPantalla = (function () {
   const instalada = window.matchMedia && (window.matchMedia("(display-mode: fullscreen)").matches ||
     window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
 
+  /* Zona ocupada por los botones de arriba (pausa, sonido, pantalla completa),
+     en pixeles del juego: el HUD dibujado en el lienzo nunca se mete debajo */
+  const botones = document.getElementById("hud-botones");
+  function zonaBotones() {
+    const r = lienzo.getBoundingClientRect();
+    const visibles = botones ? [...botones.children].filter((b) => !b.hidden) : [];
+    if (!visibles.length || !r.width) return { x: estado.W, alto: 0 };
+    let izq = Infinity, abajo = 0;
+    visibles.forEach((b) => { const q = b.getBoundingClientRect(); izq = Math.min(izq, q.left); abajo = Math.max(abajo, q.bottom); });
+    const k = estado.W / r.width;
+    return { x: Math.floor((izq - r.left) * k) - 2, alto: Math.ceil((abajo - r.top) * k) + 2 };
+  }
+
   return {
     estado: estado,
     medir: medir,
+    zonaBotones: zonaBotones,
     alCambiar: (f) => oyentes.push(f),
     pantallaCompletaDisponible: disponible,
     pantallaCompletaActiva: activa,

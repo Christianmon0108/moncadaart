@@ -589,6 +589,7 @@ window.MonkyAventura = function (deps) {
     ctx.fillRect(x + 2, y + 1, w - 4, 1);
   }
 
+  /* HUD: corazones y monedas juntos arriba a la izquierda, lejos de los botones */
   function dibujarHUD() {
     panel(3, 3, 33, 13);
     for (let i = 0; i < VIDAS; i++) {
@@ -597,12 +598,11 @@ window.MonkyAventura = function (deps) {
     }
 
     const etiqueta = recogidos.moneda + "/" + totales.moneda;
-    const ancho = 12 + 4 + anchoTexto(etiqueta) + 6;
-    const x = ANCHO - 3 - ancho;
-    panel(x, 3, ancho, 16);
-    ctx.drawImage(S.moneda[Math.floor(tiempoGlobal * 8) % 8].der, x + 3, 5);
+    const ancho = 12 + 4 + anchoTexto(etiqueta) + 5;
+    panel(39, 3, ancho, 13);
+    ctx.drawImage(S.moneda[Math.floor(tiempoGlobal * 8) % 8].der, 40, 3);
     const completo = recogidos.moneda === totales.moneda;
-    dibujarTexto(etiqueta, x + 18, 9, completo ? "#ffe08a" : "#fff7e8", "#16152a");
+    dibujarTexto(etiqueta, 55, 7, completo ? "#ffe08a" : "#fff7e8", "#16152a");
   }
 
   function dibujar() {

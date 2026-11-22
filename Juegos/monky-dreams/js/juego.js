@@ -36,7 +36,7 @@
   /* -------------------------------------------------------
      MODOS
      ------------------------------------------------------- */
-  const deps = { sprites: S, entrada: E, aviso: mostrarAviso, fin: alTerminar };
+  const deps = { sprites: S, entrada: E, aviso: mostrarAviso, fin: alTerminar, botones: P.zonaBotones };
   const modos = {
     carrera: window.MonkyCarrera(deps),
     aventura: window.MonkyAventura(deps)

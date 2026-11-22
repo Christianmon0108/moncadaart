@@ -53,6 +53,7 @@ window.MonkyCarrera = function (deps) {
   let avisosVistos = {};
   let piloto = false;
   let accionPiloto = null;
+  let pruebaSinPoderes = false; // solo pruebas (?depurar): carrera sin poderes
   let motivoFin = "";
   let registroGolpes = [];
   const fondos = {};
@@ -97,6 +98,7 @@ window.MonkyCarrera = function (deps) {
      TRAMOS: generar por delante y descartar los de atrás
      ------------------------------------------------------- */
   function prepararTramo(t) {
+    if (pruebaSinPoderes) t.poderes = t.poderes.filter((p) => Array.isArray(pruebaSinPoderes) && !pruebaSinPoderes.includes(p.tipo));
     t.mapa = t.mapa.slice();
     t.entidades.forEach((e) => { e.vivo = true; e.aplastado = 0; e.anim = Math.random() * 10; e.pos = null; });
     t.monedas.forEach((m) => { m.tomada = false; m.vx = 0; m.vy = 0; });
@@ -802,8 +804,15 @@ window.MonkyCarrera = function (deps) {
     }
   }
 
+  /* HUD
+     - Zona secundaria (arriba a la izquierda): corazones y monedas.
+     - Centro superior: distancia grande y, debajo, el récord.
+     - Debajo de los corazones: poderes activos con barra y segundos.
+     Nada se dibuja bajo los botones de pausa, sonido y pantalla completa. */
   function dibujarHUD(record) {
-    // Vidas
+    const zona = deps.botones ? deps.botones() : { x: W - 60, alto: 20 };
+
+    // Corazones
     HUD.panel(ctx, 3, 3, 33, 13);
     for (let i = 0; i < VIDAS; i++) ctx.drawImage((i < jugador.vidas ? S.corazon : S.corazonVacio).der, 6 + i * 9, 6);
     // Monedas
@@ -812,27 +821,41 @@ window.MonkyCarrera = function (deps) {
     HUD.panel(ctx, 39, 3, anchoM, 13);
     ctx.drawImage(S.moneda[Math.floor(tiempo * 8) % 8].der, 40, 3);
     texto(etiqueta, 55, 7, "#fff7e8", "#16152a");
-    // Distancia (centro)
+    const finIzq = 39 + anchoM + 4;
+
+    // Distancia y récord (centrados, sin tocar la zona izquierda ni los botones)
     const dist = metros + " M";
-    const ancho = HUD.anchoTexto(dist, 2);
-    texto(dist, Math.round(W / 2 - ancho / 2), 5, "#fff7e8", "#16152a", 2);
-    if (record > 0) {
-      const r = "RECORD " + record;
-      texto(r, Math.round(W / 2 - HUD.anchoTexto(r) / 2), 18, metros > record ? "#ffe08a" : "#9aa6dc", "#16152a");
+    const aD = HUD.anchoTexto(dist, 2);
+    const superado = record > 0 && metros > record;
+    const r = record > 0 ? (superado ? "NUEVO RECORD" : "RECORD " + record + " M") : "";
+    const aR = r ? HUD.anchoTexto(r) : 0;
+    const ancho = Math.max(aD + 12, aR + 10);
+    const cx = Math.round(Math.max(finIzq + ancho / 2, Math.min(W / 2, zona.x - 3 - ancho / 2)));
+    HUD.panel(ctx, Math.round(cx - (aD + 12) / 2), 3, aD + 12, 16);
+    texto(dist, Math.round(cx - aD / 2), 6, superado ? "#ffe08a" : "#fff7e8", "#16152a", 2);
+    if (r) {
+      const brilla = superado && Math.floor(tiempo * 4) % 2 === 0;
+      HUD.panel(ctx, Math.round(cx - (aR + 10) / 2), 20, aR + 10, 10);
+      texto(r, Math.round(cx - aR / 2), 22, superado ? (brilla ? "#fff7e8" : "#ffe08a") : "#b8c2f0", "#16152a");
     }
-    // Poderes activos con su tiempo
+
+    // Poderes activos: ícono, barra y segundos que quedan
     let y = 19;
     ["escudo", "iman", "doble", "impulso"].forEach((tipo) => {
       if (poderes[tipo] <= 0) return;
-      HUD.panel(ctx, 3, y, 44, 14);
+      const acaba = poderes[tipo] / DURACION[tipo] < 0.25;
+      const parpadea = acaba && Math.floor(tiempo * 6) % 2;
+      HUD.panel(ctx, 3, y, 56, 14);
       ctx.drawImage(S.iconos[tipo], 4, y + 1);
       const frac = poderes[tipo] / DURACION[tipo];
       ctx.fillStyle = "#16152a"; ctx.fillRect(18, y + 5, 26, 4);
-      ctx.fillStyle = frac < 0.25 && Math.floor(tiempo * 6) % 2 ? "#ff6b6b" : "#ffe08a";
+      ctx.fillStyle = parpadea ? "#ff6b6b" : "#ffe08a";
       ctx.fillRect(19, y + 6, Math.max(1, Math.round(24 * frac)), 2);
+      texto(String(Math.ceil(poderes[tipo])), 47, y + 5, parpadea ? "#ff6b6b" : "#fff7e8", "#16152a");
       y += 15;
     });
-    // Cartel de mundo nuevo
+
+    // Cartel de mundo nuevo (debajo del récord)
     if (cartel) {
       const t = cartel.texto.toUpperCase();
       const a = HUD.anchoTexto(t, 2);
@@ -884,6 +907,7 @@ window.MonkyCarrera = function (deps) {
       mundo: () => temaVisible,
       generador: () => Object.assign({}, generador.estado),
       piloto(valor) { piloto = !!valor; },
+      sinPoderes(valor) { pruebaSinPoderes = Array.isArray(valor) ? valor : !!valor; },
       activarPoder(tipo) { activarPoder(tipo); },
       quitarVida() { jugador.invul = 0; herir(0, "prueba"); },
       golpes: () => registroGolpes.slice(),

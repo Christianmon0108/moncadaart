@@ -71,7 +71,13 @@
     return false;
   }
 
-  function resolverY(e, pieAntes, mundo, plataformas) {
+  /* Plataformas atravesables ("-"):
+     pies: { margen, tolerancia } opcional (Carrera infinita).
+     - margen: px extra a cada lado para apoyar los pies (el dibujo de los pies
+       de Monky es más ancho que su caja de choque).
+     - tolerancia: px por debajo de la superficie en que todavía se aterriza al
+       bajar (si el salto termina con los pies apenas dentro de la nube). */
+  function resolverY(e, pieAntes, mundo, plataformas, pies) {
     const x0 = Math.floor(e.x / T);
     const x1 = Math.floor((e.x + e.w - 0.001) / T);
     const y0 = Math.floor(e.y / T);
@@ -92,7 +98,7 @@
           e.vy = 0;
           return golpeCabeza;
         }
-        if (ch === "-" && e.vy >= 0 && pieAntes <= cy * T + 0.5 && e.y + e.h >= cy * T) {
+        if (!pies && ch === "-" && e.vy >= 0 && pieAntes <= cy * T + 0.5 && e.y + e.h >= cy * T) {
           e.y = cy * T - e.h;
           e.vy = 0;
           e.enSuelo = true;
@@ -100,6 +106,8 @@
         }
       }
     }
+
+    if (pies && e.vy >= 0 && aterrizarEnNube(e, pieAntes, mundo, pies)) return false;
 
     if (e.vy >= 0 && plataformas) {
       for (const p of plataformas) {
@@ -114,6 +122,38 @@
       }
     }
     return false;
+  }
+
+  function aterrizarEnNube(e, pieAntes, mundo, pies) {
+    const pie = e.y + e.h;
+    const cx0 = Math.floor((e.x - pies.margen) / T);
+    const cx1 = Math.floor((e.x + e.w + pies.margen - 0.001) / T);
+    // Filas cuya superficie cruzaron los pies en este paso (o dentro de la tolerancia)
+    const cy0 = Math.floor((pieAntes - pies.tolerancia) / T);
+    const cy1 = Math.floor(pie / T);
+    for (let cy = Math.max(0, cy0); cy <= cy1; cy++) {
+      const sup = cy * T;
+      if (pieAntes > sup + pies.tolerancia || pie < sup) continue;
+      for (let cx = cx0; cx <= cx1; cx++) {
+        if (mundo.casilla(cx, cy) !== "-") continue;
+        // La cabeza no debe quedar dentro de un bloque al subir a la nube
+        const y = sup - e.h;
+        const prueba = { x: e.x, y: y, w: e.w, h: e.h };
+        if (!libre(prueba, mundo)) continue;
+        e.y = y;
+        e.vy = 0;
+        e.enSuelo = true;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function libre(r, mundo) {
+    const x0 = Math.floor(r.x / T), x1 = Math.floor((r.x + r.w - 0.001) / T);
+    const y0 = Math.floor(r.y / T), y1 = Math.floor((r.y + r.h - 0.001) / T);
+    for (let cy = y0; cy <= y1; cy++) for (let cx = x0; cx <= x1; cx++) if (mundo.esSolida(mundo.casilla(cx, cy))) return false;
+    return true;
   }
 
   /* Un paso de física del jugador.
@@ -182,6 +222,9 @@
      ======================================================= */
   const ALTO_PIE = 18;
   const ALTO_DESLIZ = 12;
+  // Pies de Monky sobre las nubes: el dibujo sobresale 2 px de la caja por lado y el
+  // salto puede terminar con los pies hasta 6 px dentro de la nube.
+  const PIES_CORREDOR = { margen: 2, tolerancia: 6 };
 
   function cabeLevantarse(j, mundo) {
     const prueba = { x: j.x, y: j.y + j.h - ALTO_PIE, w: j.w, h: ALTO_PIE };
@@ -251,7 +294,7 @@
     const estaba = j.enSuelo;
     j.y += j.vy * dt;
     j.enSuelo = false;
-    resolverY(j, pieAntes, mundo, null);
+    resolverY(j, pieAntes, mundo, null, PIES_CORREDOR);
     if (j.enSuelo) {
       j.saltosExtra = j.dobleSalto ? 1 : 0;
       if (!estaba) { ev.aterrizo = true; ev.vyAterrizaje = vyAntes; }
@@ -295,6 +338,7 @@
     cabeLevantarse: cabeLevantarse,
     clonar: clonar,
     ALTO_PIE: ALTO_PIE,
-    ALTO_DESLIZ: ALTO_DESLIZ
+    ALTO_DESLIZ: ALTO_DESLIZ,
+    PIES_CORREDOR: PIES_CORREDOR
   };
 })(typeof window !== "undefined" ? window : globalThis);

@@ -243,12 +243,14 @@ window.MonkyEscenario = (function () {
     }
 
     function nube(cx0, cx1, cy) {
-      const x0 = cx0 * T - 2, ancho = (cx1 - cx0 + 1) * T + 4, y0 = cy * T - 3, alto = 13;
+      // Nube sólida: la parte de arriba coincide con la línea donde Monky aterriza
+      // y el cuerpo es delgado (8 px), como la zona en que el aterrizaje la acepta.
+      const x0 = cx0 * T - 2, ancho = (cx1 - cx0 + 1) * T + 4, y0 = cy * T - 2, alto = 10;
       const dentro = (x, y) => {
         if (x < 0 || x >= ancho || y < 0 || y >= alto) return false;
-        const base = y >= 4 && y <= 10 && x >= 3 && x < ancho - 3;
-        let bulto = Math.hypot(x - 4, y - 7) <= 4.2 || Math.hypot(x - (ancho - 5), y - 7) <= 4.2;
-        for (let bx = 7; bx < ancho - 5; bx += 9) if (Math.hypot(x - bx, y - 5.5) <= 4 + rn(bx + cx0 * 31, cy, 8) * 1.6) bulto = true;
+        const base = y >= 2 && y <= 8 && x >= 3 && x < ancho - 3;
+        let bulto = Math.hypot(x - 4, y - 5) <= 4.2 || Math.hypot(x - (ancho - 5), y - 5) <= 4.2;
+        for (let bx = 8; bx < ancho - 6; bx += 8) if (Math.hypot(x - bx, y - 4) <= 3.4 + rn(bx + cx0 * 31, cy, 8) * 0.8) bulto = true;
         return base || bulto;
       };
       rellenar(x0, y0, ancho, alto, dentro, (x, y) => (!dentro(x, y - 2) ? "#ffffff" : y >= alto - 3 ? "#c9b8ea" : y >= alto - 5 ? "#e7dcf6" : "#fff4de"));
@@ -287,10 +289,10 @@ window.MonkyEscenario = (function () {
       const x0 = cx0 * T - 1, ancho = (cx1 - cx0 + 1) * T + 2, y0 = cy * T - 1;
       const dentro = (x, y) => {
         if (x < 0 || x >= ancho || y < 0) return false;
-        const fondo = 7 + Math.round(Math.sin(x * 0.7 + cx0) * 1.5 + (ruido(x, cx0, 9) * 3));
+        const fondo = 6 + Math.round(Math.sin(x * 0.7 + cx0) + ruido(x, cx0, 9) * 2);
         return y <= Math.max(5, fondo) && !(y === 0 && (x < 2 || x > ancho - 3));
       };
-      rellenar(x0, y0, ancho, 13, dentro, (x, y) => (y <= 1 ? "#6a5478" : y >= 6 ? "#33263f" : "#4a3a58"));
+      rellenar(x0, y0, ancho, 10, dentro, (x, y) => (y <= 1 ? "#6a5478" : y >= 6 ? "#33263f" : "#4a3a58"));
       for (let x = 2; x < ancho - 2; x += 7) { c.fillStyle = "#ff4d6d"; c.fillRect(x0 + x, y0 + 3, 1, 1); }
     }
 
@@ -504,10 +506,11 @@ window.MonkyEscenario = (function () {
       for (let y = 0; y < isla.w * 0.55; y++) {
         const mitad = (isla.w / 2) * (1 - y / (isla.w * 0.55)) ** 0.8;
         for (let x = -Math.floor(mitad); x <= Math.floor(mitad); x++) {
-          px(ic, (ix + x + PERIODO) % PERIODO, isla.y + y, x > mitad * 0.3 ? "#1e2654" : "#262f66");
+          px(ic, (ix + x + PERIODO) % PERIODO, isla.y + y, x > mitad * 0.3 ? "#1c2350" : "#212a5c");
         }
       }
-      for (let x = -isla.w / 2; x <= isla.w / 2; x++) px(ic, (ix + x + PERIODO) % PERIODO, isla.y - 1, "#3e4f92");
+      // Borde superior apagado: son decorado lejano, no plataformas
+      for (let x = -isla.w / 2; x <= isla.w / 2; x++) px(ic, (ix + x + PERIODO) % PERIODO, isla.y - 1, "#283368");
       if (isla.casa) {
         ic.fillStyle = "#2b3570"; ic.fillRect(ix - 6, isla.y - 8, 12, 8);
         ic.fillStyle = "#3a2a4a"; ic.fillRect(ix - 7, isla.y - 10, 14, 2);
