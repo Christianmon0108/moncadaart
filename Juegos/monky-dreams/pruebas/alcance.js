@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — PRUEBA DE ALCANCE DEL NIVEL
+   MONKY RUN — PRUEBA DE ALCANCE DEL NIVEL
    Usa la misma física del juego (js/fisica.js) para comprobar
    que la meta y todas las monedas se pueden alcanzar sin
    morir. Ejecutar con:  node Juegos/monky-dreams/pruebas/alcance.js

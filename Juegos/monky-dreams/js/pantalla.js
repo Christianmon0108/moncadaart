@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — PANTALLA
+   MONKY RUN — PANTALLA
    Adapta la resolución interna al espacio disponible:
    - la altura mínima es 180 px de juego y el ancho mínimo 320,
    - cada pixel del juego ocupa un número ENTERO de pixeles

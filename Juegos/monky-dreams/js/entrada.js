@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — ENTRADA (teclado y táctil)
+   MONKY RUN — ENTRADA (teclado y táctil)
    Aventura: flechas ◀ ▶ y botón de salto.
    Carrera:  mitad derecha de la pantalla = saltar,
              mitad izquierda = deslizarse.

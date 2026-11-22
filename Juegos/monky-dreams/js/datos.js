@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — DATOS GUARDADOS (economía, tienda y misiones)
+   MONKY RUN — DATOS GUARDADOS (economía, tienda y misiones)
    Todo vive en localStorage bajo una sola clave, validado al
    leer: si algo está dañado o es inválido se corrige o se
    descarta en lugar de romper el juego. No hay pagos reales:
@@ -24,18 +24,18 @@
      ------------------------------------------------------- */
   const CATALOGO = [
     { id: "monky", cat: "personajes", nombre: "Monky", precio: 0,
-      desc: "El soñador original de MoncadaArt, con su gorra hacia atrás." },
+      desc: "El artista original de MoncadaArt, con su gorra hacia atrás." },
     { id: "explorador", cat: "personajes", nombre: "Monky Explorador", precio: 120,
-      desc: "Casco de safari y chaleco de mil bolsillos para soñar con selvas." },
+      desc: "Casco de safari y chaleco de mil bolsillos para dibujar selvas." },
     { id: "cyber", cat: "personajes", nombre: "Monky Cyber", precio: 280,
       desc: "Visor de neón, antena de señal y tenis luminosos." },
     { id: "nubi", cat: "personajes", nombre: "Nubi", precio: 450,
-      desc: "Una ovejita de nube que cuida los sueños. Al deslizarse se hace bolita." },
-    { id: "pijama", cat: "vestimentas", ranura: "vestimenta", nombre: "Pijama estelar", precio: 90, para: ["monky"],
-      desc: "Pijama azul con estrellas doradas. Solo para Monky." },
+      desc: "Una ovejita de nube que se escapó de un dibujo. Al deslizarse se hace bolita." },
+    { id: "pijama", cat: "vestimentas", ranura: "vestimenta", nombre: "Traje estelar", precio: 90, para: ["monky"],
+      desc: "Traje azul con estrellas doradas. Solo para Monky." },
     { id: "sudadera", cat: "vestimentas", ranura: "vestimenta", nombre: "Sudadera atardecer", precio: 150, para: ["monky"],
       desc: "La sudadera naranja de MoncadaArt. Solo para Monky." },
-    { id: "gorro", cat: "accesorios", ranura: "cabeza", nombre: "Gorro de dormir", precio: 80, para: ["monky"],
+    { id: "gorro", cat: "accesorios", ranura: "cabeza", nombre: "Gorro de borla", precio: 80, para: ["monky"],
       desc: "Gorro lila con borla. Reemplaza la gorra de Monky." },
     { id: "bufanda", cat: "accesorios", ranura: "cuello", nombre: "Bufanda cometa", precio: 110,
       para: ["monky", "explorador", "cyber", "nubi"],

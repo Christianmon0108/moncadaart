@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — GENERADOR DE TRAMOS (Carrera infinita)
+   MONKY RUN — GENERADOR DE TRAMOS (Carrera infinita)
 
    Crea tramos de terreno nuevos según la distancia recorrida
    y comprueba con la física real de Monky (fisica.js) que
@@ -26,7 +26,7 @@
   /* -------------------------------------------------------
      MUNDOS: cambian cada 500 m y se repiten en ciclo
      ------------------------------------------------------- */
-  const MUNDOS = ["noche", "bosque", "digital", "pesadilla"];
+  const MUNDOS = ["cuaderno", "bosque", "digital", "fabrica"];
   const LARGO_MUNDO = 500;
 
   function mundoEn(metros) {
@@ -75,13 +75,19 @@
     dron:    { w: 14, h: 10, pisable: false },
     cuervo:  { w: 14, h: 10, pisable: false },
     laser:   { w: 16, h: 4,  pisable: false },
-    gota:    { w: 10, h: 10, pisable: false }
+    gota:    { w: 10, h: 10, pisable: false },
+    garabato: { w: 14, h: 11, pisable: true },
+    lapiz:   { w: 18, h: 4,  pisable: false },
+    engranaje: { w: 13, h: 13, pisable: false },
+    chispa:  { w: 11, h: 9,  pisable: false },
+    prensa:  { w: 14, h: 10, pisable: false }
   };
 
   function posicion(e, px, vel) {
     const t = Math.max(0, (px - (e.x - ACTIVACION)) / vel);
     let x = e.x, y = e.y;
     switch (e.tipo) {
+      case "garabato":
       case "bicho": {
         const ancho = e.xmax - e.xmin;
         let d = (t * 30) % (ancho * 2);
@@ -104,6 +110,21 @@
       case "dron":
         y = e.y + Math.sin(t * 2.4 + e.fase) * 18;
         break;
+      case "lapiz":
+        // Lápiz que cruza volando en línea recta
+        x = e.x - t * 120;
+        break;
+      case "engranaje":
+        // Rueda hacia Monky dando saltitos
+        x = e.x - t * 50;
+        y = e.y - Math.abs(Math.sin(t * 4.5)) * 12;
+        break;
+      case "prensa": {
+        // Pistón que baja y sube: abajo deja 13 px (solo se pasa deslizándose)
+        const abierto = 0.5 + 0.5 * Math.cos((t * Math.PI * 2) / 1.7 + e.fase);
+        const altura = 13 + 32 * abierto;
+        return { x: e.x + 1, y: -40, w: e.w, h: e.suelo - altura + 40, t: t, placa: e.suelo - altura };
+      }
       case "gota": {
         // Gota de tinta: cae del cielo cuando Monky se acerca y queda como charco
         const caida = Math.max(0, (px - (e.x - 150)) / vel);
@@ -113,6 +134,7 @@
         if (y >= yFin) return { x: e.x - 3, y: e.suelo - 4, w: 16, h: 4, t: t, charco: true, caida: caida };
         return { x: x, y: y, w: e.w, h: e.h, t: t, caida: caida };
       }
+      case "chispa":
       case "cuervo": {
         x = e.x - t * 70;
         const rel = (x - px - 34) / 34;
@@ -319,10 +341,10 @@
       const largo = 10;
       k.suelo(c, c + largo - 1, h);
       const tipo = ctx.tema === "bosque" ? ctx.azar.elegir(["hongo", "tronco"])
-        : ctx.tema === "pesadilla" ? "hongo" : "bicho";
+        : ctx.tema === "cuaderno" ? "garabato" : ctx.tema === "fabrica" ? "engranaje" : "bicho";
       const x = (c + 7) * T + 1;
       const y = s * T - DEF[tipo].h;
-      if (tipo === "bicho") k.entidad(tipo, c + 7, s - 1, { x: x, y: y, xmin: (c + 2) * T, xmax: x });
+      if (tipo === "bicho" || tipo === "garabato") k.entidad(tipo, c + 7, s - 1, { x: x, y: y, xmin: (c + 2) * T, xmax: x });
       else if (tipo === "hongo") k.entidad(tipo, c + 6, s - 1, { x: x - T, y: y, fase: ctx.azar() * 1.4 });
       else k.entidad(tipo, c + 9, s - 1, { x: x + 2 * T, y: y });
       return { c: c + largo, h: h };
@@ -332,17 +354,22 @@
       const s = superficie(h);
       const largo = 11;
       k.suelo(c, c + largo - 1, h);
-      const tipo = ctx.tema === "digital" ? "dron" : ctx.tema === "pesadilla" ? "cuervo" : "polilla";
+      const tipo = ctx.tema === "digital" ? "dron" : ctx.tema === "fabrica" ? "chispa" : ctx.tema === "cuaderno" ? "lapiz" : "polilla";
       const ySuelo = s * T;
       if (tipo === "polilla") {
         // A la altura de la cabeza: deslizarse o saltar
         k.entidad(tipo, c + 7, s - 2, { x: (c + 7) * T, y: ySuelo - 25, fase: ctx.azar() * 6 });
+      } else if (tipo === "lapiz") {
+        // Alto (a la altura de la cabeza: deslizarse) o bajo (saltar)
+        const alto = ctx.d > 0.15 && ctx.azar() < 0.5;
+        k.entidad(tipo, c + 9, s - 1, { x: (c + 9) * T + 80, y: alto ? ySuelo - 21 : ySuelo - 6 });
+        if (alto) k.deslizar = true;
       } else if (tipo === "dron") {
         k.entidad(tipo, c + 6, s - 3, { x: (c + 6) * T, y: ySuelo - 44, fase: ctx.azar() * 6 });
       } else {
         k.entidad(tipo, c + 9, s - 5, { x: (c + 9) * T + 60, y: ySuelo - 70 });
       }
-      return { c: c + largo, h: h };
+      return { c: c + largo, h: h, deslizar: !!k.deslizar };
     },
 
     /* RUTA DOBLE: autopista de nubes arriba (con monedas) y
@@ -385,6 +412,15 @@
       return { c: c + largo, h: h };
     },
 
+    /* Prensa de la fábrica: pasar cuando sube o deslizarse por debajo */
+    prensa(k, c, h, ctx) {
+      const s = superficie(h);
+      const largo = 11;
+      k.suelo(c, c + largo - 1, h);
+      k.entidad("prensa", c + 6, s - 1, { x: (c + 6) * T, y: 0, suelo: s * T, fase: ctx.azar() * Math.PI * 2 });
+      return { c: c + largo, h: h, deslizar: true };
+    },
+
     laser(k, c, h, ctx) {
       const s = superficie(h);
       const ySuelo = s * T;
@@ -413,8 +449,9 @@
     if (tema === "digital") lista.push(["laser", 4]);
     if (metros > 200) lista.push(["dosRutas", 2]);
     if (metros > 320) lista.push(["tunel", 2]);
-    if (tema === "pesadilla") lista.push(["gota", 3]);
+    if (tema === "cuaderno" && metros > 150) lista.push(["gota", 2]);
     else if (metros > 1000) lista.push(["gota", 1]);
+    if (tema === "fabrica") lista.push(["prensa", 4]);
     return lista;
   }
 
@@ -749,7 +786,7 @@
   /* Espacio en metros tras un grupo de n monedas: proporcional al grupo,
      así la cantidad total se mantiene estable aunque los grupos crezcan */
   function espacioMonedas(n, azar) {
-    return n * (15.5 + azar() * 6);
+    return n * (16.5 + azar() * 6);
   }
 
   /* Altura (centro del cuerpo de Monky) del recorrido en la posición x */

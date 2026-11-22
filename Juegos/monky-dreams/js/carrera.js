@@ -1,9 +1,10 @@
 /* =========================================================
-   MONKY DREAMS — MODO CARRERA INFINITA
-   Monky corre solo. El terreno se genera por tramos
-   (generador.js) validados con la física real y se
-   descartan los tramos que quedan atrás. Cada 500 m cambia
-   el mundo: noche → bosque → digital → pesadilla → ...
+   MONKY RUN — CARRERA INFINITA: EL GRAN BORRADOR
+   Monky, un artista, escapa de una máquina gigante que borra
+   sus creaciones. El terreno se genera por tramos validados
+   con la física real (generador.js). Cada 500 m cambia el
+   mundo: Cuaderno → Bosque de Colores → Ciudad Digital →
+   Fábrica de Ideas → ...
    ========================================================= */
 
 window.MonkyCarrera = function (deps) {
@@ -24,11 +25,11 @@ window.MonkyCarrera = function (deps) {
   let DURACION = { escudo: 10, iman: 10, doble: 12, impulso: 5 };
   let radioIman = 96;
   let escudoReforzado = false;
-  const NOMBRES_MUNDO = { noche: "Sueño nocturno", bosque: "Bosque mágico", digital: "Mundo digital", pesadilla: "Pesadilla" };
+  const NOMBRES_MUNDO = { cuaderno: "El Cuaderno", bosque: "Bosque de Colores", digital: "Ciudad Digital", fabrica: "Fábrica de Ideas" };
   const NOMBRES_PODER = { escudo: "Escudo", iman: "Imán", doble: "Doble salto", impulso: "Impulso" };
   const COLORES_MUNDO = {
-    noche: ["#ffe08a", "#b9a7e0", "#fff7e8"], bosque: ["#8be38b", "#ffa860", "#e9fff0"],
-    digital: ["#5ff0ff", "#ff6bd5", "#d6fdff"], pesadilla: ["#ff4d6d", "#b9a7e0", "#ffd6dd"]
+    cuaderno: ["#3b6fd8", "#e8473c", "#ffd23f"], bosque: ["#ff8fd1", "#7ff0d0", "#ffd23f"],
+    digital: ["#5ff0ff", "#ff6bd5", "#d6fdff"], fabrica: ["#f2c14e", "#ff6b4a", "#c9d0dd"]
   };
 
   let ctx = null;
@@ -55,18 +56,18 @@ window.MonkyCarrera = function (deps) {
   let particulas = [], efectos = [];
   let poderes = { escudo: 0, iman: 0, doble: 0, impulso: 0 };
   let invulPostImpulso = 0;
-  let sombra = { activa: false, distancia: 140, anim: 0, alfa: 0, arremetida: 0, reloj: 7 };
+  let borrador = { activa: false, distancia: 150, anim: 0, alfa: 0, arremetida: 0, reloj: 7, furia: 0 };
   let rescate = null;
   let camX = 0;
-  let temaVisible = "noche";
+  let temaVisible = "cuaderno";
   let cartel = null;
   let cartelMision = null;
   let cartelEvento = null;
-  let evento = null;          // evento aleatorio en curso: tinta, dobles o estrella
+  let evento = null;          // evento aleatorio en curso: furia, dobles o estrella
   let proximoEvento = 300;    // metros
   let racha = 0, ultimaMoneda = -9;
   let destelloMundo = 0, colorMundo = "#ffffff";
-  let manchaTinta = 0;
+  let migas = [];             // migas de goma que suelta el Borrador
   let avisosVistos = {};
   let piloto = false;
   let accionPiloto = null;
@@ -225,6 +226,7 @@ window.MonkyCarrera = function (deps) {
     asegurarTramos(true);
     asegurarTramos(true);
     generador.pasarATrabajador();
+    precargarFondos();
     jugador = Object.assign(F.crearCorredor(5 * T, (G.FILA_BASE) * T), {
       vidas: VIDAS, invul: 0, estirar: 0, aplastar: 0, relojPolvo: 0, distancia: 0, ultimoGolpe: 0, combo: 0
     });
@@ -241,13 +243,14 @@ window.MonkyCarrera = function (deps) {
     particulas = []; efectos = [];
     poderes = { escudo: 0, iman: 0, doble: 0, impulso: 0 };
     invulPostImpulso = 0;
-    sombra = { activa: false, distancia: 140, anim: 0, alfa: 0, arremetida: 0, reloj: 7, tipo: "sombra" };
+    borrador = { activa: false, distancia: 150, anim: 0, alfa: 0, arremetida: 0, reloj: 7, furia: 0 };
+    migas = [];
     evento = null; cartelEvento = null; cartelMision = null;
     proximoEvento = 260 + Math.random() * 140;
     racha = 0; ultimaMoneda = -9; destelloMundo = 0;
     rescate = null;
-    temaVisible = "noche";
-    cartel = { texto: NOMBRES_MUNDO.noche, t: 2.6 };
+    temaVisible = "cuaderno";
+    cartel = { texto: NOMBRES_MUNDO.cuaderno, t: 2.6 };
     tiempoPartida = 0; temblor = 0; fundido = 1;
     accionPiloto = null;
     estado = "jugando";
@@ -427,21 +430,20 @@ window.MonkyCarrera = function (deps) {
     temblor = 0.3;
     Snd.reproducir("dolor");
     chispas(j.x + 5, j.y + j.h / 2, ["#e8473c", "#ff9b8a", "#fff7e8"], 12);
-    if (sombra.activa) sombra.distancia -= 55;
+    if (borrador.activa) borrador.distancia -= 55; // tropezar acerca al Borrador
     j.combo = 0;
     if (j.vidas <= 0) morir("golpe");
   }
 
   /* -------------------------------------------------------
      EVENTOS ALEATORIOS (breves y avisados)
-     - tinta: una pesadilla de tinta persigue a Monky unos
-       segundos; si escapa, gana monedas. Si lo alcanza, quita
-       una vida (no termina la partida, salvo la última).
+     - furia: El Gran Borrador acelera unos segundos; si Monky
+       resiste sin que lo alcance, gana monedas y lo aleja.
      - dobles: cada moneda vale 2 durante 10 s.
      - estrella: aparece una estrella fugaz sobre la ruta.
      ------------------------------------------------------- */
   const valorMoneda = () => (evento && evento.tipo === "dobles" ? 2 : 1);
-  const DURACION_EVENTO = { tinta: 13, dobles: 10, estrella: 12 };
+  const DURACION_EVENTO = { furia: 8, dobles: 10, estrella: 12 };
 
   function anunciar(texto, color) {
     cartelEvento = { texto: texto, t: 2.4, color: color || "#ffe08a" };
@@ -449,15 +451,13 @@ window.MonkyCarrera = function (deps) {
   }
 
   function iniciarEvento() {
-    // Sin tinta cerca de la Pesadilla (ahí ya persigue la sombra gigante)
-    const tintaPosible = temaVisible !== "pesadilla" && G.mundoEn(metros + 220) !== "pesadilla" && metros > 400;
     const r = Math.random();
-    const tipo = tintaPosible && r < 0.4 ? "tinta" : r < 0.72 ? "dobles" : "estrella";
-    evento = { tipo: tipo, t: DURACION_EVENTO[tipo], fase: "aviso", aviso: 1.6, atrapado: false };
-    if (tipo === "tinta") {
-      anunciar("PESADILLA DE TINTA", "#9fb0ff");
-      Snd.reproducir("tinta");
-      deps.aviso("¡Una pesadilla de tinta te persigue! Corre sin tropezar");
+    const tipo = metros > 350 && r < 0.36 ? "furia" : r < 0.7 ? "dobles" : "estrella";
+    evento = { tipo: tipo, t: DURACION_EVENTO[tipo], fase: "aviso", aviso: 1.4 };
+    if (tipo === "furia") {
+      anunciar("EL BORRADOR ACELERA", "#ff6b6b");
+      Snd.reproducir("motor");
+      deps.aviso("¡El Gran Borrador acelera! Resiste sin tropezar");
     } else if (tipo === "dobles") {
       evento.fase = "activo";
       anunciar("MONEDAS DOBLES", "#ffe08a");
@@ -470,13 +470,14 @@ window.MonkyCarrera = function (deps) {
   }
 
   function terminarEvento() {
-    if (evento.tipo === "tinta" && !evento.atrapado && estado === "jugando") {
-      const premio = 15 * (evento.tipo === "dobles" ? 2 : 1);
-      monedas += premio;
-      anunciar("ESCAPASTE +" + premio, "#8be38b");
+    if (evento.tipo === "furia" && estado === "jugando") {
+      monedas += 15;
+      alejarBorrador(40);
+      anunciar("RESISTISTE +15", "#8be38b");
       Snd.reproducir("mision");
       chispas(jugador.x + 5, jugador.y + 4, ["#8be38b", "#fff7e8", "#ffe08a"], 14);
     }
+    borrador.furia = 0;
     evento = null;
     proximoEvento = metros + 320 + Math.random() * 260;
   }
@@ -488,36 +489,20 @@ window.MonkyCarrera = function (deps) {
     }
     if (evento.fase === "aviso") {
       evento.aviso -= dt;
-      if (evento.aviso <= 0) evento.fase = "activo";
+      if (evento.aviso <= 0) {
+        evento.fase = "activo";
+        if (evento.tipo === "furia") { borrador.furia = evento.t; borrador.reloj = 0; }
+      }
       return;
     }
     evento.t -= dt;
     if (evento.t <= 0) terminarEvento();
   }
 
-  /* La tinta alcanzó a Monky: pierde una vida y la tinta se retira */
-  function tintaAlcanza() {
-    const j = jugador;
-    evento.atrapado = true;
-    sombra.distancia = 150;
-    temblor = 0.4;
-    manchaTinta = 0.9;
-    if (poderes.escudo > 0) {
-      poderes.escudo = 0;
-      deps.aviso("¡El escudo te salvó de la tinta!");
-    } else {
-      j.vidas--;
-      Snd.reproducir("dolor");
-      j.invul = 1.5;
-      if (j.vidas <= 0) { morir("tinta"); return; }
-      deps.aviso("¡La tinta te alcanzó! Perdiste una vida");
-    }
-    terminarEvento();
-  }
-
   function tomarEstrella(p) {
     const premio = 15 * valorMoneda();
     monedas += premio;
+    alejarBorrador(20);
     Snd.reproducir("comprar");
     temblor = 0.15;
     chispas(p.x + 6, p.y + 6, ["#ffe08a", "#fff8c8", "#f2a93b", "#ffffff"], 22);
@@ -530,13 +515,13 @@ window.MonkyCarrera = function (deps) {
     Snd.reproducir("caer");
     if (poderes.escudo <= 0) {
       j.vidas--;
-      if (sombra.activa) sombra.distancia -= 55;
+      if (borrador.activa) borrador.distancia -= 55; // tropezar acerca al Borrador
       if (j.vidas <= 0) { morir("vacío"); return; }
     }
     iniciarRescate();
   }
 
-  /* Burbuja de sueño: lleva a Monky al próximo suelo seguro */
+  /* Globo de pintura: lleva a Monky al próximo suelo seguro */
   function iniciarRescate() {
     const j = jugador;
     let destino = null;
@@ -571,14 +556,15 @@ window.MonkyCarrera = function (deps) {
       j.enSuelo = true;
       j.invul = 1.5;
       accionPiloto = null;
-      deps.aviso("¡Una burbuja de sueño te rescató!");
+      deps.aviso("¡Un globo de pintura te rescató!");
     }
   }
 
   function morir(motivo) {
     motivoFin = motivo;
     estado = "muerte";
-    temporizador = motivo === "atrapado" ? 1.8 : 1.3;
+    temporizador = motivo === "borrado" ? 2 : 1.3;
+    if (motivo === "borrado") Snd.reproducir("borrar");
     jugador.vy = -280;
     Snd.reproducir("perder");
     temblor = 0.4;
@@ -617,6 +603,7 @@ window.MonkyCarrera = function (deps) {
           Snd.reproducir("aplastar");
           efectos.push({ tipo: "destello", x: e.pos.x + e.w / 2, y: e.pos.y + 2, vida: 0.3, total: 0.3 });
           chispas(e.pos.x + e.w / 2, e.pos.y + 4, ["#b294f0", "#fff7e8", "#f2c14e"], 10);
+          alejarBorrador(14);
           // Combo: pisar varios enemigos sin tocar el suelo da monedas extra
           j.combo++;
           if (j.combo >= 2) {
@@ -661,6 +648,7 @@ window.MonkyCarrera = function (deps) {
           if (m.grupo && t.gruposRestantes[m.grupo] !== undefined && --t.gruposRestantes[m.grupo] === 0) {
             const extra = 2 * valorMoneda();
             monedas += extra;
+            alejarBorrador(8);
             Snd.reproducir("grupo");
             chispas(m.x + 6, m.y + 6, ["#ffe08a", "#fff7e8", "#f2c14e"], 12);
             efectos.push({ tipo: "texto", x: m.x - 8, y: m.y - 8, vida: 0.9, total: 0.9, contenido: "GRUPO +" + extra });
@@ -694,46 +682,69 @@ window.MonkyCarrera = function (deps) {
   }
 
   /* -------------------------------------------------------
-     SOMBRA GIGANTE (solo en la Pesadilla)
+     EL GRAN BORRADOR
+     Persigue a Monky toda la carrera. "distancia" va de 150
+     (lejos, apenas asoma la goma) a 0 (lo alcanza: fin).
+     - Arremete cada tanto (más fuerte con la dificultad), pero
+       si Monky no tropieza nunca llega a alcanzarlo.
+     - Cada tropiezo lo acerca 55.
+     - Pisar enemigos, completar grupos de monedas, atrapar
+       estrellas y el impulso lo hacen retroceder.
      ------------------------------------------------------- */
-  function actualizarSombra(dt) {
-    const enPesadilla = temaVisible === "pesadilla";
-    const tinta = !enPesadilla && evento && evento.tipo === "tinta" && evento.fase === "activo";
-    const debe = enPesadilla || tinta;
-    if (debe && !sombra.activa) {
-      sombra.activa = true;
-      sombra.tipo = enPesadilla ? "sombra" : "tinta";
-      sombra.distancia = 150;
-      sombra.reloj = enPesadilla ? 6 : 3.5;
-      if (enPesadilla) deps.aviso("¡Una sombra gigante te persigue! No te detengas");
-    }
-    if (!debe && sombra.activa) sombra.activa = false;
-    sombra.alfa = limitar(sombra.alfa + (sombra.activa ? dt : -dt) * 1.5, 0, 1);
-    sombra.anim += dt;
-    if (!sombra.activa) { sombra.distancia = Math.min(150, sombra.distancia + 40 * dt); return; }
+  function alejarBorrador(cuanto) {
+    if (!borrador.activa) return;
+    borrador.distancia = Math.min(150, borrador.distancia + cuanto);
+  }
 
-    // Se acerca en arremetidas y se aleja si Monky corre sin tropezar
-    sombra.reloj -= dt;
-    if (sombra.reloj <= 0) {
-      sombra.arremetida = 1.2;
-      sombra.reloj = sombra.tipo === "tinta" ? 4.5 + Math.random() * 2 : 7 + Math.random() * 4;
+  function actualizarBorrador(dt) {
+    if (!borrador.activa && metros >= 25 && estado === "jugando") {
+      borrador.activa = true;
+      borrador.distancia = 150;
+      borrador.reloj = 6;
+      deps.aviso("¡El Gran Borrador quiere borrar tus dibujos! Corre y no tropieces");
+      Snd.reproducir("motor");
+    }
+    borrador.alfa = limitar(borrador.alfa + (borrador.activa ? dt : -dt) * 1.5, 0, 1);
+    borrador.anim += dt;
+    if (!borrador.activa) return;
+
+    const d = G.dificultad(metros);
+    borrador.furia = Math.max(0, borrador.furia - dt);
+    borrador.reloj -= dt;
+    if (borrador.reloj <= 0) {
+      // Arremetida: con dificultad máxima resta 42 y luego se recupera 8/s durante al menos 6 s
+      borrador.arremetida = 1.1 + 0.3 * d;
+      borrador.reloj = (borrador.furia > 0 ? 2.8 : 8 - 2 * d) + Math.random() * 3;
       temblor = 0.2;
+      Snd.reproducir("motor");
     }
-    if (sombra.arremetida > 0) { sombra.arremetida -= dt; sombra.distancia -= 22 * dt; }
-    else sombra.distancia = Math.min(150, sombra.distancia + 7 * dt);
-    if (poderes.impulso > 0) sombra.distancia = Math.min(150, sombra.distancia + 30 * dt);
+    if (borrador.arremetida > 0) { borrador.arremetida -= dt; borrador.distancia -= (22 + 8 * d) * dt; }
+    else borrador.distancia = Math.min(150, borrador.distancia + 8 * dt);
+    if (poderes.impulso > 0) borrador.distancia = Math.min(150, borrador.distancia + 30 * dt);
 
-    if (sombra.distancia <= 0 && estado === "jugando" && !rescate && sombra.tipo === "tinta") { tintaAlcanza(); return; }
-    if (sombra.distancia <= 0 && estado === "jugando" && !rescate) {
+    // Migas de goma que salen de la goma gigante
+    if (borrador.distancia < 120 && Math.random() < 0.5) {
+      const frente = frenteBorrador();
+      migas.push({ x: frente - 2, y: G.FILA_BASE * T - 30 - Math.random() * 30, vx: -20 - Math.random() * 40, vy: -20 - Math.random() * 30, vida: 0.8, color: Math.random() < 0.5 ? "#ff8fab" : "#c9b8b0" });
+    }
+
+    if (borrador.distancia <= 0 && estado === "jugando" && !rescate) {
       if (poderes.escudo > 0) {
         poderes.escudo = 0;
-        sombra.distancia = 90;
+        borrador.distancia = 90;
         efectos.push({ tipo: "anillo", x: jugador.x + 5, y: jugador.y + 9, vida: 0.5, total: 0.5, color: "#7aa6cf" });
-        deps.aviso("¡El escudo te salvó de la sombra!");
+        deps.aviso("¡El escudo te salvó del Gran Borrador!");
       } else {
-        morir("atrapado");
+        morir("borrado");
       }
     }
+  }
+
+  /* X del mundo donde está el borde de la goma */
+  function frenteBorrador() {
+    const jx = jugador.x - camX;
+    const frente = jx - 2 - (Math.max(0, borrador.distancia) / 150) * (jx - 30);
+    return camX + frente;
   }
 
   /* -------------------------------------------------------
@@ -812,6 +823,16 @@ window.MonkyCarrera = function (deps) {
     return fondos[clave];
   }
 
+  /* Prepara los fondos de los 4 mundos (y su cielo a este tamaño) al empezar,
+     así el primer cambio de mundo no traba el juego */
+  let lienzoPrueba = null;
+  function precargarFondos() {
+    if (!lienzoPrueba) lienzoPrueba = S.crearCanvas(W, H);
+    if (lienzoPrueba.width !== W || lienzoPrueba.height !== H) { lienzoPrueba.width = W; lienzoPrueba.height = H; }
+    const c = lienzoPrueba.getContext("2d");
+    G.MUNDOS.forEach((m) => fondoDe(m, 0).dibujar(c, 0, 0, W, H));
+  }
+
   /* -------------------------------------------------------
      ACTUALIZAR
      ------------------------------------------------------- */
@@ -823,7 +844,8 @@ window.MonkyCarrera = function (deps) {
     if (cartelMision) { cartelMision.t -= dt; if (cartelMision.t <= 0) cartelMision = null; }
     if (cartelEvento) { cartelEvento.t -= dt; if (cartelEvento.t <= 0) cartelEvento = null; }
     destelloMundo = Math.max(0, destelloMundo - dt);
-    manchaTinta = Math.max(0, manchaTinta - dt * 0.8);
+    for (const m of migas) { m.vida -= dt; m.vy += 160 * dt; m.x += m.vx * dt; m.y += m.vy * dt; }
+    migas = migas.filter((m) => m.vida > 0);
 
     // Si el trabajador se atrasa (muy raro), el juego espera en lugar de dejar caer a Monky
     if (estado === "jugando" && generador.esperando() && tramos.length &&
@@ -844,7 +866,7 @@ window.MonkyCarrera = function (deps) {
       actualizarObjetos(dt);
       actualizarMundo();
       actualizarEventos(dt);
-      actualizarSombra(dt);
+      actualizarBorrador(dt);
       // Primera ruta doble: explicarla
       const doble = tramos.find((t) => t.rutaDoble && t.x0 * T > jugador.x && t.x0 * T < jugador.x + W);
       if (doble && !avisosVistos.doble) { avisosVistos.doble = true; deps.aviso("¡Dos caminos! Arriba hay más monedas"); }
@@ -861,7 +883,7 @@ window.MonkyCarrera = function (deps) {
       temporizador -= dt;
       jugador.vy = Math.min(FIS.caidaMax, jugador.vy + FIS.grav * dt);
       jugador.y += jugador.vy * dt;
-      if (motivoFin === "atrapado") sombra.distancia = Math.max(-60, sombra.distancia - 60 * dt);
+      if (motivoFin === "borrado") borrador.distancia = Math.max(-80, borrador.distancia - 70 * dt);
       if (temporizador <= 0) {
         estado = "fin";
         deps.fin({ tipo: "carrera", metros: metros, monedas: monedas, poderes: poderesUsados, motivo: motivoFin, tiempo: tiempoPartida });
@@ -898,7 +920,7 @@ window.MonkyCarrera = function (deps) {
       if (x > W || x + t.ancho * T < 0) return;
       ctx.drawImage(t.lienzo, Math.round(x), -cy);
     });
-    // Portales de sueño en cada cambio de mundo
+    // Portales en cada cambio de mundo
     const primero = Math.ceil((cx - 40) / T / G.LARGO_MUNDO), ultimo = Math.floor((cx + W + 40) / T / G.LARGO_MUNDO);
     for (let k = Math.max(1, primero); k <= ultimo; k++) {
       const col = k * G.LARGO_MUNDO;
@@ -948,7 +970,7 @@ window.MonkyCarrera = function (deps) {
         const p = e.pos || G.posicion(e, jugador.x, t.vel);
         const x = Math.round(p.x - cx), y = Math.round(p.y - cy);
         // Aviso "!" en el borde para los enemigos rápidos que todavía no se ven
-        if ((e.tipo === "tronco" || e.tipo === "cuervo") && x > W - 2 && x < W + 190 && estado === "jugando") {
+        if ((e.tipo === "tronco" || e.tipo === "cuervo" || e.tipo === "lapiz" || e.tipo === "chispa" || e.tipo === "engranaje") && x > W - 2 && x < W + 190 && estado === "jugando") {
           avisoBorde(limitar(y + 2, 26, H - 30), x - W);
         }
         if (x < -40 || x > W + 40) return;
@@ -961,7 +983,7 @@ window.MonkyCarrera = function (deps) {
             break;
           }
           case "hongo": {
-            const cuadro = S.hongo[t.tema === "pesadilla" ? 1 : 0];
+            const cuadro = S.hongo[0];
             if (e.aplastado > 0) ctx.drawImage(cuadro.der, x - 1, y + 8, 16, 6);
             else ctx.drawImage(cuadro.der, x - 1, y);
             break;
@@ -969,10 +991,42 @@ window.MonkyCarrera = function (deps) {
           case "tronco":
             ctx.drawImage(S.tronco[Math.floor(p.t * 10) % 4].der, x - 1, y);
             break;
-          case "polilla":
-            if (e.aplastado > 0) ctx.drawImage(S.polilla[1].der, x - 2, y + 4, 16, 6);
-            else ctx.drawImage(S.polilla[Math.floor(e.anim * 10) % 2].izq, x - 2, y - 1);
+          case "polilla": {
+            // En el Bosque de Colores es una mariposa
+            const lista = t.tema === "bosque" ? S.mariposa : S.polilla;
+            if (e.aplastado > 0) ctx.drawImage(lista[1].der, x - 2, y + 4, 16, 6);
+            else ctx.drawImage(lista[Math.floor(e.anim * 10) % 2].izq, x - 2, y - 1);
             break;
+          }
+          case "garabato":
+            if (e.aplastado > 0) ctx.drawImage(S.garabato[0].der, x - 1, y + 6, 16, 6);
+            else ctx.drawImage(S.garabato[f % 3].izq, x - 1, y + e.h - 14);
+            break;
+          case "lapiz": {
+            // Líneas de velocidad detrás del lápiz
+            ctx.fillStyle = "rgba(90, 95, 115, 0.5)";
+            for (let k = 0; k < 3; k++) ctx.fillRect(x + 20 + k * 5 + (Math.floor(tiempo * 20) % 3), y + 1 + (k % 2) * 2, 3, 1);
+            ctx.drawImage(S.lapiz.der, x - 1, y - 1);
+            break;
+          }
+          case "engranaje":
+            ctx.drawImage(S.engranaje[Math.floor(p.t * 12) % 4].der, x - 2, y - 2);
+            break;
+          case "chispa":
+            ctx.drawImage(S.chispa[Math.floor(e.anim * 14) % 2].der, x - 1, y - 1);
+            break;
+          case "prensa": {
+            // Vástago desde arriba y placa de la prensa
+            const placa = Math.round(p.placa - cy);
+            ctx.fillStyle = "#16152a"; ctx.fillRect(x + 4, 0, 8, placa - 8);
+            ctx.fillStyle = "#9aa3b8"; ctx.fillRect(x + 5, 0, 6, placa - 8);
+            ctx.fillStyle = "#c9d0dd"; ctx.fillRect(x + 5, 0, 1, placa - 8);
+            ctx.fillStyle = "#16152a"; ctx.fillRect(x - 2, placa - 10, 20, 11);
+            ctx.fillStyle = "#5a6278"; ctx.fillRect(x - 1, placa - 9, 18, 9);
+            for (let k = 0; k < 18; k++) { ctx.fillStyle = (k + Math.floor(tiempo * 4)) % 6 < 3 ? "#f2c14e" : "#16152a"; ctx.fillRect(x - 1 + k, placa - 3, 1, 2); }
+            ctx.fillStyle = "#7b849c"; ctx.fillRect(x - 1, placa - 9, 18, 1);
+            break;
+          }
           case "dron":
             ctx.drawImage(S.dron[f % 2].izq, x - 1, y - 1);
             break;
@@ -1071,44 +1125,56 @@ window.MonkyCarrera = function (deps) {
     ctx.fillRect(Math.round(x - r * 0.5), Math.round(y - r * 0.6), 2, 1);
   }
 
-  function dibujarSombra(cx, cy) {
-    if (sombra.alfa <= 0) return;
-    const jx = jugador.x - cx;
-    // Siempre asoma por la izquierda y se acerca a Monky cuando la distancia baja
-    // Siempre asoma (con sus ojos) y llega a Monky cuando la distancia es 0, en cualquier ancho de pantalla
-    const frente = Math.round(jx - 8 - (sombra.distancia / 150) * (jx - 40));
+  /* Pérdida de color: cuanto más cerca está el Borrador, más gris se ve el mundo */
+  function quitarColor() {
+    if (borrador.alfa <= 0) return;
+    const k = limitar((105 - borrador.distancia) / 105, 0, 1) * borrador.alfa;
+    if (k <= 0.01) return;
+    ctx.globalCompositeOperation = "saturation";
+    ctx.globalAlpha = Math.min(0.92, k * 1.1);
+    ctx.fillStyle = "#808080";
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 1;
+  }
+
+  function dibujarBorrador(cx, cy) {
+    if (borrador.alfa <= 0) return;
+    const frente = Math.round(frenteBorrador() - cx);
     const suelo = G.FILA_BASE * T - cy;
-    ctx.globalAlpha = sombra.alfa;
-    // Oscuridad que trae detrás
-    if (estado === "muerte" && motivoFin === "atrapado") {
-      ctx.fillStyle = "rgba(5, 2, 8, 0.6)";
+    ctx.globalAlpha = borrador.alfa;
+    // Lo que queda detrás de la máquina está borrado: papel en blanco
+    const borde = frente - 96;
+    if (borde > 0) {
+      ctx.fillStyle = "rgba(246, 239, 224, 0.92)";
+      ctx.fillRect(0, 0, borde, H);
+      for (let x = Math.max(0, borde); x < borde + 14; x += 2) {
+        ctx.fillStyle = "rgba(246, 239, 224, " + ((borde + 14 - x) / 14 * 0.8).toFixed(2) + ")";
+        ctx.fillRect(x, 0, 2, H);
+      }
+      ctx.fillStyle = "rgba(156, 195, 230, 0.5)";
+      for (let y = 10; y < H; y += 10) ctx.fillRect(0, y, borde, 1);
+    }
+    if (estado === "muerte" && motivoFin === "borrado") {
+      ctx.fillStyle = "rgba(246, 239, 224, " + Math.min(0.85, (2 - temporizador) * 0.6).toFixed(2) + ")";
       ctx.fillRect(0, 0, W, H);
     }
-    const esTinta = sombra.tipo === "tinta";
-    const oscuro = esTinta ? "10, 12, 34" : "5, 2, 8";
-    if (frente - 50 > 0) {
-      ctx.fillStyle = "rgba(" + oscuro + ", 0.85)";
-      ctx.fillRect(0, 0, frente - 50, H);
+    const tiembla = borrador.arremetida > 0 ? Math.round((Math.random() - 0.5) * 2) : 0;
+    const sprite = S.borrador[Math.floor(borrador.anim * (borrador.arremetida > 0 ? 14 : 8)) % 4].der;
+    const x = frente - 98, y = suelo - 82 + Math.round(Math.sin(borrador.anim * 5) * 1) + tiembla;
+    ctx.drawImage(sprite, x, y);
+    // Humo de la chimenea
+    for (let k = 0; k < 4; k++) {
+      const f = ((borrador.anim * (borrador.arremetida > 0 ? 1.2 : 0.6) + k / 4) % 1);
+      const r = 2 + Math.round(f * 4);
+      ctx.fillStyle = "rgba(60, 64, 80, " + (0.7 - f * 0.65).toFixed(2) + ")";
+      ctx.fillRect(Math.round(x + 16 - r - f * 14), Math.round(y + 2 - f * 26), r * 2, r * 2);
     }
-    for (let x = Math.max(0, frente - 50); x < frente - 30; x += 2) {
-      ctx.fillStyle = "rgba(" + oscuro + ", " + ((frente - 30 - x) / 20 * 0.8).toFixed(2) + ")";
-      ctx.fillRect(x, 0, 2, H);
-    }
-    if (esTinta) {
-      const sprite = S.tinta[Math.floor(sombra.anim * 7) % 4].der;
-      ctx.drawImage(sprite, frente - 58, suelo - 84 + Math.round(Math.sin(sombra.anim * 3) * 2));
-      // Gotas que caen de la ola
-      for (let i = 0; i < 5; i++) {
-        const fx = frente - 50 + ((i * 13) % 40), fy = (sombra.anim * 70 + i * 37) % H;
-        ctx.fillStyle = "#1b2050"; ctx.fillRect(Math.round(fx), Math.round(fy), 2, 3);
-      }
-    } else {
-      const sprite = S.sombra[Math.floor(sombra.anim * 6) % 4].der;
-      ctx.drawImage(sprite, frente - 54, suelo - 90 + Math.round(Math.sin(sombra.anim * 2) * 2));
-    }
-    // Viñeta roja cuando está muy cerca
-    if (sombra.distancia < 50 && Math.floor(tiempo * 4) % 2) {
-      ctx.fillStyle = "rgba(255, 40, 70, 0.10)";
+    // Migas de goma
+    for (const m of migas) { ctx.fillStyle = m.color; ctx.fillRect(Math.round(m.x - cx), Math.round(m.y - cy), 1, 1); }
+    // Aviso rojo cuando está muy cerca
+    if (borrador.distancia < 50 && Math.floor(tiempo * 4) % 2) {
+      ctx.fillStyle = "rgba(255, 40, 70, 0.14)";
       ctx.fillRect(0, 0, W, 3); ctx.fillRect(0, H - 3, W, 3); ctx.fillRect(0, 0, 3, H); ctx.fillRect(W - 3, 0, 3, H);
     }
     ctx.globalAlpha = 1;
@@ -1246,22 +1312,13 @@ window.MonkyCarrera = function (deps) {
     dibujarObjetos(cx, cy);
     dibujarJugador(cx, cy);
     dibujarParticulas(cx, cy);
-    dibujarSombra(cx, cy);
+    quitarColor();
+    dibujarBorrador(cx, cy);
     fondoDe(f.actual, f.ciclo).dibujarFrente(ctx, cx, tiempo, W, H);
     if (destelloMundo > 0) {
       ctx.globalAlpha = Math.min(0.45, destelloMundo);
       ctx.fillStyle = colorMundo;
       ctx.fillRect(0, 0, W, H);
-      ctx.globalAlpha = 1;
-    }
-    if (manchaTinta > 0) {
-      // Salpicaduras de tinta en los bordes
-      ctx.globalAlpha = Math.min(0.85, manchaTinta);
-      ctx.fillStyle = "#0a0c22";
-      for (let i = 0; i < 14; i++) {
-        const r = 10 + (i * 7) % 18, ax = (i * 53) % W, ay = i % 2 ? (i * 31) % 40 : H - (i * 23) % 40;
-        ctx.fillRect(Math.round(ax - r / 2), Math.round(ay - r / 2), r, r);
-      }
       ctx.globalAlpha = 1;
     }
     dibujarHUD(record);
@@ -1290,7 +1347,9 @@ window.MonkyCarrera = function (deps) {
       entidades: () => tramos.reduce((s, t) => s + t.entidades.length, 0),
       particulas: () => particulas.length + efectos.length,
       poderes: () => Object.assign({}, poderes),
-      sombra: () => ({ activa: sombra.activa, distancia: Math.round(sombra.distancia) }),
+      sombra: () => ({ activa: borrador.activa, distancia: Math.round(borrador.distancia) }),
+      borrador: () => ({ activa: borrador.activa, distancia: Math.round(borrador.distancia), furia: borrador.furia, arremetida: borrador.arremetida }),
+      acercarBorrador(n) { borrador.distancia -= n; },
       mundo: () => temaVisible,
       generador: () => Object.assign({ trabajador: generador.enTrabajador, cola: generador.cola.length }, generador.estado),
       piloto(valor) { piloto = !!valor; },
@@ -1299,7 +1358,7 @@ window.MonkyCarrera = function (deps) {
       duracion: () => Object.assign({ radioIman: radioIman }, DURACION),
       evento: () => evento && Object.assign({}, evento),
       estrellas: () => tramos.reduce((l, t) => l.concat(t.poderes.filter((p) => p.tipo === "estrella").map((p) => ({ x: Math.round(p.x), tomado: p.tomado }))), []),
-      forzarEvento(tipo) { proximoEvento = metros; const r = Math.random; if (tipo) Math.random = () => (tipo === "tinta" ? 0.1 : tipo === "dobles" ? 0.6 : 0.9); iniciarEvento(); Math.random = r; },
+      forzarEvento(tipo) { proximoEvento = metros; const r = Math.random; if (tipo) Math.random = () => (tipo === "furia" ? 0.1 : tipo === "dobles" ? 0.6 : 0.9); iniciarEvento(); Math.random = r; },
       sinEventos(v) { proximoEvento = v ? 1e9 : metros + 50; },
       sinPoderes(valor) { pruebaSinPoderes = Array.isArray(valor) ? valor : !!valor; },
       activarPoder(tipo) { activarPoder(tipo); },

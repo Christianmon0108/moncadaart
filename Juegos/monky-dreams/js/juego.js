@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — ESQUELETO DEL JUEGO
+   MONKY RUN: EL GRAN BORRADOR — ESQUELETO DEL JUEGO
    Menú principal, modos (Carrera infinita y Aventura),
    pausa, sonido, pantalla completa, récord y bucle a paso
    fijo de 1/60 s.
@@ -72,52 +72,58 @@
   const tienda = window.MonkyTienda({ sprites: S, alCambiarEquipo: () => { aplicarEquipo(); actualizarMenu(); } });
 
   /* -------------------------------------------------------
-     PORTADA (dibujada en el lienzo)
+     PORTADA (dibujada en el lienzo): Monky huye del Gran
+     Borrador sobre una hoja de cuaderno
      ------------------------------------------------------- */
-  const fondoMenu = ESC.construirFondo("noche", 0);
+  const fondoMenu = ESC.construirFondo("cuaderno", 0);
   const logoMonky = HUD.construirPalabra(S.crearCanvas, "MONKY", ["#fffaf0", "#fff1d6", "#f3e4c8", "#e0c9a2"]);
-  const logoDreams = HUD.construirPalabra(S.crearCanvas, "DREAMS", ["#ffe08a", "#ffb35a", "#e8792e", "#c95f1f"]);
-  const nubeTitulo = (function () {
-    const w = 84, h = 22, c = S.crearCanvas(w, h), g = c.getContext("2d");
-    const dentro = (x, y) => x >= 0 && y >= 0 && x < w && y < h && (Math.hypot(x - 14, y - 13) < 8 || Math.hypot(x - 30, y - 9) < 9 ||
-      Math.hypot(x - 42, y - 8) < 8.5 || Math.hypot(x - 54, y - 9) < 8 || Math.hypot(x - 69, y - 13) < 8 || (y > 10 && y < 20 && x > 8 && x < 76));
-    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-      if (!dentro(x, y)) continue;
-      const borde = !dentro(x - 1, y) || !dentro(x + 1, y) || !dentro(x, y - 1) || !dentro(x, y + 1);
-      g.fillStyle = borde ? "#16152a" : !dentro(x, y - 2) ? "#ffffff" : y > h - 5 ? "#c9b8ea" : y > h - 7 ? "#e7dcf6" : "#fff4de";
-      g.fillRect(x, y, 1, 1);
-    }
-    return c;
-  })();
-  let zetas = [];
-  let relojZetas = 0;
+  const logoRun = HUD.construirPalabra(S.crearCanvas, "RUN", ["#ffe08a", "#ffb35a", "#e8792e", "#c95f1f"]);
+  let migasMenu = [];
 
   function animarMenu(dt) {
     if (estado === "tienda") tienda.dibujar(dt);
-    relojZetas -= dt;
-    if (relojZetas <= 0) { relojZetas = 0.9; zetas.push({ x: 10, y: 0, vida: 2.6, fase: Math.random() * 6 }); }
-    zetas.forEach((z) => { z.vida -= dt; z.y -= 11 * dt; z.x += (6 + Math.sin(tiempo * 2 + z.fase) * 8) * dt; });
-    zetas = zetas.filter((z) => z.vida > 0);
+    if (Math.random() < 0.4) migasMenu.push({ x: 0, y: 0, vx: -20 - Math.random() * 30, vy: -10 - Math.random() * 30, vida: 0.7, color: Math.random() < 0.5 ? "#ff8fab" : "#c9b8b0" });
+    migasMenu.forEach((m) => { m.vida -= dt; m.vy += 150 * dt; m.x += m.vx * dt; m.y += m.vy * dt; });
+    migasMenu = migasMenu.filter((m) => m.vida > 0);
   }
 
   function dibujarMenu(W, H) {
-    const camX = 300 + Math.sin(tiempo * 0.05) * 300;
+    const camX = tiempo * 30;
     fondoMenu.dibujar(ctx, camX, tiempo, W, H);
-    const arriba = Math.max(8, Math.round((H - 180) / 2) + 6);
+    // Suelo: borde de hojas sobre cartón
+    const suelo = H - 26;
+    ctx.fillStyle = "#16152a"; ctx.fillRect(0, suelo - 1, W, 1);
+    ctx.fillStyle = "#f6efe0"; ctx.fillRect(0, suelo, W, 5);
+    ctx.fillStyle = "#9cc3e6"; ctx.fillRect(0, suelo + 2, W, 1);
+    ctx.fillStyle = "#9a7650"; ctx.fillRect(0, suelo + 5, W, H - suelo - 5);
+    for (let x = -Math.floor(camX % 12); x < W; x += 12) { ctx.fillStyle = "#b8946a"; ctx.fillRect(x, suelo + 10, 4, 1); }
+
+    const arriba = Math.max(6, Math.round((H - 180) / 2) + 4);
     const flota = Math.round(Math.sin(tiempo * 1.3) * 1.5);
-    ctx.drawImage(logoMonky, Math.round(W / 2 - logoMonky.width / 2), arriba + flota);
-    ctx.drawImage(logoDreams, Math.round(W / 2 - logoDreams.width / 2), arriba + 26 + flota);
-    const sub = "UN JUEGO DE MONCADAART";
-    HUD.texto(ctx, sub, Math.round(W / 2 - HUD.anchoTexto(sub) / 2), arriba + 56, "#ffb35a", "#16152a");
-    const ny = arriba + 84 + Math.round(Math.sin(tiempo * 1.1) * 2);
-    const nx = Math.round(W * 0.78 - nubeTitulo.width / 2);
-    ctx.drawImage(nubeTitulo, nx, ny);
-    ctx.drawImage(S.mono.dormido[Math.floor(tiempo * 1.2) % 2].der, nx + 33, ny - 15);
-    zetas.forEach((z) => {
-      ctx.globalAlpha = Math.min(1, z.vida / 2.6);
-      HUD.texto(ctx, "Z", nx + 52 + z.x, ny - 18 + z.y, "#fff1d0", "#16152a");
-    });
-    ctx.globalAlpha = 1;
+    const anchoLogo = logoMonky.width + 10 + logoRun.width;
+    const lx = Math.round(W / 2 - anchoLogo / 2);
+    ctx.drawImage(logoMonky, lx, arriba + flota);
+    ctx.drawImage(logoRun, lx + logoMonky.width + 10, arriba + flota);
+    const sub = "EL GRAN BORRADOR";
+    const anchoSub = HUD.anchoTexto(sub, 2);
+    HUD.panel(ctx, Math.round(W / 2 - anchoSub / 2 - 6), arriba + 29, anchoSub + 12, 16);
+    HUD.texto(ctx, sub, Math.round(W / 2 - anchoSub / 2), arriba + 32, "#ff8fab", "#16152a", 2);
+    const firma = "UN JUEGO DE MONCADAART";
+    HUD.texto(ctx, firma, Math.round(W / 2 - HUD.anchoTexto(firma) / 2), arriba + 49, "#5a5f73", "#fff7e8");
+
+    // El Gran Borrador persigue al personaje elegido
+    const mx = Math.round(Math.min(W - 26, W * 0.5 + 118));
+    const bx = mx - 116 + Math.round(Math.sin(tiempo * 0.9) * 6);
+    const sprite = S.borrador[Math.floor(tiempo * 9) % 4].der;
+    ctx.drawImage(sprite, bx, suelo - 82);
+    for (let k = 0; k < 4; k++) {
+      const f = ((tiempo * 0.6 + k / 4) % 1), r = 2 + Math.round(f * 4);
+      ctx.fillStyle = "rgba(60, 64, 80, " + (0.6 - f * 0.55).toFixed(2) + ")";
+      ctx.fillRect(Math.round(bx + 16 - r - f * 14), Math.round(suelo - 80 - f * 24), r * 2, r * 2);
+    }
+    migasMenu.forEach((m) => { ctx.fillStyle = m.color; ctx.fillRect(Math.round(bx + 96 + m.x), Math.round(suelo - 20 + m.y), 1, 1); });
+    const monky = S.mono.correr[Math.floor(tiempo * 12) % 6].der;
+    ctx.drawImage(monky, mx - 9, suelo - monky.height);
     fondoMenu.dibujarFrente(ctx, camX, tiempo, W, H);
   }
 
@@ -196,7 +202,7 @@
       const alcanzablesAntes = tienda.alcanzables().map((a) => a.id);
       const g = cerrarPartida(r) || { ganadas: 0, premios: [], saldo: D.saldo(), record: D.record(), nuevoRecord: false };
       record = g.record;
-      $("fc-titulo").textContent = r.motivo === "atrapado" ? "¡La sombra te atrapó!" : "Fin de la carrera";
+      $("fc-titulo").textContent = r.motivo === "borrado" ? "¡El Gran Borrador te alcanzó!" : "Fin de la carrera";
       $("fc-metros").textContent = r.metros + " m";
       $("fc-monedas").textContent = r.monedas;
       $("fc-record").textContent = record.metros + " m";
@@ -223,7 +229,7 @@
       $("res-tiempo").textContent = formatoTiempo(r.tiempo);
       $("res-vidas").textContent = r.vidas + "/" + r.vidasMax;
       $("res-mensaje").textContent = r.monedas === r.total
-        ? "¡Sueño perfecto! Reuniste todas las monedas."
+        ? "¡Obra perfecta! Reuniste todas las monedas."
         : "Reuniste " + r.monedas + " de " + r.total + " monedas. Aún quedan algunas por descubrir.";
       mostrarPantalla(ui.victoria);
     } else {

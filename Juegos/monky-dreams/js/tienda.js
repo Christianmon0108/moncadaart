@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — TIENDA Y MISIONES (interfaz)
+   MONKY RUN — TIENDA Y MISIONES (interfaz)
    La tienda también es la selección de personaje: cada
    artículo tiene vista previa animada, precio, estado
    (bloqueado, tuyo, equipado) y la acción que corresponde.

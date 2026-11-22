@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — GENERADOR EN SEGUNDO PLANO (Web Worker)
+   MONKY RUN — GENERADOR EN SEGUNDO PLANO (Web Worker)
    Crea y valida los tramos fuera del hilo principal, así el
    juego no se traba en celulares lentos. Es el mismo
    generador (misma semilla, mismos tramos) que en las pruebas.

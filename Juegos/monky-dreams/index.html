@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Monky Dreams — MoncadaArt</title>
-  <meta name="description" content="Monky Dreams: carrera infinita en pixel art protagonizada por Monky, la mascota de MoncadaArt.">
+  <title>Monky Run: El Gran Borrador — MoncadaArt</title>
+  <meta name="description" content="Monky Run: El Gran Borrador. Carrera infinita en pixel art: Monky, un artista, escapa de una máquina gigante que quiere borrar sus creaciones.">
   <meta name="theme-color" content="#0d0f26">
   <link rel="icon" href="../../assets/img/perfil.jpeg">
 
@@ -13,7 +13,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Monky Dreams">
+  <meta name="apple-mobile-web-app-title" content="Monky Run">
   <link rel="apple-touch-icon" href="media/icono-192.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
     <div class="escenario">
 
       <canvas id="juego" width="320" height="180" tabindex="-1"
-        aria-label="Monky Dreams, juego de plataformas en pixel art"></canvas>
+        aria-label="Monky Run: El Gran Borrador, carrera infinita en pixel art"></canvas>
 
       <!-- Carrera: mitad izquierda = deslizarse, mitad derecha = saltar -->
       <div class="zona zona-abajo" id="zona-abajo" aria-hidden="true">
@@ -55,7 +55,7 @@
 
       <!-- MENÚ PRINCIPAL: el logotipo y el personaje se dibujan en el lienzo -->
       <section class="pantalla pantalla-inicio" id="pantalla-inicio" aria-labelledby="titulo-juego">
-        <h1 id="titulo-juego" class="solo-lectores">Monky Dreams, un juego de MoncadaArt</h1>
+        <h1 id="titulo-juego" class="solo-lectores">Monky Run: El Gran Borrador, un juego de MoncadaArt</h1>
         <div class="menu-arriba">
           <div class="saldo" aria-label="Monedas para la tienda">
             <span class="icono-moneda" aria-hidden="true"></span><span data-saldo>0</span>
@@ -129,7 +129,7 @@
       <section class="pantalla" id="pantalla-pausa" aria-labelledby="titulo-pausa" hidden>
         <div class="marco">
           <h2 id="titulo-pausa">Pausa</h2>
-          <p class="bajada">Monky sigue soñando…</p>
+          <p class="bajada">Monky recupera el aliento… El Gran Borrador espera.</p>
           <div class="acciones">
             <button class="btn btn-principal" type="button" data-accion="continuar" data-principal>Continuar</button>
             <button class="btn" type="button" data-accion="reintentar">Reiniciar</button>
@@ -165,8 +165,8 @@
       <!-- AVENTURA: DERROTA -->
       <section class="pantalla" id="pantalla-derrota" aria-labelledby="titulo-derrota" hidden>
         <div class="marco">
-          <h2 id="titulo-derrota">Fin del sueño</h2>
-          <p class="bajada">Las pesadillas ganaron esta vez. ¡Monky quiere intentarlo otra vez!</p>
+          <h2 id="titulo-derrota">¡Boceto borrado!</h2>
+          <p class="bajada">Esta vez ganaron los bichos. ¡Monky quiere intentarlo otra vez!</p>
           <div class="acciones">
             <button class="btn btn-principal" type="button" data-accion="reintentar" data-principal>Reintentar</button>
             <button class="btn" type="button" data-accion="menu">Menú</button>
@@ -177,7 +177,7 @@
       <!-- AVENTURA: VICTORIA -->
       <section class="pantalla" id="pantalla-victoria" aria-labelledby="titulo-victoria" hidden>
         <div class="marco">
-          <h2 id="titulo-victoria">¡Monky despertó!</h2>
+          <h2 id="titulo-victoria">¡Obra entregada!</h2>
           <p class="bajada" id="res-mensaje"></p>
           <dl class="resultados">
             <div><dt>Monedas</dt><dd id="res-monedas">0</dd></div>

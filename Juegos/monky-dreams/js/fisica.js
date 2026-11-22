@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — FÍSICA
+   MONKY RUN — FÍSICA
    Movimiento, salto y colisiones. Lo usan el juego y las
    pruebas de alcance del nivel, así ambos coinciden siempre.
    ========================================================= */

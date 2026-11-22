@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — ESTILOS (interfaz pixel art)
+   MONKY RUN — ESTILOS (interfaz pixel art)
    El juego ocupa TODA la pantalla. --px es el tamaño de un
    pixel del juego en pantalla (lo calcula pantalla.js), así
    botones y marcos usan la misma retícula que el lienzo.
@@ -172,7 +172,7 @@ body.tactil.retrato .pantalla {
   justify-content: flex-end;
   align-items: flex-start;
   padding: calc(var(--px) * 6) max(calc(var(--px) * 10), var(--seg-izq)) max(calc(var(--px) * 6), var(--seg-inf));
-  background: linear-gradient(to right, rgba(13, 15, 38, .55), transparent 70%);
+  background: linear-gradient(to right, rgba(13, 15, 38, .86) 0, rgba(13, 15, 38, .7) 34%, transparent 62%);
 }
 
 body.tactil.retrato .pantalla-inicio {

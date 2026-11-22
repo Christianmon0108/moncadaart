@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — SPRITES PIXEL ART (16 bits)
+   MONKY RUN — SPRITES PIXEL ART (16 bits)
    Todo el arte se dibuja con código. Los personajes son
    filas de texto: cada carácter es un color de la PALETA
    y "." es transparente. Los objetos redondos (monedas,
@@ -548,7 +548,7 @@ window.MonkySprites = (function () {
     const lienzo = crearCanvas(ancho, alto);
     const ctx = lienzo.getContext("2d");
     filas.forEach((fila, y) => {
-      if (fila.length !== ancho) console.warn("Monky Dreams: fila de sprite irregular", fila);
+      if (fila.length !== ancho) console.warn("Monky Run: fila de sprite irregular", fila);
       for (let x = 0; x < fila.length; x++) {
         const color = paleta[fila[x]];
         if (color) {
@@ -698,58 +698,9 @@ window.MonkySprites = (function () {
     return c;
   }
 
-  /* Sombra gigante de la Pesadilla: 4 cuadros (64x96) */
-  function sombraGigante(cuadroN) {
-    const W = 64, H = 96;
-    const c = crearCanvas(W, H);
-    const g = c.getContext("2d");
-    const borde = (y) => 46 + Math.sin(y * 0.22 + cuadroN * 1.6) * 5 + Math.sin(y * 0.07 + cuadroN) * 3;
-    const dentro = (x, y) => {
-      if (y < 0 || y >= H || x < 0) return false;
-      const cabeza = Math.hypot((x - 30) / 26, (y - 34) / 30) <= 1;
-      const cuerpo = y > 30 && x < borde(y) - (y > 80 ? (y - 80) * 0.8 : 0);
-      return cabeza || cuerpo;
-    };
-    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-      if (dentro(x, y)) {
-        const filo = !dentro(x + 1, y) || !dentro(x, y - 1) || !dentro(x + 2, y);
-        g.fillStyle = filo ? "#2a1f4a" : (x + y * 3) % 11 === 0 ? "#151029" : "#0a0814";
-        g.fillRect(x, y, 1, 1);
-      } else if ((dentro(x - 2, y) || dentro(x - 3, y + 1)) && (x + y + cuadroN) % 2 === 0) {
-        g.fillStyle = "rgba(42, 31, 74, 0.55)";
-        g.fillRect(x, y, 1, 1);
-      }
-    }
-    // Garras que se estiran hacia Monky
-    for (let i = 0; i < 3; i++) {
-      const y0 = 60 + i * 9, largo = 10 + ((cuadroN + i) % 4) * 3;
-      for (let k = 0; k < largo; k++) {
-        g.fillStyle = k > largo - 3 ? "#2a1f4a" : "#0a0814";
-        g.fillRect(Math.round(borde(y0) - 2 + k), y0 + Math.round(Math.sin(k * 0.5 + cuadroN) * 1.5), 2, 2);
-      }
-    }
-    // Ojos
-    [[36, 26], [50, 30]].forEach(([ox, oy], i) => {
-      for (let y = -3; y <= 3; y++) for (let x = -5; x <= 5; x++) {
-        const d = Math.hypot(x / 5, y / 3);
-        if (d > 1) continue;
-        g.fillStyle = d > 0.75 ? "#ff4d6d" : "#ffe0e6";
-        g.fillRect(ox + x, oy + y, 1, 1);
-      }
-      g.fillStyle = "#16152a";
-      g.fillRect(ox + 1 + (cuadroN % 2), oy - 1, 2, 3);
-    });
-    // Boca dentada
-    for (let x = 30; x < 56; x++) {
-      const y = 44 + Math.round((x - 30) * 0.16);
-      g.fillStyle = "#ff4d6d"; g.fillRect(x, y, 1, 4 + (cuadroN % 2));
-      if (x % 3 === 0) { g.fillStyle = "#fff4de"; g.fillRect(x, y, 1, 2); g.fillRect(x, y + 3 + (cuadroN % 2), 1, 1); }
-    }
-    return c;
-  }
 
   /* -------------------------------------------------------
-     TINTA: gota que cae, charco y la pesadilla de tinta
+     TINTA: gota que cae y charco (El Cuaderno)
      ------------------------------------------------------- */
   function gotaTinta(fase) {
     const c = crearCanvas(12, 14), g = c.getContext("2d");
@@ -781,37 +732,6 @@ window.MonkySprites = (function () {
     return c;
   }
 
-  /* Pesadilla de tinta: una ola de tinta con ojos que persigue a Monky */
-  function olaTinta(cuadroN) {
-    const W = 72, H = 88;
-    const c = crearCanvas(W, H), g = c.getContext("2d");
-    // Cresta redondeada arriba, cuerpo ondulante abajo
-    const frente = (y) => 54 + Math.sin(y * 0.18 + cuadroN * 1.4) * 4 + Math.sin(y * 0.05 + cuadroN * 0.7) * 5 - Math.pow(Math.max(0, 22 - y), 2) * 0.09;
-    const dentro = (x, y) => y >= 4 && y < H && x >= 0 && x < frente(y);
-    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-      if (dentro(x, y)) {
-        const filo = !dentro(x + 1, y) || !dentro(x, y - 1);
-        g.fillStyle = filo ? "#4a5ab8" : (x * 3 + y * 5 + cuadroN * 7) % 23 === 0 ? "#2a3270" : (x + y) % 9 === 0 ? "#141838" : "#0a0c22";
-        g.fillRect(x, y, 1, 1);
-      }
-    }
-    // Gotas que salpican al frente
-    for (let i = 0; i < 4; i++) {
-      const y = 20 + ((i * 17 + cuadroN * 5) % 60), x = Math.round(frente(y) + 2 + ((i + cuadroN) % 3) * 3);
-      g.fillStyle = "#1b2050"; g.fillRect(x, y, 3, 3);
-      g.fillStyle = "#4a5ab8"; g.fillRect(x, y, 1, 1);
-    }
-    // Ojos grandes y boca dentada
-    [[40, 30], [52, 34]].forEach(([ox, oy]) => {
-      g.fillStyle = "#05060f"; g.fillRect(ox - 4, oy - 3, 9, 8);
-      g.fillStyle = "#f6efe5"; g.fillRect(ox - 3, oy - 2, 7, 6);
-      g.fillStyle = "#16152a"; g.fillRect(ox + (cuadroN % 2), oy - 1, 3, 4);
-    });
-    g.fillStyle = "#05060f"; g.fillRect(34, 46, 20, 7);
-    g.fillStyle = "#f6efe5";
-    for (let x = 35; x < 53; x += 3) { g.fillRect(x, 46, 2, 2); g.fillRect(x + 1, 51, 2, 2); }
-    return c;
-  }
 
   /* Estrella fugaz (recompensa de evento) */
   function estrella(fase) {
@@ -831,6 +751,150 @@ window.MonkySprites = (function () {
       g.fillRect(x, y, 1, 1);
     }
     g.fillStyle = "#16152a"; g.fillRect(6, 7, 1, 2); g.fillRect(9, 7, 1, 2);
+    return c;
+  }
+
+  /* -------------------------------------------------------
+     EL GRAN BORRADOR: máquina gigante con orugas, brazo
+     mecánico y una goma de borrar enorme (mira a la derecha)
+     ------------------------------------------------------- */
+  function granBorrador(f) {
+    const W = 100, H = 84;
+    const c = crearCanvas(W, H), g = c.getContext("2d");
+    const P = (x, y, col) => { g.fillStyle = col; g.fillRect(x, y, 1, 1); };
+    const caja = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(x, y, w, h); };
+    const K = "#16152a";
+    // Contorno + relleno de un rectángulo con luz y sombra
+    const placa = (x, y, w, h, base, luz, sombra) => {
+      caja(x - 1, y - 1, w + 2, h + 2, K);
+      caja(x, y, w, h, base);
+      caja(x, y, w, 1, luz); caja(x, y, 1, h, luz);
+      caja(x, y + h - 1, w, 1, sombra); caja(x + w - 1, y, 1, h, sombra);
+    };
+    // Chimenea
+    placa(12, 4, 9, 30, "#4c5366", "#6b7489", "#2e3342");
+    placa(10, 2, 13, 4, "#2e3342", "#4c5366", "#1d2130");
+    // Cabina con ojo
+    placa(20, 14, 40, 22, "#5a6278", "#7b849c", "#3a4052");
+    placa(24, 18, 14, 8, "#1d2130", "#2e3342", "#11131d");          // ventana
+    P(26, 19, "#5ff0ff"); P(27, 19, "#2bb8d8");
+    const ojoX = 48, ojoY = 24, brillo = f % 2 ? "#ff6b6b" : "#ff4d4d";
+    for (let y = -6; y <= 6; y++) for (let x = -6; x <= 6; x++) {
+      const d = Math.hypot(x, y);
+      if (d <= 6.2) P(ojoX + x, ojoY + y, d > 5.2 ? K : d > 3.8 ? "#8a1222" : d > 1.6 ? brillo : "#ffd0d0");
+    }
+    caja(40, 15, 16, 2, K); caja(41, 17, 5, 1, K);                    // ceja enojada
+    // Chasis
+    placa(6, 36, 64, 24, "#7a8296", "#9aa3b8", "#4c5366");
+    for (let x = 6; x < 70; x++) for (let y = 52; y < 58; y++) P(x, y, ((x + y + f * 2) % 8) < 4 ? "#f2c14e" : K);
+    [[10, 40], [24, 40], [38, 40], [52, 40], [64, 40]].forEach(([x, y]) => { P(x, y, "#c9d0dd"); P(x + 1, y + 1, "#4c5366"); });
+    // Tubos y medidores
+    caja(30, 42, 18, 6, K); caja(31, 43, 16, 4, "#3a4052");
+    P(34 + (f % 4) * 3, 44, "#8be38b"); P(35 + (f % 4) * 3, 45, "#8be38b");
+    // Orugas
+    placa(2, 62, 72, 18, "#2e3342", "#4c5366", "#1d2130");
+    for (let x = 3; x < 74; x++) if ((x + f * 3) % 6 < 2) { P(x, 62, "#6b7489"); P(x, 79, "#6b7489"); }
+    [12, 28, 44, 60].forEach((cx) => {
+      const cy = 71;
+      for (let y = -7; y <= 7; y++) for (let x = -7; x <= 7; x++) {
+        const d = Math.hypot(x, y);
+        if (d > 7.2) continue;
+        let col = d > 6.2 ? K : d > 4.5 ? "#9aa3b8" : "#5a6278";
+        const ang = Math.atan2(y, x) + f * (Math.PI / 6);
+        if (d <= 4.5 && d > 1 && Math.abs(Math.sin(ang * 2)) < 0.3) col = "#c9d0dd";
+        if (d <= 1.5) col = K;
+        P(cx + x, cy + y, col);
+      }
+    });
+    // Brazo mecánico (dos segmentos con pistón) que sostiene la goma
+    const fregar = [0, 2, 0, -2][f % 4];
+    placa(66, 40, 10, 6, "#9aa3b8", "#c9d0dd", "#5a6278");
+    placa(74, 34 + fregar, 6, 12, "#5a6278", "#7b849c", "#3a4052");
+    caja(76, 30 + fregar, 2, 6, "#c9d0dd");
+    // Segundo brazo: pinza articulada que sale de la cabina
+    const abre = f % 2;
+    placa(58, 20, 8, 4, "#9aa3b8", "#c9d0dd", "#5a6278");
+    placa(65, 12, 4, 12, "#5a6278", "#7b849c", "#3a4052");
+    placa(66, 10, 12, 4, "#9aa3b8", "#c9d0dd", "#5a6278");
+    caja(77, 6 - abre, 2, 5, K); caja(78, 6 - abre, 3, 1, K);       // dedo de arriba
+    caja(77, 13 + abre, 2, 4, K); caja(78, 16 + abre, 3, 1, K);      // dedo de abajo
+    caja(76, 9, 2, 6, "#c9d0dd");
+    // Goma de borrar gigante (rosa con funda azul)
+    const gx = 78, gy = 24 + fregar, gw = 20, gh = 40;
+    caja(gx - 1, gy - 1, gw + 2, gh + 2, K);
+    for (let y = 0; y < gh; y++) for (let x = 0; x < gw; x++) {
+      let col = x < 3 ? "#ffd0da" : x > gw - 4 ? "#d9567a" : "#ff8fab";
+      if (y < 2) col = "#ffe3ea";
+      if (y > gh - 3) col = "#c24466";
+      if (y >= 10 && y < 26) col = x < 3 ? "#7aa6ff" : x > gw - 4 ? "#22489c" : "#3b6fd8";     // funda
+      if (y >= 15 && y < 20 && x >= 5 && x < gw - 4 && (x + y) % 3 === 0) col = "#fff7e8";     // letras de la funda
+      P(gx + x, gy + y, col);
+    }
+    // Borde gastado de la goma
+    for (let y = 2; y < gh - 2; y += 3) P(gx + gw - 1, gy + y, "#ffe3ea");
+    return c;
+  }
+
+  /* Garabato: un enredo de rayas de lápiz con ojos (Cuaderno) */
+  function garabato(f) {
+    const c = crearCanvas(16, 14), g = c.getContext("2d");
+    const P = (x, y, col) => { g.fillStyle = col; g.fillRect(x, y, 1, 1); };
+    const lazos = [[7.5, 6, 5.2, 4.2], [6, 5.5, 3.4, 3], [9.5, 6.5, 3.6, 3.2], [7.5, 7, 4.2, 2]];
+    lazos.forEach(([cx, cy, rx, ry], i) => {
+      for (let a = 0; a < Math.PI * 2; a += 0.12) {
+        const x = Math.round(cx + Math.cos(a + i + f * 0.4) * rx), y = Math.round(cy + Math.sin(a + i) * ry);
+        P(x, y, i % 2 ? "#5a5f73" : "#2e3142");
+      }
+    });
+    [[5, 5], [9, 5]].forEach(([x, y]) => { g.fillStyle = "#16152a"; g.fillRect(x - 1, y - 1, 4, 4); g.fillStyle = "#fff7e8"; g.fillRect(x, y, 2, 2); P(x + 1, y + 1, "#16152a"); });
+    const patas = [[3, 12, 5, 13], [10, 12, 12, 13], [4, 12, 3, 13], [11, 12, 10, 13]];
+    const p = f % 2 ? [patas[0], patas[1]] : [patas[2], patas[3]];
+    p.forEach(([x0, y0, x1, y1]) => { P(x0, y0, "#2e3142"); P(x1, y1, "#2e3142"); });
+    return c;
+  }
+
+  /* Lápiz volador (apunta a la izquierda) */
+  function lapizVolador() {
+    const filas = [
+      "....kkkkkkkkkkkkkk",
+      "..kkwwYYYYYYYYYYmmJk",
+      "kgkwwwyyyyyyyyyymmJJk",
+      "..kkwwYYYYYYYYYYmmJk",
+      "....kkkkkkkkkkkkkk"
+    ];
+    const colores = { k: "#16152a", g: "#3a3d4e", w: "#e8c08a", Y: "#f2c14e", y: "#ffd86b", m: "#b9c0cc", J: "#ff8fab" };
+    const c = crearCanvas(21, 5), g = c.getContext("2d");
+    filas.forEach((f, y) => { for (let x = 0; x < f.length; x++) if (colores[f[x]]) { g.fillStyle = colores[f[x]]; g.fillRect(x, y, 1, 1); } });
+    return c;
+  }
+
+  /* Engranaje que rueda y salta (Fábrica de Ideas) */
+  function engranaje(f) {
+    const c = crearCanvas(16, 16), g = c.getContext("2d");
+    const P = (x, y, col) => { g.fillStyle = col; g.fillRect(x, y, 1, 1); };
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const dx = x - 7.5, dy = y - 7.5, d = Math.hypot(dx, dy);
+      const ang = Math.atan2(dy, dx) - f * (Math.PI / 16);
+      const r = 5.4 + (Math.cos(ang * 8) > 0.35 ? 2.2 : 0);
+      if (d > r) continue;
+      let col = d > r - 1 ? "#16152a" : d < 2 ? "#16152a" : d < 3.2 ? "#ff6b4a" : (dx + dy < 0 ? "#c9d0dd" : "#7a8296");
+      P(x, y, col);
+    }
+    return c;
+  }
+
+  /* Chispa eléctrica que se lanza en picada (Fábrica de Ideas) */
+  function chispa(f) {
+    const c = crearCanvas(14, 12), g = c.getContext("2d");
+    const P = (x, y, col) => { g.fillStyle = col; g.fillRect(x, y, 1, 1); };
+    for (let y = 0; y < 12; y++) for (let x = 0; x < 14; x++) {
+      const d = Math.hypot(x - 7, y - 6);
+      if (d < 2.2) P(x, y, "#ffffff");
+      else if (d < 3.6) P(x, y, "#fff1b0");
+      else if (d < 4.4) P(x, y, "#f2c14e");
+    }
+    const rayos = f % 2 ? [[1, 2], [12, 3], [2, 10], [12, 10]] : [[0, 6], [13, 6], [7, 0], [7, 11]];
+    rayos.forEach(([x, y]) => { P(x, y, "#5ff0ff"); P(Math.round((x + 7) / 2), Math.round((y + 6) / 2), "#d6fdff"); });
     return c;
   }
 
@@ -891,10 +955,14 @@ window.MonkySprites = (function () {
       cuervo: [cuadro(CUERVO_A), cuadro(CUERVO_B)],
       tronco: [0, 1, 2, 3].map((i) => desdeLienzo(tronco(i))),
       bichoDigital: BICHO_PATAS.map((patas) => cuadro(BICHO_CUERPO.concat(patas), { u: "#2bb8d8", U: "#5ff0ff", V: "#1a6f8f", v: "#0c3550", r: "#ff6bd5" })),
-      sombra: [0, 1, 2, 3].map((i) => desdeLienzo(sombraGigante(i))),
       gota: [0, 1].map((i) => desdeLienzo(gotaTinta(i))),
+      borrador: [0, 1, 2, 3].map((i) => desdeLienzo(granBorrador(i))),
+      garabato: [0, 1, 2].map((i) => desdeLienzo(garabato(i))),
+      lapiz: desdeLienzo(lapizVolador()),
+      engranaje: [0, 1, 2, 3].map((i) => desdeLienzo(engranaje(i))),
+      chispa: [0, 1].map((i) => desdeLienzo(chispa(i))),
+      mariposa: [cuadro(POLILLA_A, { U: "#ff8fd1", u: "#7ff0d0", v: "#6a3a9c", y: "#fff7e8" }), cuadro(POLILLA_B, { U: "#ff8fd1", u: "#7ff0d0", v: "#6a3a9c", y: "#fff7e8" })],
       charco: [0, 1, 2, 3].map((i) => desdeLienzo(charcoTinta(i))),
-      tinta: [0, 1, 2, 3].map((i) => desdeLienzo(olaTinta(i))),
       estrella: [0, 1, 2, 3, 4, 5].map((i) => desdeLienzo(estrella(i))),
       polvo: [0, 1, 2, 3].map((i) => desdeLienzo(polvo(i))),
       crearCanvas: crearCanvas

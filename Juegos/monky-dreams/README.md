@@ -1,10 +1,12 @@
-# Monky Dreams 🐒💤
+# Monky Run: El Gran Borrador 🐒✏️
 
-Videojuego 2D en **pixel art** para **MoncadaArt**. Monky, la mascota que duerme en la portada
-del portafolio, sueña que corre por un mundo que se genera solo y nunca termina.
+Videojuego 2D en **pixel art** para **MoncadaArt**. Monky es un artista que escapa de **El Gran
+Borrador**, una máquina gigante con orugas, brazos mecánicos y una goma enorme que intenta borrar
+sus creaciones. Corre, salta y deslízate por cuatro mundos que se generan solos y nunca terminan.
 
-> **Versión 4.0 — Más divertido.** Tienda, personajes, misiones, eventos y rutas dobles en la
-> Carrera infinita. Incluye también el modo **Aventura**.
+> **Versión 5.0 — Nueva identidad.** Antes se llamaba *Monky Dreams*. La carpeta y la dirección
+> (`Juegos/monky-dreams/`) se mantienen para no romper los enlaces existentes, igual que las claves
+> de guardado: tu saldo, compras, récord y misiones siguen funcionando.
 
 ## Dónde se juega
 
@@ -15,11 +17,11 @@ GitHub Pages publica MoncadaArt desde la rama `main` del repositorio `moncadaart
 
 ### Respaldos de versiones anteriores
 
-- Versión 3.1 (antes de la tienda): rama **`claude/monky-dreams-v3.1-respaldo`**.
+- Versión 4.0 (Monky Dreams con tienda): commit `7fea5f4` del historial de `main`.
+- Versión 3.1: rama **`claude/monky-dreams-v3.1-respaldo`**.
 - Versión 2.0: rama **`claude/monky-dreams-v2-respaldo`**.
 
-Ambas siguen también en el historial de `main`. Para recuperar una, basta con restaurar la carpeta
-`Juegos/monky-dreams/` desde esa rama.
+Para recuperar una versión, basta con restaurar la carpeta `Juegos/monky-dreams/` desde ese punto.
 
 ---
 
@@ -28,49 +30,47 @@ Ambas siguen también en el historial de `main`. Para recuperar una, basta con r
 ### Carrera infinita (principal)
 
 - Monky corre solo hacia la derecha; tú controlas el **salto** (mantener = más alto) y el
-  **deslizamiento** (para pasar bajo techos bajos y enemigos a la altura de la cabeza).
-- El terreno se genera por **tramos** conforme avanzas y los tramos que quedan atrás se
+  **deslizamiento** (para pasar bajo techos bajos, lápices voladores y prensas).
+- El terreno se genera por **tramos** que se validan con la física real; los que quedan atrás se
   descartan (en memoria nunca hay más de unos 6 tramos).
-- **Dificultad progresiva:** la velocidad sube de 118 a ~205 px/s; aparecen nuevos patrones
-  (nubes, vallas, techos bajos, voladores, combinaciones) y los huecos crecen, siempre dentro
-  de lo que el salto de Monky puede cruzar con margen.
-- **Cuatro mundos** que cambian cada 500 m con transición suave y un portal de sueño:
-  1. **Sueño nocturno** — luna, estrellas, montañas e islas flotantes.
-  2. **Bosque mágico** — musgo, hongos luminosos y plataformas de hongo.
-  3. **Mundo digital** — circuitos, torres de datos, lluvia de datos y láseres.
-  4. **Pesadilla** — sombras, niebla, ojos en la oscuridad y una **sombra gigante** que persigue a Monky.
-  Después vuelve a empezar con variaciones (por ejemplo, aurora en la noche).
-- **Enemigos:** bichos y hongos saltarines (se aplastan saltando encima), troncos rodantes,
-  polillas, drones, cuervos de sombra y láseres.
-- **Poderes** (con su tiempo en el HUD): **escudo** (10 s, protege de todo), **imán** (10 s, atrae
-  monedas), **doble salto** (12 s) e **impulso** (5 s: vuelo rasante que rompe obstáculos y cruza abismos).
-- **3 vidas.** Al caer a un abismo, una **burbuja de sueño** te lleva al siguiente suelo seguro.
-  En la Pesadilla, cada golpe acerca a la sombra; si te alcanza, termina la carrera.
-- **Monedas como guía:** aparecen en grupos de 3 a 7 (unas 30–45 por cada 500 m) con tramos
-  vacíos entre grupo y grupo. Dibujan la trayectoria de un salto (arco), una subida o bajada, o
-  una línea sobre un camino seguro. Están sobre el recorrido comprobado, así que seguirlas
-  siempre es posible.
-- **Nubes y plataformas:** todas son sólidas desde arriba. Se colocan donde el salto real de Monky
-  baja a su altura a la velocidad actual, y el validador exige pararse en cada una.
-- **HUD:** distancia y récord arriba al centro; corazones y monedas arriba a la izquierda; debajo,
-  los poderes activos con barra y segundos restantes. Nada queda bajo los botones.
-- **Récord personal** guardado en el navegador (`localStorage`): distancia y monedas.
+- **Dificultad progresiva:** la velocidad sube de 118 a ~205 px/s y aparecen más patrones,
+  combinaciones y enemigos, siempre dentro de lo que el salto de Monky puede superar.
 
-### Novedades de la 4.0 en la Carrera
+#### El Gran Borrador
+
+- Persigue a Monky durante toda la carrera. Al principio solo asoma su goma por la izquierda.
+- **Arremete** cada tanto (más fuerte y seguido con la dificultad), pero si Monky no tropieza
+  **nunca llega a alcanzarlo**: entre arremetidas siempre recupera la distancia.
+- **Cada tropiezo lo acerca.** Dos o tres tropiezos seguidos y te alcanza.
+- **Retrocede** con el impulso, al pisar enemigos, al completar grupos de monedas, al atrapar
+  estrellas y al resistir su aceleración.
+- Cuando está cerca, **el escenario pierde el color**; detrás de él todo queda borrado como una
+  hoja en blanco.
+- **Si alcanza a Monky, termina la partida** (el escudo te salva una vez).
+
+#### Cuatro mundos (cambian cada 500 m)
+
+| Mundo | Escenario | Obstáculos y enemigos propios |
+|---|---|---|
+| **El Cuaderno** | Hoja rayada, sol garabateado, casitas y árboles dibujados a lápiz | Garabatos que caminan (se pisan), lápices voladores (altos: deslizarse; bajos: saltar), gotas de tinta que caen, puntas de lápiz, reglas como plataformas |
+| **Bosque de Colores** | Atardecer pastel, árboles morados con frutos de colores | Hongos saltarines, troncos rodantes, mariposas de colores, hongos-plataforma |
+| **Ciudad Digital** | Rascacielos de neón, circuitos y lluvia de datos | Robots, drones, láseres y paneles holográficos |
+| **Fábrica de Ideas** | Chimeneas con humo, tuberías y engranajes que giran | Prensas que bajan y suben (pasar a tiempo o deslizarse), engranajes que ruedan saltando, chispas eléctricas en picada, cajas y vigas de acero |
+
+### Más mecánicas de la Carrera
 
 - **Rutas dobles:** *autopista de nubes* (arriba, con monedas; abajo, púas que se saltan) y
   *túnel* (subir a los bloques o pasar deslizándose). Las dos rutas se validan con la física real.
 - **Gota de tinta:** cae del cielo cuando Monky se acerca; su sombra en el suelo avisa antes y
   queda un charco que hay que saltar.
-- **Avisos:** un "!" en el borde derecho anuncia troncos y cuervos que todavía no se ven.
+- **Avisos:** un "!" en el borde derecho anuncia troncos, lápices, engranajes y chispas que todavía no se ven.
 - **Eventos aleatorios** (breves, anunciados y justos):
-  - *Pesadilla de tinta:* una ola de tinta persigue a Monky unos 13 s. Si escapa sin tropezar,
-    gana 15 monedas; si lo alcanza, pierde una vida (no la partida, salvo la última).
+  - *El Borrador acelera:* durante 8 s arremete más seguido. Si resistes, ganas 15 monedas y lo alejas.
   - *Monedas dobles:* durante 10 s cada moneda vale 2 (indicador ×2 en el HUD).
   - *Estrella fugaz:* aparece sobre la ruta y vale 15 monedas.
 - **Recompensas:** cada moneda de una racha suena más aguda; completar un grupo de monedas da +2;
   pisar varios enemigos sin tocar el suelo da un combo con monedas extra.
-- **Cambio de mundo:** destello y partículas con los colores del mundo nuevo y un sonido de portal.
+- **Cambio de mundo:** portal, destello y partículas con los colores del mundo nuevo.
 - Los tramos se generan en un **Web Worker** (`js/trabajador.js`): el juego no se traba en celulares lentos.
 
 ### Tienda, economía y misiones
@@ -85,10 +85,10 @@ Ambas siguen también en el historial de `main`. Para recuperar una, basta con r
   | Personajes | Monky | gratis | El original |
   | Personajes | Monky Explorador | 120 | Casco de safari y chaleco |
   | Personajes | Monky Cyber | 280 | Visor de neón y antena |
-  | Personajes | Nubi | 450 | Ovejita de nube; al deslizarse se hace bolita |
-  | Vestimentas | Pijama estelar | 90 | Solo Monky |
+  | Personajes | Nubi | 450 | Ovejita de nube que se escapó de un dibujo; al deslizarse se hace bolita |
+  | Vestimentas | Traje estelar | 90 | Solo Monky |
   | Vestimentas | Sudadera atardecer | 150 | Solo Monky |
-  | Accesorios | Gorro de dormir | 80 | Solo Monky (reemplaza la gorra) |
+  | Accesorios | Gorro de borla | 80 | Solo Monky (reemplaza la gorra) |
   | Accesorios | Bufanda cometa | 110 | Todos los personajes |
   | Mejoras | Imán potente | 200 | Imán de 15 s (antes 10) y mayor alcance |
   | Mejoras | Escudo reforzado | 300 | Escudo de 15 s (antes 10) y 1 s extra de protección al terminar |
@@ -106,8 +106,8 @@ Ambas siguen también en el historial de `main`. Para recuperar una, basta con r
 
 ### Aventura
 
-El nivel "El primer sueño" de la versión 2.0: un nivel completo con monedas, lámpara de punto de
-control y el despertador como meta.
+El nivel "El primer boceto": un nivel completo sobre la hoja de cuaderno, con monedas, lámpara de
+punto de control y el reloj de entrega como meta.
 
 ---
 

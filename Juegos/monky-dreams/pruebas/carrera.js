@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — PRUEBA DEL GENERADOR (Carrera infinita)
+   MONKY RUN — PRUEBA DEL GENERADOR (Carrera infinita)
 
    1. Genera muchos kilómetros de terreno con varias semillas
       y revalida cada tramo con la física real de Monky,

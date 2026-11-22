@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — EFECTOS DE SONIDO
+   MONKY RUN — EFECTOS DE SONIDO
    Sonidos tipo chiptune generados con Web Audio.
    No se usa ningún archivo de audio externo.
    ========================================================= */
@@ -121,8 +121,15 @@ window.MonkySonido = (function () {
     evento() {
       [440, 554, 659].forEach((f, i) => tono(f, 0.09, { tipo: "square", volumen: 0.03, retraso: i * 0.06 }));
     },
-    tinta() {
-      tono(110, 0.6, { tipo: "sawtooth", hasta: 70, volumen: 0.05 });
+    motor() {
+      // Rugido mecánico del Gran Borrador
+      tono(70, 0.5, { tipo: "sawtooth", hasta: 95, volumen: 0.05 });
+      tono(140, 0.3, { tipo: "square", hasta: 90, volumen: 0.02, retraso: 0.08 });
+    },
+    borrar() {
+      // Chirrido de goma de borrar
+      [880, 760, 900, 700].forEach((f, i) => tono(f, 0.07, { tipo: "square", hasta: f * 0.8, volumen: 0.025, retraso: i * 0.07 }));
+      tono(300, 0.7, { tipo: "triangle", hasta: 60, volumen: 0.06, retraso: 0.3 });
     },
     deslizar() {
       tono(180, 0.1, { tipo: "triangle", hasta: 120, volumen: 0.04 });

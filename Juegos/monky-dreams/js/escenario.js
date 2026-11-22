@@ -1,9 +1,9 @@
 /* =========================================================
-   MONKY DREAMS — ESCENARIO EN PIXEL ART
-   Casillas, decoraciones, fondos con parallax y almohada
-   voladora para cuatro mundos: noche, bosque, digital y
-   pesadilla. Todo se dibuja pixel a pixel con código y se
-   guarda en lienzos para no repetir trabajo cada cuadro.
+   MONKY RUN — ESCENARIO EN PIXEL ART
+   Casillas, decoraciones, fondos con parallax y plataforma
+   voladora para los cuatro mundos: El Cuaderno, Bosque de
+   Colores, Ciudad Digital y Fábrica de Ideas. Todo se dibuja
+   pixel a pixel con código y se guarda en lienzos.
    ========================================================= */
 
 window.MonkyEscenario = (function () {
@@ -33,12 +33,13 @@ window.MonkyEscenario = (function () {
      PALETAS DE CADA MUNDO
      ======================================================= */
   const TEMAS = {
-    noche: {
-      suelo: { hondo: "#3a1f15", oscuro: "#4f2c1d", base: "#6b3f2a", claro: "#8a5538" },
-      musgo: { brillo: "#ffb56e", base: "#e8792e", medio: "#d3662a", oscuro: "#a9481b" },
-      piedra: ["#a5876f", "#76594a", "#4d3a30"],
-      bloque: { cara: "#ead9bd", luz: "#fff6e6", sombra: "#c9ad85", borde: "#a68962", e1: "#ffa860", e2: "#e8792e", e3: "#a9481b" },
-      cristal: { luz: "#efe6ff", medio: "#b9a7e0", oscuro: "#7c64b8", base: "#4a3d7a" }
+    // El Cuaderno: cartón kraft con hojas rayadas encima
+    cuaderno: {
+      suelo: { hondo: "#5a4027", oscuro: "#7a5a38", base: "#9a7650", claro: "#b8946a" },
+      musgo: { brillo: "#ffffff", base: "#f6efe0", medio: "#dcd3bd", oscuro: "#b9ae95" },
+      piedra: ["#d8c7a5", "#b39a72", "#8a7250"],
+      bloque: { cara: "#ffe27a", luz: "#fff4b8", sombra: "#e3b93c", borde: "#b58a1f", e1: "#ff6b6b", e2: "#3b6fd8", e3: "#16152a" },
+      cristal: { luz: "#ffd86b", medio: "#f2c14e", oscuro: "#c99a2e", base: "#3a3d4e" }
     },
     bosque: {
       suelo: { hondo: "#1d140f", oscuro: "#2a1d15", base: "#3d2a1e", claro: "#56402c" },
@@ -54,12 +55,13 @@ window.MonkyEscenario = (function () {
       bloque: { cara: "#33456a", luz: "#5a72a0", sombra: "#22304d", borde: "#151f36", e1: "#ff6bd5", e2: "#c43aa6", e3: "#6a1d5c" },
       cristal: { luz: "#fff7b0", medio: "#ffd23f", oscuro: "#c98a00", base: "#3a2a0a" }
     },
-    pesadilla: {
-      suelo: { hondo: "#0d0710", oscuro: "#160c1b", base: "#231329", claro: "#341d3d" },
-      musgo: { brillo: "#c2507a", base: "#7a2a55", medio: "#5e1f44", oscuro: "#3a1230" },
-      piedra: ["#5a4466", "#3a2a45", "#221829"],
-      bloque: { cara: "#4a3a58", luz: "#6a5478", sombra: "#33263f", borde: "#221829", e1: "#ff4d6d", e2: "#b3243f", e3: "#5a0f22" },
-      cristal: { luz: "#ff9aa8", medio: "#3a1430", oscuro: "#1a0812", base: "#0d0408" }
+    // Fábrica de Ideas: placas de acero, cajas y pinchos metálicos
+    fabrica: {
+      suelo: { hondo: "#1d1f26", oscuro: "#2e323d", base: "#434956", claro: "#5a6272" },
+      musgo: { brillo: "#c9d0dd", base: "#8a93a6", medio: "#6b7489", oscuro: "#4c5366" },
+      piedra: ["#c9d0dd", "#7a8296", "#2e3342"],
+      bloque: { cara: "#a8703a", luz: "#d0955a", sombra: "#7a4d24", borde: "#4f2f14", e1: "#f2c14e", e2: "#16152a", e3: "#7a8296" },
+      cristal: { luz: "#e7ecf5", medio: "#9aa3b8", oscuro: "#5a6278", base: "#2e3342" }
     }
   };
 
@@ -70,7 +72,7 @@ window.MonkyEscenario = (function () {
      ======================================================= */
   function construirCapaNivel(mapa, opciones) {
     const op = opciones || {};
-    const tema = op.tema || "noche";
+    const tema = TEMAS[op.tema] ? op.tema : "cuaderno";
     const P = TEMAS[tema];
     const filas = mapa.length;
     const columnas = mapa.reduce((m, f) => Math.max(m, f.length), 0);
@@ -133,7 +135,20 @@ window.MonkyEscenario = (function () {
         }
       }
 
-      if (tema === "digital") {
+      if (tema === "cuaderno") {
+        // Fibras del cartón y algún recorte de papel
+        for (let i = 0; i < 3; i++) {
+          if (rn(cx, cy, 60 + i) > 0.6) continue;
+          const fx = x0 + 1 + Math.floor(rn(cx, cy, 63 + i) * 12), fy = y0 + (superficie ? 8 : 1) + Math.floor(rn(cx, cy, 66 + i) * 6);
+          c.fillStyle = S.claro; c.fillRect(fx, fy, 3, 1);
+        }
+        if (rn(cx, cy, 69) < 0.25) { const fx = x0 + 3 + Math.floor(rn(cx, cy, 70) * 8); c.fillStyle = "#f6efe0"; c.fillRect(fx, y0 + (superficie ? 10 : 5), 4, 3); c.fillStyle = "#9cc3e6"; c.fillRect(fx, y0 + (superficie ? 11 : 6), 4, 1); }
+      } else if (tema === "fabrica") {
+        // Placas atornilladas con juntas
+        c.fillStyle = S.hondo; c.fillRect(x0, y0 + T - 1, T, 1); c.fillRect(x0 + T - 1, y0, 1, T);
+        c.fillStyle = S.claro; c.fillRect(x0, y0 + (superficie ? 6 : 0), T, 1);
+        [[3, superficie ? 9 : 3], [12, superficie ? 9 : 3], [3, 13], [12, 13]].forEach(([a, b]) => { px(x0 + a, y0 + b, P.piedra[0]); px(x0 + a + 1, y0 + b + 1, P.piedra[2]); });
+      } else if (tema === "digital") {
         // Pistas de circuito con nodos luminosos
         const fila = y0 + (superficie ? 8 : 4) + Math.floor(rn(cx, cy, 20) * 5);
         c.fillStyle = "#1d4766"; c.fillRect(x0, fila, T, 1);
@@ -148,30 +163,29 @@ window.MonkyEscenario = (function () {
           px(sx, sy, P.piedra[0]); px(sx + 1, sy, P.piedra[0]);
           c.fillStyle = P.piedra[2]; c.fillRect(sx, sy + 2, 3, 1); px(sx + 3, sy + 1, P.piedra[2]);
         }
-        if (tema === "pesadilla" && rn(cx, cy, 40) < 0.4) {
-          // Raíces retorcidas
-          let rx = x0 + Math.floor(rn(cx, cy, 41) * 14), ry = y0 + (superficie ? 6 : 0);
-          for (let i = 0; i < 8; i++) { px(rx, ry, "#3a2346"); ry++; rx += rn(cx, i, 42) < 0.5 ? -1 : 1; }
-        }
       }
 
       if (superficie) {
         for (let x = 0; x < T; x++) {
           const gx = x0 + x;
-          const grosor = tema === "digital" ? 3 : 4 + (rn(gx, cy, 3) < 0.35 ? 1 : 0) + (rn(gx, cy, 4) < 0.12 ? 1 : 0);
+          const grosor = tema === "digital" ? 3 : tema === "cuaderno" ? 5 : tema === "fabrica" ? 4 : 4 + (rn(gx, cy, 3) < 0.35 ? 1 : 0) + (rn(gx, cy, 4) < 0.12 ? 1 : 0);
           for (let y = 0; y < grosor; y++) {
             let color = M.base;
             if (y === 0) color = M.brillo;
             else if (y === grosor - 1) color = M.oscuro;
             else if (y >= 2 && rn(gx, y0 + y, 5) < 0.35) color = M.medio;
             if (tema === "digital" && y === 1) color = (gx % 8 === 0) ? M.brillo : M.medio;
+            // Cuaderno: borde de hojas apiladas con una línea azul de renglón
+            if (tema === "cuaderno") color = y === 0 ? M.brillo : y === 2 ? "#9cc3e6" : y === 4 ? M.oscuro : y === 3 ? M.medio : M.base;
+            // Fábrica: franja de peligro amarilla y negra
+            if (tema === "fabrica" && y >= 1 && y <= 2) color = ((gx + y) % 8) < 4 ? "#f2c14e" : "#16152a";
             px(gx, y0 + y, color);
           }
           px(gx, y0 + grosor, S.hondo);
         }
         c.fillStyle = TINTA;
         c.fillRect(x0 + (izq ? 0 : 2), y0 - 1, T - (izq ? 0 : 2) - (der ? 0 : 2), 1);
-        if (tema !== "digital") {
+        if (tema === "bosque") {
           for (let x = (izq ? 0 : 3); x < T - (der ? 0 : 3); x++) {
             const gx = x0 + x;
             const r = rn(gx, cy, 6);
@@ -211,6 +225,16 @@ window.MonkyEscenario = (function () {
         c.fillStyle = B.borde; c.fillRect(x0 + 4, y0 + 6, 8, 4);
         c.fillStyle = (cx + cy) % 2 ? B.e1 : "#5ff0ff"; c.fillRect(x0 + 5, y0 + 7, 6, 2);
         [[3, 3], [12, 3], [3, 12], [12, 12]].forEach(([a, b]) => px(x0 + a, y0 + b, B.luz));
+      } else if (tema === "cuaderno") {
+        // Nota adhesiva con un garabato de estrella y la esquina doblada
+        c.fillStyle = B.sombra; c.fillRect(x0 + T - 5, y0 + T - 5, 4, 4);
+        c.fillStyle = B.luz; c.fillRect(x0 + T - 5, y0 + T - 5, 3, 1); c.fillRect(x0 + T - 5, y0 + T - 5, 1, 3);
+        const tinta = (cx + cy) % 2 ? B.e1 : B.e2;
+        [[7, 3], [6, 5], [8, 5], [4, 6], [5, 6], [9, 6], [10, 6], [5, 8], [9, 8], [7, 7], [4, 10], [10, 10], [6, 9], [8, 9]].forEach(([a, b2]) => px(x0 + a, y0 + b2, tinta));
+      } else if (tema === "fabrica") {
+        // Caja de madera con tablas en X y esquinas de metal
+        for (let k = 2; k < T - 2; k++) { px(x0 + k, y0 + k, B.sombra); px(x0 + T - 1 - k, y0 + k, B.sombra); px(x0 + k, y0 + k + 1, B.borde); }
+        c.fillStyle = B.e3; c.fillRect(x0 + 1, y0 + 1, 3, 3); c.fillRect(x0 + T - 4, y0 + 1, 3, 3); c.fillRect(x0 + 1, y0 + T - 4, 3, 3); c.fillRect(x0 + T - 4, y0 + T - 4, 3, 3);
       } else if (tema === "bosque") {
         // Piedra con musgo y hoja
         for (let x = 0; x < T; x++) if (rn(x0 + x, cy, 50) < 0.5) px(x0 + x, y0 + 1 + (rn(x0 + x, cy, 51) < 0.3 ? 1 : 0), "#62c06c");
@@ -225,7 +249,6 @@ window.MonkyEscenario = (function () {
             else if (d <= 4.5) px(x0 + x, y0 + y, B.e3);
           }
         }
-        if (tema === "pesadilla") { px(x0 + 3, y0 + 4, TINTA); px(x0 + 4, y0 + 5, TINTA); px(x0 + 4, y0 + 6, TINTA); px(x0 + 12, y0 + 10, TINTA); px(x0 + 11, y0 + 11, TINTA); }
       }
       c.fillStyle = TINTA;
       if (!es(0, -1)) c.fillRect(x0, y0, T, 1);
@@ -238,8 +261,34 @@ window.MonkyEscenario = (function () {
     function plataforma(cx0, cx1, cy) {
       if (tema === "bosque") return hongoPlataforma(cx0, cx1, cy);
       if (tema === "digital") return panelHolografico(cx0, cx1, cy);
-      if (tema === "pesadilla") return losaFlotante(cx0, cx1, cy);
-      return nube(cx0, cx1, cy);
+      if (tema === "fabrica") return viga(cx0, cx1, cy);
+      return regla(cx0, cx1, cy);
+    }
+
+    /* Cuaderno: una regla de madera con marcas */
+    function regla(cx0, cx1, cy) {
+      const x0 = cx0 * T - 1, ancho = (cx1 - cx0 + 1) * T + 2, y0 = cy * T - 1;
+      c.fillStyle = TINTA; c.fillRect(x0, y0, ancho, 8);
+      c.fillStyle = "#f2c88a"; c.fillRect(x0 + 1, y0 + 1, ancho - 2, 6);
+      c.fillStyle = "#fff1d0"; c.fillRect(x0 + 1, y0 + 1, ancho - 2, 1);
+      c.fillStyle = "#c99a5e"; c.fillRect(x0 + 1, y0 + 6, ancho - 2, 1);
+      for (let x = 3; x < ancho - 2; x += 3) { c.fillStyle = "#7a5a38"; c.fillRect(x0 + x, y0 + 1, 1, x % 12 === 0 ? 3 : 2); }
+      // Sombra suave debajo
+      c.fillStyle = "rgba(90, 64, 39, 0.25)"; c.fillRect(x0 + 2, y0 + 8, ancho - 4, 2);
+    }
+
+    /* Fábrica: viga de acero con remaches */
+    function viga(cx0, cx1, cy) {
+      const x0 = cx0 * T - 1, ancho = (cx1 - cx0 + 1) * T + 2, y0 = cy * T - 1;
+      c.fillStyle = TINTA; c.fillRect(x0, y0, ancho, 8);
+      c.fillStyle = "#9a5a2e"; c.fillRect(x0 + 1, y0 + 1, ancho - 2, 6);
+      c.fillStyle = "#c97a3e"; c.fillRect(x0 + 1, y0 + 1, ancho - 2, 1);
+      c.fillStyle = "#6a3a1e"; c.fillRect(x0 + 1, y0 + 6, ancho - 2, 1);
+      for (let x = 4; x < ancho - 3; x += 6) {
+        // Celosía en V
+        c.fillStyle = "#6a3a1e"; c.fillRect(x0 + x, y0 + 3, 1, 1); c.fillRect(x0 + x + 1, y0 + 4, 1, 1); c.fillRect(x0 + x + 2, y0 + 3, 1, 1);
+        c.fillStyle = "#f2c14e"; c.fillRect(x0 + x + 1, y0 + 2, 1, 1);
+      }
     }
 
     function nube(cx0, cx1, cy) {
@@ -307,6 +356,7 @@ window.MonkyEscenario = (function () {
     }
 
     function puas(cx, cy) {
+      if (tema === "cuaderno") return lapices(cx, cy);
       const x0 = cx * T, base = cy * T + T, K = P.cristal;
       const cristales = [
         { x: 0, w: 6, h: 8 + Math.floor(rn(cx, cy, 11) * 3) },
@@ -333,6 +383,28 @@ window.MonkyEscenario = (function () {
       c.fillStyle = TINTA; c.fillRect(x0, base - 1, T, 1);
     }
 
+    /* Cuaderno: tres lápices clavados con la punta hacia arriba */
+    function lapices(cx, cy) {
+      const x0 = cx * T, base = cy * T + T;
+      const cuerpo = ["#f2c14e", "#ff6b6b", "#3b6fd8"];
+      [[1, 11], [6, 14], [11, 10]].forEach(([lx, alto], i) => {
+        const col = cuerpo[(i + cx) % 3];
+        for (let y = 0; y < alto; y++) {
+          const yy = base - alto + y;
+          if (y < 2) { px(x0 + lx + 1, yy, y === 0 ? TINTA : "#3a3d4e"); continue; }        // grafito
+          if (y < 5) {                                                                       // madera
+            const ancho = y - 1;
+            for (let x = 2 - Math.min(2, ancho - 1); x <= Math.min(2, ancho); x++) px(x0 + lx + x - 1 + 1, yy, x === 2 - Math.min(2, ancho - 1) || x === Math.min(2, ancho) ? TINTA : "#e8c08a");
+            continue;
+          }
+          px(x0 + lx - 1, yy, TINTA); px(x0 + lx + 3, yy, TINTA);
+          px(x0 + lx, yy, "#fff4b8"); px(x0 + lx + 1, yy, col); px(x0 + lx + 2, yy, col);
+        }
+      });
+      c.fillStyle = "#b39a72"; c.fillRect(x0, base - 2, T, 2);
+      c.fillStyle = TINTA; c.fillRect(x0, base - 1, T, 1);
+    }
+
     function letrero(cx, cy) {
       const x0 = cx * T, y0 = cy * T;
       c.fillStyle = TINTA; c.fillRect(x0 + 6, y0 + 7, 4, 9);
@@ -355,12 +427,22 @@ window.MonkyEscenario = (function () {
         for (let i = 0; i < 4; i++) { c.fillStyle = "#8ba3c7"; c.fillRect(x0 + 4 + i * 2, y0 + 8, 1, 1); }
         return;
       }
-      if (tema === "pesadilla") {
-        // Arbusto con ojos
-        for (let y = 0; y < 7; y++) for (let x = 0; x < 12; x++) {
-          if (Math.hypot(x - 6, y - 7) < 6.5) px(x0 + 2 + x, y0 + 9 + y, Math.hypot(x - 6, y - 7) > 5.6 ? TINTA : "#1a0d1f");
-        }
-        px(x0 + 6, y0 + 12, "#ff4d6d"); px(x0 + 9, y0 + 12, "#ff4d6d");
+      if (tema === "fabrica") {
+        // Tuercas y una aceitera
+        [[2, 13], [6, 14]].forEach(([a, b2]) => { c.fillStyle = TINTA; c.fillRect(x0 + a - 1, y0 + b2 - 1, 4, 3); c.fillStyle = "#9aa3b8"; c.fillRect(x0 + a, y0 + b2, 2, 1); });
+        c.fillStyle = TINTA; c.fillRect(x0 + 9, y0 + 9, 6, 7); c.fillRect(x0 + 14, y0 + 7, 1, 3);
+        c.fillStyle = "#ff6b4a"; c.fillRect(x0 + 10, y0 + 10, 4, 5);
+        c.fillStyle = "#ffa860"; c.fillRect(x0 + 10, y0 + 10, 4, 1);
+        return;
+      }
+      if (tema === "cuaderno") {
+        // Crayones gastados
+        ["#ff6b6b", "#62c06c", "#3b6fd8"].forEach((col, i) => {
+          const fx = x0 + 2 + i * 5, alto = 5 + ((cx + i) % 3);
+          c.fillStyle = TINTA; c.fillRect(fx - 1, y0 + T - alto - 1, 4, alto + 1);
+          c.fillStyle = col; c.fillRect(fx, y0 + T - alto, 2, alto);
+          c.fillStyle = "#fff7e8"; c.fillRect(fx, y0 + T - alto + 2, 2, 1);
+        });
         return;
       }
       if (tema === "bosque") {
@@ -408,24 +490,24 @@ window.MonkyEscenario = (function () {
         px(x0 + 5, base - 29, "#ffffff");
         return;
       }
-      if (tema === "pesadilla") {
-        // Árbol muerto retorcido
-        let x = x0 + 8;
-        for (let y = 0; y < 26; y++) {
-          const ancho = y < 6 ? 3 : 2;
-          c.fillStyle = TINTA; c.fillRect(x - 1, base - y - 1, ancho + 2, 1);
-          c.fillStyle = "#2a1a30"; c.fillRect(x, base - y - 1, ancho, 1);
-          if (y % 7 === 6) x += y % 14 === 6 ? 1 : -1;
-        }
-        for (let i = 0; i < 6; i++) { px(x0 + 9 + i, base - 22 - i, "#2a1a30"); px(x0 + 6 - i, base - 18 - Math.floor(i / 2), "#2a1a30"); }
+      if (tema === "fabrica") {
+        // Lámpara de taller con tubo y válvula
+        c.fillStyle = TINTA; c.fillRect(x0 + 6, base - 24, 4, 24);
+        c.fillStyle = "#7a8296"; c.fillRect(x0 + 7, base - 24, 2, 24);
+        c.fillStyle = TINTA; c.fillRect(x0 + 2, base - 28, 12, 5);
+        c.fillStyle = "#f2c14e"; c.fillRect(x0 + 3, base - 27, 10, 3);
+        c.fillStyle = "#fff1b0"; c.fillRect(x0 + 4, base - 24, 8, 1);
+        c.fillStyle = "#ff6b4a"; c.fillRect(x0 + 4, base - 12, 8, 2);
         return;
       }
-      // Noche: farol de sueño
-      c.fillStyle = TINTA; c.fillRect(x0 + 6, base - 22, 4, 22);
-      c.fillStyle = "#3f6d98"; c.fillRect(x0 + 7, base - 22, 2, 22);
-      c.fillStyle = TINTA; c.fillRect(x0 + 3, base - 30, 10, 9);
-      c.fillStyle = "#ffcc66"; c.fillRect(x0 + 4, base - 29, 8, 7);
-      c.fillStyle = "#fff1b0"; c.fillRect(x0 + 5, base - 28, 3, 3);
+      // Cuaderno: pincel gigante clavado en el suelo
+      c.fillStyle = TINTA; c.fillRect(x0 + 6, base - 26, 4, 26);
+      c.fillStyle = "#c97a3e"; c.fillRect(x0 + 7, base - 18, 2, 18);
+      c.fillStyle = "#b9c0cc"; c.fillRect(x0 + 7, base - 22, 2, 4);
+      c.fillStyle = TINTA; c.fillRect(x0 + 5, base - 31, 6, 9);
+      c.fillStyle = "#3b6fd8"; c.fillRect(x0 + 6, base - 30, 4, 8);
+      c.fillStyle = "#7aa6ff"; c.fillRect(x0 + 6, base - 30, 1, 6);
+      px(x0 + 8, base - 32, "#3b6fd8");
     }
   }
 
@@ -435,10 +517,10 @@ window.MonkyEscenario = (function () {
      inferior; si la pantalla es más alta, el cielo crece.
      ======================================================= */
   const CIELOS = {
-    noche: [[0, "#0d0f26"], [0.28, "#161b40"], [0.52, "#232d66"], [0.72, "#36468a"], [0.86, "#5d5893"], [1, "#a86d7c"]],
-    bosque: [[0, "#07141a"], [0.35, "#0d2a2c"], [0.6, "#16413c"], [0.8, "#2d5a48"], [1, "#6a7a52"]],
+    cuaderno: [[0, "#fbf6ea"], [0.5, "#f6efe0"], [1, "#ece2c8"]],
+    bosque: [[0, "#2a1d5c"], [0.3, "#4a2f86"], [0.55, "#8a4aa0"], [0.78, "#e07a9a"], [1, "#ffc39a"]],
     digital: [[0, "#06051a"], [0.35, "#120a35"], [0.6, "#25105a"], [0.82, "#4a1670"], [1, "#9a2f7a"]],
-    pesadilla: [[0, "#050207"], [0.4, "#12060f"], [0.65, "#2a0a1c"], [0.85, "#4a0f24"], [1, "#6e1a2a"]]
+    fabrica: [[0, "#1a1210"], [0.4, "#2e1f18"], [0.65, "#4a2e1c"], [0.85, "#7a4a24"], [1, "#b8702e"]]
   };
 
   function cielo(tema, W, H) {
@@ -479,89 +561,107 @@ window.MonkyEscenario = (function () {
 
   const px = (c, x, y, color) => { c.fillStyle = color; c.fillRect(x, y, 1, 1); };
 
-  /* ---------- Sueño nocturno ---------- */
-  function capasNoche(sem) {
-    const luna = crearCanvas(40, 40);
-    const l = luna.getContext("2d");
-    for (let y = 0; y < 40; y++) for (let x = 0; x < 40; x++) {
-      const d = Math.hypot(x - 19.5, y - 19.5);
-      if (d <= 12.5) {
-        let color = "#fff1d0";
-        if (Math.hypot(x - 23, y - 23) > 12) color = "#fff8e6";
-        if (Math.hypot(x - 16, y - 16) > 12.6) color = "#f0d39c";
-        [[15, 14, 2.6], [23, 19, 2], [18, 24, 3], [24, 13, 1.4]].forEach(([kx, ky, kr]) => {
-          if (Math.hypot(x - kx, y - ky) <= kr) color = "#e3c287";
-        });
-        if (d > 11.6) color = "#e9c98f";
-        px(l, x, y, color);
-      } else if (d <= 16 && (x + y) % 2 === 0) {
-        px(l, x, y, "rgba(255, 241, 208, 0.18)");
-      }
-    }
-    const montanas = capaSilueta((x) => 78 + perfil(x, [[2, 14], [5, 7], [11, 3]], 1.7 + sem), "#1d2556", "#34428a");
-    const islas = crearCanvas(PERIODO, ALTO_BASE);
-    const ic = islas.getContext("2d");
-    [{ x: 60, y: 62, w: 46, casa: true }, { x: 230, y: 44, w: 30 }, { x: 360, y: 72, w: 54, cascada: true }, { x: 465, y: 50, w: 24 }].forEach((isla, n) => {
-      const ix = (isla.x + sem * 97) % PERIODO;
-      for (let y = 0; y < isla.w * 0.55; y++) {
-        const mitad = (isla.w / 2) * (1 - y / (isla.w * 0.55)) ** 0.8;
-        for (let x = -Math.floor(mitad); x <= Math.floor(mitad); x++) {
-          px(ic, (ix + x + PERIODO) % PERIODO, isla.y + y, x > mitad * 0.3 ? "#1c2350" : "#212a5c");
-        }
-      }
-      // Borde superior apagado: son decorado lejano, no plataformas
-      for (let x = -isla.w / 2; x <= isla.w / 2; x++) px(ic, (ix + x + PERIODO) % PERIODO, isla.y - 1, "#283368");
-      if (isla.casa) {
-        ic.fillStyle = "#2b3570"; ic.fillRect(ix - 6, isla.y - 8, 12, 8);
-        ic.fillStyle = "#3a2a4a"; ic.fillRect(ix - 7, isla.y - 10, 14, 2);
-        ic.fillStyle = "#ffcc66"; ic.fillRect(ix - 3, isla.y - 6, 3, 3);
-      }
-      if (isla.cascada) for (let y = 0; y < 30; y++) px(ic, ix + 12, isla.y + 6 + y, (y + n) % 2 ? "#7aa6cf" : "#4f7fb0");
-    });
-    const colinas = capaSilueta((x) => 46 + perfil(x, [[3, 9], [7, 4], [13, 2]], 4.1 + sem), "#141a3d", "#36438a", (c, altura) => {
-      [[90, 0.35, 40], [300, -0.3, 32], [430, 0.2, 24]].forEach(([bx, inc, largo]) => {
-        const base = Math.round(ALTO_BASE - altura(bx)) + 6;
-        for (let i = 0; i < largo; i++) for (let w = -2; w <= 2; w++) {
-          if (i > largo - 8 && Math.abs(w) > (largo - i) / 3) continue;
-          px(c, Math.round(bx + i * inc) + w, base - i, i < 4 ? "#3a2a4a" : i > largo - 3 ? "#2a2147" : w === -2 ? "#323d7a" : "#262f63");
-        }
-      });
-    });
-    return {
-      astro: { lienzo: luna, x: 246, y: 10 },
-      capas: [[montanas, 0.1, 0], [islas, 0.2, 2], [colinas, 0.4, 0]],
-      estrellas: true, aurora: sem % 2 === 1
-    };
+  /* ---------- El Cuaderno ---------- */
+  // Trazo de lápiz: un pixel con algo de temblor
+  function trazo(c, x0, y0, x1, y1, color) {
+    const pasos = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0), 1);
+    for (let i = 0; i <= pasos; i++) px(c, Math.round(x0 + (x1 - x0) * i / pasos), Math.round(y0 + (y1 - y0) * i / pasos), color);
   }
 
-  /* ---------- Bosque mágico ---------- */
+  function capasCuaderno(sem) {
+    const GRAFITO = "#5a5f73", SUAVE = "#a9aec0";
+    // Sol garabateado con cara feliz
+    const sol = crearCanvas(40, 40);
+    const l = sol.getContext("2d");
+    for (let y = 0; y < 40; y++) for (let x = 0; x < 40; x++) {
+      const d = Math.hypot(x - 19.5, y - 19.5);
+      if (d <= 9.6 && d > 8.4) px(l, x, y, "#ff9a3c");
+      else if (d <= 8.4 && (x + y) % 3 === 0) px(l, x, y, "#ffd23f");
+    }
+    for (let k = 0; k < 10; k++) {
+      const a = (k / 10) * Math.PI * 2;
+      trazo(l, Math.round(19.5 + Math.cos(a) * 12), Math.round(19.5 + Math.sin(a) * 12), Math.round(19.5 + Math.cos(a) * 17), Math.round(19.5 + Math.sin(a) * 17), "#ff9a3c");
+    }
+    px(l, 16, 17, GRAFITO); px(l, 23, 17, GRAFITO);
+    trazo(l, 15, 22, 17, 24, GRAFITO); trazo(l, 17, 24, 22, 24, GRAFITO); trazo(l, 22, 24, 24, 22, GRAFITO);
+
+    // Colinas dibujadas a lápiz con sombreado de rayitas
+    const colinas = capaSilueta((x) => 70 + perfil(x, [[2, 12], [5, 6]], 1.7 + sem), "#efe6d0", GRAFITO, (c, altura) => {
+      for (let x = 0; x < PERIODO; x += 4) {
+        const top = Math.round(ALTO_BASE - altura(x));
+        for (let k = 3; k < 9; k++) px(c, x + (k % 2), top + k * 2, "#d8cfb6");
+      }
+    });
+    // Casitas y árboles de contorno con lápices de colores
+    const dibujos = crearCanvas(PERIODO, ALTO_BASE);
+    const d = dibujos.getContext("2d");
+    for (let i = 0; i < 7; i++) {
+      const bx = Math.floor(ruido(i, sem, 31) * (PERIODO - 30)) + 10;
+      const suelo = ALTO_BASE - 44 - Math.floor(ruido(i, sem, 32) * 10);
+      if (i % 2) {
+        // Árbol: copa redonda verde y tronco marrón
+        const r = 7 + Math.floor(ruido(i, sem, 33) * 4);
+        for (let a = 0; a < Math.PI * 2; a += 0.08) px(d, Math.round(bx + Math.cos(a) * r), Math.round(suelo - 10 - r + Math.sin(a) * r), "#3e9a5a");
+        for (let y = -r + 2; y < r - 1; y += 3) for (let x = -r + 2; x < r - 1; x += 2) if (Math.hypot(x, y) < r - 2) px(d, bx + x + (y % 2), suelo - 10 - r + y, "#9ad6a2");
+        trazo(d, bx, suelo - 10, bx, suelo, "#8a5538"); trazo(d, bx + 1, suelo - 10, bx + 1, suelo, "#8a5538");
+      } else {
+        // Casita: cuadro y techo de triángulo
+        const w = 16 + Math.floor(ruido(i, sem, 34) * 6), h = 12;
+        trazo(d, bx, suelo, bx + w, suelo, GRAFITO); trazo(d, bx, suelo, bx, suelo - h, GRAFITO); trazo(d, bx + w, suelo, bx + w, suelo - h, GRAFITO);
+        trazo(d, bx - 2, suelo - h, bx + w / 2, suelo - h - 9, "#e8473c"); trazo(d, bx + w / 2, suelo - h - 9, bx + w + 2, suelo - h, "#e8473c"); trazo(d, bx - 2, suelo - h, bx + w + 2, suelo - h, "#e8473c");
+        for (let y = 2; y < h; y += 3) trazo(d, bx + 2, suelo - y, bx + w - 2, suelo - y, "#a9c8f0");
+        trazo(d, bx + 6, suelo, bx + 6, suelo - 6, GRAFITO); trazo(d, bx + 9, suelo, bx + 9, suelo - 6, GRAFITO); trazo(d, bx + 6, suelo - 6, bx + 9, suelo - 6, GRAFITO);
+      }
+    }
+    // Estrellitas y espirales sueltas
+    for (let i = 0; i < 10; i++) {
+      const sx = Math.floor(ruido(i, sem, 35) * PERIODO), sy = 20 + Math.floor(ruido(i, sem, 36) * 50);
+      const col = ["#3b6fd8", "#e8473c", "#b06ad0"][i % 3];
+      if (i % 2) { trazo(d, sx - 2, sy, sx + 2, sy, col); trazo(d, sx, sy - 2, sx, sy + 2, col); px(d, sx - 1, sy - 1, col); px(d, sx + 1, sy + 1, col); }
+      else for (let a = 0; a < 9; a += 0.4) px(d, Math.round(sx + Math.cos(a) * a * 0.5), Math.round(sy + Math.sin(a) * a * 0.5), col);
+    }
+    // Lomas cercanas con pasto de crayón
+    const cerca = capaSilueta((x) => 30 + perfil(x, [[3, 6], [9, 2]], 4.1 + sem), "#e6dcc2", GRAFITO, (c, altura) => {
+      for (let x = 0; x < PERIODO; x += 3) {
+        const top = Math.round(ALTO_BASE - altura(x));
+        px(c, x, top - 1, "#62c06c"); px(c, x + 1, top - 2, "#62c06c"); px(c, x + 1, top - 1, "#3e9a5a");
+      }
+    });
+    return { astro: { lienzo: sol, x: 246, y: 8 }, capas: [[colinas, 0.1, 0], [dibujos, 0.22, 0], [cerca, 0.4, 0]], rayado: true };
+  }
+
+  /* ---------- Bosque de Colores ---------- */
   function capasBosque(sem) {
     const luna = crearCanvas(24, 24);
     const l = luna.getContext("2d");
     for (let y = 0; y < 24; y++) for (let x = 0; x < 24; x++) {
       const d = Math.hypot(x - 11.5, y - 11.5);
-      if (d <= 8) px(l, x, y, d > 7 ? "#bfe8c8" : "#e9fff0");
-      else if (d <= 11 && (x + y) % 2 === 0) px(l, x, y, "rgba(200, 255, 220, 0.16)");
+      if (d <= 8) px(l, x, y, d > 7 ? "#ffd6a0" : "#fff1c8");
+      else if (d <= 11 && (x + y) % 2 === 0) px(l, x, y, "rgba(255, 230, 180, 0.2)");
     }
-    const arbolesLejos = capaSilueta((x) => 60 + perfil(x, [[4, 6], [9, 3]], 2.2 + sem), "#123029", "#1d4a3e", (c, altura) => {
+    const arbolesLejos = capaSilueta((x) => 60 + perfil(x, [[4, 6], [9, 3]], 2.2 + sem), "#5a3a96", "#8a6ad0", (c, altura) => {
       for (let i = 0; i < 26; i++) {
         const bx = Math.floor(ruido(i, sem, 31) * PERIODO);
         const top = Math.round(ALTO_BASE - altura(bx));
         const alto = 14 + Math.floor(ruido(i, sem, 32) * 16);
         for (let y = 0; y < alto; y++) {
           const ancho = Math.round((y / alto) * 7) + 1;
-          c.fillStyle = "#123029"; c.fillRect(bx - ancho, top - alto + y, ancho * 2, 1);
-          px(c, bx - ancho, top - alto + y, "#1d4a3e");
+          c.fillStyle = "#5a3a96"; c.fillRect(bx - ancho, top - alto + y, ancho * 2, 1);
+          px(c, bx - ancho, top - alto + y, "#8a6ad0");
         }
       }
     });
-    const arbolesMedio = capaSilueta((x) => 44 + perfil(x, [[3, 8], [8, 4]], 5.3 + sem), "#0b231f", "#174036", (c, altura) => {
+    const arbolesMedio = capaSilueta((x) => 44 + perfil(x, [[3, 8], [8, 4]], 5.3 + sem), "#2f2066", "#5a4ab0", (c, altura) => {
       for (let i = 0; i < 9; i++) {
         const bx = Math.floor(ruido(i, sem, 41) * PERIODO);
         const top = Math.round(ALTO_BASE - altura(bx));
-        c.fillStyle = "#0b231f"; c.fillRect(bx - 2, top - 30, 5, 30);
+        c.fillStyle = "#2f2066"; c.fillRect(bx - 2, top - 30, 5, 30);
         for (let y = -22; y < 0; y++) for (let x = -14; x <= 14; x++) {
-          if (Math.hypot(x / 14, (y + 30) / 16) <= 1) px(c, bx + x, top - 30 + y + 16, ruido(bx + x, y, 42) < 0.08 ? "#174036" : "#0b231f");
+          if (Math.hypot(x / 14, (y + 30) / 16) <= 1) {
+            const r = ruido(bx + x, y, 42);
+            // Frutos y flores de colores en la copa
+            px(c, bx + x, top - 30 + y + 16, r < 0.03 ? "#ff8fd1" : r < 0.06 ? "#7ff0d0" : r < 0.075 ? "#ffd23f" : r < 0.12 ? "#5a4ab0" : "#2f2066");
+          }
         }
         // Hongos luminosos al pie
         for (let k = 0; k < 3; k++) {
@@ -572,11 +672,11 @@ window.MonkyEscenario = (function () {
         }
       }
     });
-    const helechos = capaSilueta((x) => 26 + perfil(x, [[6, 5], [15, 2]], 8.1 + sem), "#061712", "#0f2d24", (c, altura) => {
+    const helechos = capaSilueta((x) => 26 + perfil(x, [[6, 5], [15, 2]], 8.1 + sem), "#1d1446", "#3a2a86", (c, altura) => {
       for (let i = 0; i < 14; i++) {
         const bx = Math.floor(ruido(i, sem, 51) * PERIODO);
         const top = Math.round(ALTO_BASE - altura(bx));
-        for (let k = 0; k < 12; k++) { px(c, bx + k, top - Math.round(Math.sin(k / 3) * 6) - k / 2, "#0f2d24"); px(c, bx - k, top - Math.round(Math.sin(k / 3) * 6) - k / 2, "#0f2d24"); }
+        for (let k = 0; k < 12; k++) { px(c, bx + k, top - Math.round(Math.sin(k / 3) * 6) - k / 2, "#3a2a86"); px(c, bx - k, top - Math.round(Math.sin(k / 3) * 6) - k / 2, "#3a2a86"); }
       }
     });
     return { astro: { lienzo: luna, x: 60, y: 18 }, capas: [[arbolesLejos, 0.1, 0], [arbolesMedio, 0.25, 0], [helechos, 0.45, 0]], esporas: true };
@@ -628,34 +728,86 @@ window.MonkyEscenario = (function () {
     return { astro: { lienzo: sol, x: 200, y: 26 }, capas: [[torres, 0.1, 0], [circuitos, 0.25, 0], [chips, 0.45, 0]], datos: true, rejilla: true };
   }
 
-  /* ---------- Pesadilla ---------- */
-  function capasPesadilla(sem) {
-    const luna = crearCanvas(36, 36);
-    const l = luna.getContext("2d");
-    for (let y = 0; y < 36; y++) for (let x = 0; x < 36; x++) {
-      const d = Math.hypot(x - 17.5, y - 17.5);
-      if (d <= 11) px(l, x, y, Math.hypot(x - 21, y - 14) < 10 ? "#6e1a2a" : "#ff4d6d");
-      else if (d <= 16 && (x + y) % 2 === 0) px(l, x, y, "rgba(255, 77, 109, 0.14)");
+  /* ---------- Fábrica de Ideas ---------- */
+  // Engranaje de fondo (silueta) para un ángulo dado
+  function engranajeFondo(r, angulo, color, borde) {
+    const t = r * 2 + 8;
+    const c = crearCanvas(t, t), g = c.getContext("2d");
+    const cx = t / 2 - 0.5;
+    for (let y = 0; y < t; y++) for (let x = 0; x < t; x++) {
+      const dx = x - cx, dy = y - cx, d = Math.hypot(dx, dy);
+      const ang = Math.atan2(dy, dx) - angulo;
+      const radio = r + (Math.cos(ang * 10) > 0.3 ? 3 : 0);
+      if (d > radio || d < r * 0.3) continue;
+      g.fillStyle = d > radio - 1 || (d < r * 0.3 + 1) ? borde : color;
+      g.fillRect(x, y, 1, 1);
     }
-    const arboles = capaSilueta((x) => 52 + perfil(x, [[3, 8], [7, 3]], 6.6 + sem), "#100510", "#2a0a1c", (c, altura) => {
-      for (let i = 0; i < 12; i++) {
-        let x = Math.floor(ruido(i, sem, 91) * PERIODO);
-        let y = Math.round(ALTO_BASE - altura(x));
-        for (let k = 0; k < 40; k++) {
-          c.fillStyle = "#100510"; c.fillRect(x, y, 2, 1);
-          y--; if (ruido(i, k, 92) < 0.25) x += ruido(i, k, 93) < 0.5 ? -1 : 1;
-          if (k > 20 && k % 6 === 0) for (let r = 0; r < 8; r++) px(c, x + (k % 12 ? r : -r), y - Math.floor(r / 2), "#100510");
-        }
-      }
-    });
-    const colinas = capaSilueta((x) => 34 + perfil(x, [[4, 6], [10, 2]], 9.2 + sem), "#0a0309", "#240a1c");
-    return { astro: { lienzo: luna, x: 230, y: 14 }, capas: [[arboles, 0.12, 0], [colinas, 0.3, 0]], ojos: true, niebla: true };
+    return c;
   }
 
-  const CONSTRUCTORES = { noche: capasNoche, bosque: capasBosque, digital: capasDigital, pesadilla: capasPesadilla };
+  function capasFabrica(sem) {
+    // Resplandor del horno al fondo
+    const horno = crearCanvas(48, 48);
+    const l = horno.getContext("2d");
+    for (let y = 0; y < 48; y++) for (let x = 0; x < 48; x++) {
+      const d = Math.hypot(x - 23.5, y - 23.5);
+      if (d <= 12) px(l, x, y, d > 10 ? "#ff8a3d" : "#ffb35a");
+      else if (d <= 22 && (x + y) % 2 === 0) px(l, x, y, "rgba(255, 140, 60, " + (0.22 - d * 0.008).toFixed(2) + ")");
+    }
+    const chimeneas = [];
+    const naves = capaSilueta((x) => 52 + (Math.floor(x / 64) % 2) * 10, "#2a1d18", "#3e2c22", (c, altura) => {
+      for (let i = 0; i < 6; i++) {
+        const bx = Math.floor(ruido(i, sem, 91) * (PERIODO - 20)) + 10;
+        const top = Math.round(ALTO_BASE - altura(bx));
+        const alto = 34 + Math.floor(ruido(i, sem, 92) * 30);
+        c.fillStyle = "#2a1d18"; c.fillRect(bx, top - alto, 8, alto);
+        c.fillStyle = "#3e2c22"; c.fillRect(bx - 1, top - alto, 10, 2);
+        chimeneas.push({ x: bx + 4, y: top - alto });
+      }
+      // Ventanas encendidas
+      for (let x = 4; x < PERIODO; x += 9) {
+        const top = Math.round(ALTO_BASE - altura(x));
+        if (ruido(x, sem, 93) < 0.45) { px(c, x, top + 8, "#ffb35a"); px(c, x + 1, top + 8, "#ffb35a"); px(c, x, top + 9, "#c97a2e"); px(c, x + 1, top + 9, "#c97a2e"); }
+      }
+    });
+    const tubos = crearCanvas(PERIODO, ALTO_BASE);
+    const t = tubos.getContext("2d");
+    for (let i = 0; i < 4; i++) {
+      const y = ALTO_BASE - 60 - i * 14 - Math.floor(ruido(i, sem, 94) * 6);
+      const x0 = Math.floor(ruido(i, sem, 95) * PERIODO), largo = 120 + Math.floor(ruido(i, sem, 96) * 160);
+      for (let x = x0; x < x0 + largo; x++) {
+        const xx = x % PERIODO;
+        t.fillStyle = "#1d1410"; t.fillRect(xx, y - 1, 1, 6);
+        t.fillStyle = "#4a3a30"; t.fillRect(xx, y, 1, 4);
+        t.fillStyle = "#6a5444"; t.fillRect(xx, y, 1, 1);
+        if (x % 40 === 0) { t.fillStyle = "#1d1410"; t.fillRect(xx - 1, y - 2, 4, 8); t.fillStyle = "#7a6454"; t.fillRect(xx, y - 1, 2, 6); }
+      }
+      const bajada = (x0 + largo) % PERIODO;
+      t.fillStyle = "#1d1410"; t.fillRect(bajada - 1, y, 6, ALTO_BASE - y);
+      t.fillStyle = "#4a3a30"; t.fillRect(bajada, y, 4, ALTO_BASE - y);
+    }
+    const cinta = capaSilueta((x) => 22 + (x % 128 < 70 ? 4 : 0), "#1a1210", "#3a2a22", (c, altura) => {
+      for (let x = 0; x < PERIODO; x += 6) { const top = Math.round(ALTO_BASE - altura(x)); px(c, x, top + 2, "#5a4232"); px(c, x + 1, top + 2, "#5a4232"); }
+    });
+    // Engranajes animados (se dibujan cada cuadro)
+    const engranajes = [];
+    for (let i = 0; i < 4; i++) {
+      const r = 10 + Math.floor(ruido(i, sem, 97) * 10);
+      const cuadros = [];
+      for (let k = 0; k < 8; k++) cuadros.push(engranajeFondo(r, (k / 8) * (Math.PI / 5), "#33241c", "#4a3428"));
+      engranajes.push({ x: Math.floor(ruido(i, sem, 98) * PERIODO), y: 60 + Math.floor(ruido(i, sem, 99) * 60), r: r, cuadros: cuadros, giro: i % 2 ? 1 : -1 });
+    }
+    return {
+      astro: { lienzo: horno, x: 220, y: 20 },
+      capas: [[naves, 0.1, 0], [tubos, 0.22, 0], [cinta, 0.42, 0]],
+      engranajes: engranajes, chimeneas: chimeneas, niebla: true
+    };
+  }
+
+  const CONSTRUCTORES = { cuaderno: capasCuaderno, bosque: capasBosque, digital: capasDigital, fabrica: capasFabrica };
 
   function construirFondo(tema, variante) {
-    const nombre = tema || "noche";
+    const nombre = CONSTRUCTORES[tema] ? tema : "cuaderno";
     const sem = variante || 0;
     const def = CONSTRUCTORES[nombre](sem);
     const cieloCache = { W: 0, H: 0, lienzo: null };
@@ -666,9 +818,6 @@ window.MonkyEscenario = (function () {
     }
     const brillos = [];
     for (let i = 0; i < 16; i++) brillos.push({ x: ruido(i, 9, 3 + sem) * 480, y: ruido(i, 8, 3), fase: ruido(i, 7, 3) * 6.28 });
-    const ojos = [];
-    for (let i = 0; i < 7; i++) ojos.push({ x: ruido(i, 11, 5 + sem) * PERIODO, y: 0.45 + ruido(i, 12, 5) * 0.35, fase: ruido(i, 13, 5) * 9 });
-    let fugaz = null;
 
     function capaRepetida(ctx, lienzo, desplazamiento, y, W) {
       let x = -(((desplazamiento % PERIODO) + PERIODO) % PERIODO);
@@ -692,39 +841,30 @@ window.MonkyEscenario = (function () {
         }
       }
 
-      if (def.estrellas || nombre === "pesadilla" || nombre === "bosque") {
+      if (def.rayado) {
+        // Hoja de cuaderno: renglones azules y margen rojo
+        ctx.fillStyle = "#cfe0f0";
+        for (let y = base + 14; y < H; y += 10) ctx.fillRect(0, y, W, 1);
+        ctx.fillStyle = "#f2a0a0";
+        const margen = Math.round(24 - ((camX * 0.05) % 360));
+        if (margen > -2) ctx.fillRect(margen, 0, 1, H);
+      }
+
+      if (nombre === "bosque" || nombre === "digital") {
         const zona = base + 110;
         estrellas.forEach((e, i) => {
-          if (nombre !== "noche" && i % 3) return;
+          if (i % 3) return;
           let x = (e.x - camX * 0.03) % 480;
           if (x < 0) x += 480;
           if (x > W) return;
           const y = Math.round(e.y * zona);
           const brillo = Math.sin(t * 1.7 + e.fase);
           const xi = Math.round(x);
-          if (e.tipo === 2 && nombre === "noche") {
-            ctx.fillStyle = "#fff1d0"; ctx.fillRect(xi, y, 1, 1);
-            if (brillo > -0.2) { ctx.fillRect(xi - 1, y, 3, 1); ctx.fillRect(xi, y - 1, 1, 3); }
-          } else if (brillo > (e.tipo === 1 ? -0.6 : 0)) {
-            ctx.fillStyle = nombre === "pesadilla" ? "#7a2a3a" : e.tipo === 1 ? "#fff1d0" : "#9aa6dc";
+          if (brillo > (e.tipo === 1 ? -0.6 : 0)) {
+            ctx.fillStyle = e.tipo === 1 ? "#fff1d0" : "#9aa6dc";
             ctx.fillRect(xi, y, 1, 1);
           }
         });
-      }
-
-      if (nombre === "noche") {
-        if (!fugaz && Math.random() < 0.0025) fugaz = { x: 40 + Math.random() * (W - 120), y: 8 + Math.random() * 40, vida: 0 };
-        if (fugaz) {
-          fugaz.vida += 1 / 60;
-          const avance = fugaz.vida * 160;
-          for (let i = 0; i < 10; i++) {
-            ctx.globalAlpha = (1 - i / 10) * Math.max(0, 1 - fugaz.vida * 1.4);
-            ctx.fillStyle = "#fff1d0";
-            ctx.fillRect(Math.round(fugaz.x + avance - i * 2), Math.round(fugaz.y + (avance - i * 2) * 0.45), 1, 1);
-          }
-          ctx.globalAlpha = 1;
-          if (fugaz.vida > 0.8) fugaz = null;
-        }
       }
 
       if (def.rejilla) {
@@ -738,23 +878,37 @@ window.MonkyEscenario = (function () {
       const a = def.astro;
       ctx.drawImage(a.lienzo, Math.round(W * (a.x / 320) - camX * 0.02), base + a.y);
 
-      def.capas.forEach(([lienzo, factor, extra]) => {
-        capaRepetida(ctx, lienzo, camX * factor + (extra ? t * extra : 0), base + (extra ? Math.round(Math.sin(t * 0.6) * 1.5) : 0), W);
-      });
-
-      if (def.ojos) {
-        ojos.forEach((o) => {
-          let x = (o.x - camX * 0.3) % PERIODO;
+      if (def.engranajes) {
+        // Engranajes que giran detrás de las naves
+        def.engranajes.forEach((e) => {
+          let x = (e.x - camX * 0.16) % PERIODO;
           if (x < 0) x += PERIODO;
-          if (x > W) return;
-          const abierto = (t + o.fase) % 5 > 0.3;
-          if (!abierto) return;
-          const y = Math.round(base + 180 - 40 * o.y);
-          ctx.fillStyle = "#ff4d6d";
-          ctx.fillRect(Math.round(x), y, 2, 1);
-          ctx.fillRect(Math.round(x) + 5, y, 2, 1);
+          const cuadro = e.cuadros[((Math.floor(t * 6 * e.giro) % 8) + 8) % 8];
+          for (let k = -1; k <= 0; k++) {
+            const xx = Math.round(x + k * PERIODO - cuadro.width / 2);
+            if (xx > -cuadro.width && xx < W) ctx.drawImage(cuadro, xx, base + e.y);
+          }
         });
       }
+
+      def.capas.forEach(([lienzo, factor, extra], n) => {
+        capaRepetida(ctx, lienzo, camX * factor + (extra ? t * extra : 0), base + (extra ? Math.round(Math.sin(t * 0.6) * 1.5) : 0), W);
+        if (n === 0 && def.chimeneas) {
+          // Humo que sale de las chimeneas
+          def.chimeneas.forEach((ch, i) => {
+            let x = (ch.x - camX * factor) % PERIODO;
+            if (x < 0) x += PERIODO;
+            if (x > W + 20) return;
+            for (let k = 0; k < 4; k++) {
+              const f = ((t * 0.35 + k / 4 + i * 0.13) % 1);
+              const r = 2 + Math.round(f * 5);
+              ctx.fillStyle = "rgba(90, 76, 70, " + (0.5 - f * 0.45).toFixed(2) + ")";
+              ctx.fillRect(Math.round(x - r + f * 10), Math.round(base + ch.y - 4 - f * 34), r * 2, r * 2);
+            }
+          });
+        }
+      });
+
     }
 
     function dibujarFrente(ctx, camX, t, W, H) {
@@ -766,12 +920,12 @@ window.MonkyEscenario = (function () {
           for (let x = 0; x < W; x += 2) {
             const v = Math.sin((x + camX * (0.6 + b * 0.2)) * 0.03 + t * (0.5 + b * 0.2) + b);
             if (v < 0.2) continue;
-            ctx.fillStyle = "rgba(120, 60, 110, 0.10)";
+            ctx.fillStyle = "rgba(90, 70, 60, 0.10)";
             ctx.fillRect(x, y + Math.round(v * 4), 2, 10 + Math.round(v * 6));
           }
         }
       }
-      const color = nombre === "bosque" ? "#b6ff9a" : nombre === "digital" ? "#5ff0ff" : nombre === "pesadilla" ? "#ff7a5a" : "#ffd678";
+      const color = nombre === "bosque" ? "#ffb8f0" : nombre === "digital" ? "#5ff0ff" : nombre === "fabrica" ? "#ffb35a" : "#8a8fa3";
       brillos.forEach((l, i) => {
         if (def.datos) {
           // Lluvia de datos: columnas de pixeles que caen
@@ -784,12 +938,14 @@ window.MonkyEscenario = (function () {
         let x = (l.x - camX * 0.9 + Math.sin(t * 0.5 + l.fase) * 14) % 480;
         if (x < 0) x += 480;
         if (x > W) return;
-        const y = base + 50 + l.y * 120 + Math.sin(t * 0.9 + l.fase * 2) * 6 - (nombre === "pesadilla" ? (t * 12 + l.fase * 20) % 60 : 0);
+        const y = base + 50 + l.y * 120 + Math.sin(t * 0.9 + l.fase * 2) * 6 - (nombre === "fabrica" ? (t * 14 + l.fase * 20) % 70 : 0);
         if (Math.sin(t * 2 + l.fase) < -0.2) return;
         const xi = Math.round(x), yi = Math.round(y);
-        ctx.fillStyle = "rgba(255, 214, 120, 0.22)";
-        ctx.fillRect(xi - 1, yi, 3, 1); ctx.fillRect(xi, yi - 1, 1, 3);
-        ctx.fillStyle = i % 3 ? color : "#ffffff";
+        if (nombre !== "cuaderno") {
+          ctx.fillStyle = "rgba(255, 214, 120, 0.22)";
+          ctx.fillRect(xi - 1, yi, 3, 1); ctx.fillRect(xi, yi - 1, 1, 3);
+        }
+        ctx.fillStyle = nombre === "cuaderno" ? color : i % 3 ? color : "#ffffff";
         ctx.fillRect(xi, yi, 1, 1);
       });
     }
@@ -798,7 +954,7 @@ window.MonkyEscenario = (function () {
   }
 
   /* =======================================================
-     ALMOHADA VOLADORA (plataforma móvil del modo Aventura)
+     PLATAFORMA VOLADORA (plataforma móvil del modo Aventura)
      ======================================================= */
   function almohada(cuadro) {
     const W = 56, H = 16;
@@ -836,12 +992,12 @@ window.MonkyEscenario = (function () {
     return capa;
   }
 
-  /* Portal de sueño: marca el cambio de mundo */
+  /* Portal: marca el cambio de mundo */
   function portal(tema) {
     const W = 28, H = 44;
     const capa = crearCanvas(W, H);
     const c = capa.getContext("2d");
-    const color = { noche: "#ffd678", bosque: "#7ff0d0", digital: "#ff6bd5", pesadilla: "#ff4d6d" }[tema] || "#ffd678";
+    const color = { cuaderno: "#3b6fd8", bosque: "#ff8fd1", digital: "#ff6bd5", fabrica: "#f2c14e" }[tema] || "#3b6fd8";
     for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
       const d = Math.hypot((x - 13.5) / 13.5, (y - 22) / 22);
       if (d > 1) continue;

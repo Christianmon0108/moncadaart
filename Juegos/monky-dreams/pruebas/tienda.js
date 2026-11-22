@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — PRUEBA DE LA ECONOMÍA (datos.js)
+   MONKY RUN — PRUEBA DE LA ECONOMÍA (datos.js)
    Saldo, compras, equipamiento, cobro único de partidas,
    misiones, datos dañados y compatibilidad con el récord
    de versiones anteriores.

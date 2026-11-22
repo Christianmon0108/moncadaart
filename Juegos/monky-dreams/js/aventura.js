@@ -1,6 +1,6 @@
 /* =========================================================
-   MONKY DREAMS — MODO AVENTURA
-   El nivel "El primer sueño" de la versión 2.0, conservado
+   MONKY RUN — MODO AVENTURA
+   El nivel "El primer boceto" de la versión 2.0, conservado
    como modo de juego. Se adapta a cualquier tamaño de
    pantalla (la cámara muestra más cielo si hay espacio).
    ========================================================= */
@@ -38,8 +38,8 @@ window.MonkyAventura = function (deps) {
   const casilla = mundo.casilla;
   const esSolida = mundo.esSolida;
 
-  const capaNivel = ESC.construirCapaNivel(MAPA);
-  const fondo = ESC.construirFondo("noche", 0);
+  const capaNivel = ESC.construirCapaNivel(MAPA, { tema: "cuaderno" });
+  const fondo = ESC.construirFondo("cuaderno", 0);
   const halo = HUD.halo(S.crearCanvas, 18, "rgba(255, 214, 120, 0.2)");
 
   /* -------------------------------------------------------
@@ -96,7 +96,7 @@ window.MonkyAventura = function (deps) {
         } else if (ch === "L") {
           lamparas.push({ x: x, y: y, w: T, h: T, activa: false });
         } else if (ch === "Z") {
-          // Zona de meta: toda la columna del despertador (también cuenta pasar por encima)
+          // Zona de meta: toda la columna del reloj de entrega (también cuenta pasar por encima)
           meta = { x: x - 2, y: -64, w: 20, h: y + 16 + 64, dibujoY: y - 3 };
         } else if (ch === "M") {
           inicio = { x: x + 3, y: y + T - jugador.h };
@@ -635,7 +635,7 @@ window.MonkyAventura = function (deps) {
     reiniciarNivel();
     estado = "jugando";
     fundido = 1;
-    deps.aviso("Reúne monedas y llega al despertador. ¡Cuidado con los bichos!");
+    deps.aviso("Reúne monedas y llega al reloj de entrega. ¡Cuidado con los bichos!");
   }
 
   return {

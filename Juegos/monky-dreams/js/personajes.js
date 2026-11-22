@@ -1,5 +1,5 @@
 /* =========================================================
-   MONKY DREAMS — PERSONAJES Y ARTÍCULOS DE LA TIENDA
+   MONKY RUN — PERSONAJES Y ARTÍCULOS DE LA TIENDA
    Arma los cuadros del personaje equipado combinando:
    - el personaje (Monky, Monky Explorador, Monky Cyber o Nubi),
    - la vestimenta (cambia la ropa de Monky),
