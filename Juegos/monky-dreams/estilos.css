@@ -1,19 +1,26 @@
 /* =========================================================
-   MONKY DREAMS — ESTILOS
-   Paleta tomada de MoncadaArt: crema, naranja y azul Monky,
-   sobre una noche de sueño.
+   MONKY DREAMS — ESTILOS (interfaz pixel art)
+   --px es el tamaño de un pixel del juego en pantalla; lo
+   calcula juego.js para que botones y marcos usen la misma
+   retícula que el lienzo de 320x180.
    ========================================================= */
 
 :root {
-  --noche: #141831;
-  --noche-2: #1f2748;
+  --px: 3px;
+  --noche: #0d0f26;
+  --noche-2: #1d2248;
+  --noche-3: #3b4478;
   --crema: #f6efe5;
   --crema-2: #fff7e8;
+  --arena: #c9ad85;
   --naranja: #e8792e;
-  --naranja-oscuro: #b9551c;
+  --naranja-claro: #ffa860;
+  --naranja-oscuro: #a9481b;
+  --dorado: #f2c14e;
   --azul: #315d78;
-  --tinta: #1b1a2a;
+  --tinta: #16152a;
   --fuente: "Pixelify Sans", ui-monospace, "Courier New", monospace;
+  --hueco: 0px;
 }
 
 * {
@@ -25,9 +32,7 @@ body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 50% 0%, #26305a 0%, transparent 60%),
-    var(--noche);
+  background: var(--noche);
   color: var(--crema);
   font-family: var(--fuente);
   -webkit-tap-highlight-color: transparent;
@@ -35,6 +40,42 @@ body {
   -webkit-user-select: none;
   user-select: none;
   overscroll-behavior: none;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 50% 0%, #232a5c 0%, transparent 65%),
+    var(--noche);
+}
+
+.sprites-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+svg {
+  fill: currentColor;
+  shape-rendering: crispEdges;
+}
+
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Contorno pixel con esquinas recortadas (técnica de 4 sombras) */
+.pixel {
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--tinta),
+    0 var(--px) 0 0 var(--tinta),
+    calc(var(--px) * -1) 0 0 0 var(--tinta),
+    var(--px) 0 0 0 var(--tinta);
 }
 
 .app {
@@ -53,7 +94,7 @@ body {
 .escenario {
   position: relative;
   width: min(100vw, calc(100vh * 16 / 9), 1280px);
-  width: min(100vw, calc(100dvh * 16 / 9), 1280px);
+  width: min(calc(100vw - var(--hueco) * 2), calc(100dvh * 16 / 9), 1280px);
   aspect-ratio: 16 / 9;
   container-type: inline-size;
   overflow: hidden;
@@ -63,12 +104,17 @@ body {
 
 @media (min-width: 900px) and (min-height: 560px) {
   .escenario {
-    width: min(92vw, calc(88dvh * 16 / 9), 1280px);
-    border: 3px solid var(--tinta);
-    border-radius: 14px;
+    width: min(92vw, calc(86dvh * 16 / 9), 1280px);
     box-shadow:
-      0 0 0 3px #2c3866,
-      0 24px 60px rgba(0, 0, 0, .45);
+      0 calc(var(--px) * -1) 0 0 var(--tinta),
+      0 var(--px) 0 0 var(--tinta),
+      calc(var(--px) * -1) 0 0 0 var(--tinta),
+      var(--px) 0 0 0 var(--tinta),
+      0 calc(var(--px) * -2) 0 0 var(--noche-3),
+      0 calc(var(--px) * 2) 0 0 var(--noche-3),
+      calc(var(--px) * -2) 0 0 0 var(--noche-3),
+      calc(var(--px) * 2) 0 0 0 var(--noche-3),
+      0 calc(var(--px) * 10) calc(var(--px) * 12) rgba(0, 0, 0, .45);
   }
 }
 
@@ -82,50 +128,75 @@ canvas {
 }
 
 /* =========================================================
-   BOTONES SUPERIORES
+   BOTONES SUPERIORES (iconos pixel)
    ========================================================= */
 
 .hud-botones {
   position: absolute;
-  top: 1.6cqw;
+  top: calc(var(--px) * 4);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 1.2cqw;
+  gap: calc(var(--px) * 4);
   z-index: 3;
 }
 
-/* En la portada no hay HUD: los botones van a la esquina */
 body.en-titulo .hud-botones {
   left: auto;
-  right: 1.6cqw;
+  right: calc(var(--px) * 5);
   transform: none;
 }
 
 .btn-icono {
-  width: clamp(30px, 4.6cqw, 52px);
-  height: clamp(30px, 4.6cqw, 52px);
+  width: max(36px, calc(var(--px) * 12));
+  height: max(36px, calc(var(--px) * 12));
   display: grid;
   place-items: center;
+  margin: var(--px);
   padding: 0;
-  border: 2px solid var(--tinta);
-  border-radius: 8px;
-  background: rgba(20, 22, 44, .62);
+  border: 0;
+  background: var(--noche-2);
   color: var(--crema-2);
-  font: 700 clamp(13px, 2cqw, 22px) / 1 var(--fuente);
   cursor: pointer;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--tinta),
+    0 var(--px) 0 0 var(--tinta),
+    calc(var(--px) * -1) 0 0 0 var(--tinta),
+    var(--px) 0 0 0 var(--tinta),
+    inset 0 var(--px) 0 0 var(--noche-3),
+    inset 0 calc(var(--px) * -1) 0 0 #121633;
+}
+
+.btn-icono svg {
+  width: 50%;
+  height: 50%;
 }
 
 .btn-icono:hover {
-  background: rgba(49, 93, 120, .85);
+  background: var(--azul);
+}
+
+.btn-icono:active {
+  transform: translateY(var(--px));
 }
 
 .btn-icono[hidden] {
   display: none;
 }
 
+.btn-icono .icono-off,
+.btn-icono.apagado .icono-on,
+.btn-icono.activa .icono-on {
+  display: none;
+}
+
+.btn-icono.apagado .icono-off,
+.btn-icono.activa .icono-off {
+  display: block;
+}
+
 /* =========================================================
-   PANTALLAS (inicio, pausa, derrota y victoria)
+   PANTALLAS
    ========================================================= */
 
 .pantalla {
@@ -136,10 +207,9 @@ body.en-titulo .hud-botones {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.6cqw;
-  padding: 4cqw;
+  padding: calc(var(--px) * 6);
   text-align: center;
-  background: rgba(16, 19, 40, .78);
+  background: rgba(13, 15, 38, .62);
 }
 
 .pantalla[hidden] {
@@ -147,77 +217,85 @@ body.en-titulo .hud-botones {
 }
 
 .pantalla-inicio {
-  justify-content: space-between;
-  padding-block: 4cqw 3cqw;
-  background:
-    linear-gradient(to bottom, rgba(16, 19, 40, .55), transparent 42%, transparent 70%, rgba(16, 19, 40, .5));
+  justify-content: flex-end;
+  padding-bottom: calc(var(--px) * 7);
+  background: linear-gradient(to bottom, transparent 62%, rgba(13, 15, 38, .55));
 }
 
-.inicio-arriba,
 .inicio-abajo {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1cqw;
+  gap: calc(var(--px) * 3);
 }
 
-.etiqueta {
-  margin: 0;
-  color: var(--naranja);
-  font-size: clamp(11px, 1.7cqw, 18px);
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+/* Marco de diálogo pixel */
+.marco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--px) * 3);
+  max-width: 92%;
+  padding: calc(var(--px) * 7) calc(var(--px) * 10);
+  background: var(--noche-2);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--tinta),
+    0 var(--px) 0 0 var(--tinta),
+    calc(var(--px) * -1) 0 0 0 var(--tinta),
+    var(--px) 0 0 0 var(--tinta),
+    inset 0 var(--px) 0 0 var(--noche-3),
+    inset var(--px) 0 0 0 var(--noche-3),
+    inset 0 calc(var(--px) * -2) 0 0 #121633,
+    inset calc(var(--px) * -1) 0 0 0 #121633,
+    0 calc(var(--px) * 4) 0 calc(var(--px) * -1) rgba(0, 0, 0, .35);
 }
 
-h1,
 h2 {
   margin: 0;
-  font-weight: 700;
-  line-height: .95;
   color: var(--crema-2);
+  font-size: clamp(24px, calc(var(--px) * 12), 56px);
+  font-weight: 700;
+  line-height: 1;
   text-shadow:
-    0 .5cqw 0 var(--tinta),
-    .5cqw 0 0 var(--tinta),
-    -.3cqw 0 0 var(--tinta);
+    0 var(--px) 0 var(--tinta),
+    var(--px) 0 0 var(--tinta),
+    calc(var(--px) * -1) 0 0 var(--tinta),
+    0 calc(var(--px) * -1) 0 var(--tinta),
+    0 calc(var(--px) * 2) 0 var(--naranja-oscuro);
 }
 
-h1 {
-  font-size: clamp(34px, 9cqw, 112px);
-}
-
-h1 span {
-  color: var(--naranja);
-}
-
-h2 {
-  font-size: clamp(26px, 6cqw, 72px);
+#titulo-victoria {
+  color: var(--dorado);
 }
 
 .bajada {
-  max-width: 44ch;
+  max-width: 40ch;
   margin: 0;
   color: #e9dcc6;
-  font-size: clamp(12px, 2cqw, 22px);
+  font-size: clamp(12px, calc(var(--px) * 4.5), 20px);
   line-height: 1.35;
 }
 
 .ayuda {
   margin: 0;
   color: #cfc6e6;
-  font-size: clamp(11px, 1.6cqw, 17px);
+  font-size: clamp(11px, calc(var(--px) * 3.6), 16px);
+  text-shadow: 0 var(--px) 0 var(--tinta);
 }
 
 kbd {
   display: inline-block;
-  min-width: 1.8em;
-  padding: .05em .4em;
-  border: 2px solid #4a4f7c;
-  border-bottom-width: 3px;
-  border-radius: 5px;
+  min-width: 1.7em;
+  padding: 0 .35em;
+  margin: 0 var(--px);
   background: var(--noche-2);
   color: var(--crema-2);
   font: inherit;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--noche-3),
+    0 var(--px) 0 0 var(--noche-3),
+    calc(var(--px) * -1) 0 0 0 var(--noche-3),
+    var(--px) 0 0 0 var(--noche-3);
 }
 
 .ayuda-tactil {
@@ -236,70 +314,82 @@ body.tactil .ayuda-teclado {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.4cqw;
-  margin-top: 1cqw;
+  gap: calc(var(--px) * 4);
+  margin-top: var(--px);
 }
 
-/* Botones con sombra "pixel" dura */
+/* Botón pixel: contorno con esquinas recortadas, luz arriba y sombra abajo */
 .btn {
-  min-height: 44px;
-  padding: .55em 1.3em;
-  border: 3px solid var(--tinta);
-  border-radius: 10px;
-  background: var(--crema);
+  --relleno: var(--crema);
+  --luz: #fffaf0;
+  --sombra: var(--arena);
+  min-height: 40px;
+  margin: var(--px);
+  padding: calc(var(--px) * 2.5) calc(var(--px) * 7) calc(var(--px) * 3);
+  border: 0;
+  background: var(--relleno);
   color: var(--tinta);
-  font: 700 clamp(14px, 2.3cqw, 26px) / 1 var(--fuente);
-  box-shadow: 0 5px 0 var(--tinta);
+  font: 700 clamp(14px, calc(var(--px) * 5), 24px) / 1 var(--fuente);
   cursor: pointer;
-  transition: transform .08s ease, box-shadow .08s ease, background-color .15s ease;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--tinta),
+    0 var(--px) 0 0 var(--tinta),
+    calc(var(--px) * -1) 0 0 0 var(--tinta),
+    var(--px) 0 0 0 var(--tinta),
+    inset 0 var(--px) 0 0 var(--luz),
+    inset 0 calc(var(--px) * -2) 0 0 var(--sombra),
+    0 calc(var(--px) * 3) 0 calc(var(--px) * -1) var(--tinta);
 }
 
 .btn:hover {
-  background: #fff;
+  --relleno: #fffaf0;
 }
 
 .btn:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 var(--tinta);
+  transform: translateY(calc(var(--px) * 2));
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--tinta),
+    0 var(--px) 0 0 var(--tinta),
+    calc(var(--px) * -1) 0 0 0 var(--tinta),
+    var(--px) 0 0 0 var(--tinta),
+    inset 0 var(--px) 0 0 var(--sombra);
 }
 
 .btn-principal {
-  background: var(--naranja);
+  --relleno: var(--naranja);
+  --luz: var(--naranja-claro);
+  --sombra: var(--naranja-oscuro);
   color: var(--crema-2);
-  text-shadow: 0 2px 0 var(--naranja-oscuro);
+  text-shadow: 0 var(--px) 0 var(--naranja-oscuro);
 }
 
 .btn-principal:hover {
-  background: #f08a40;
+  --relleno: #f08a40;
 }
 
-.pantalla-inicio .btn-principal {
-  font-size: clamp(18px, 3.2cqw, 36px);
-  padding: .5em 2.2em;
+.btn-grande {
+  font-size: clamp(18px, calc(var(--px) * 7), 34px);
+  padding: calc(var(--px) * 3) calc(var(--px) * 16) calc(var(--px) * 4);
 }
 
 .btn:focus-visible,
-.btn-icono:focus-visible {
-  outline: 3px solid #f2c14e;
-  outline-offset: 3px;
+.btn-icono:focus-visible,
+.volver:focus-visible {
+  outline: var(--px) solid var(--dorado);
+  outline-offset: calc(var(--px) * 3);
 }
 
-/* Enlace para regresar al portafolio */
 .volver {
   color: #cfc6e6;
-  font-size: clamp(12px, 1.6cqw, 17px);
+  font-size: clamp(12px, calc(var(--px) * 3.6), 16px);
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration-thickness: max(1px, calc(var(--px) / 2));
+  text-underline-offset: calc(var(--px) * 1.5);
+  text-shadow: 0 var(--px) 0 var(--tinta);
 }
 
-.volver:hover,
-.volver:focus-visible {
+.volver:hover {
   color: var(--crema-2);
-}
-
-.volver:focus-visible {
-  outline: 3px solid #f2c14e;
-  outline-offset: 3px;
 }
 
 /* Resultados de victoria */
@@ -307,27 +397,30 @@ body.tactil .ayuda-teclado {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1cqw;
-  margin: .5cqw 0 0;
+  gap: calc(var(--px) * 4);
+  margin: var(--px) 0 0;
 }
 
 .resultados div {
-  min-width: 11cqw;
-  padding: .8cqw 1.4cqw;
-  border: 2px solid #3b4478;
-  border-radius: 8px;
-  background: rgba(31, 39, 72, .9);
+  min-width: calc(var(--px) * 24);
+  padding: calc(var(--px) * 2) calc(var(--px) * 4);
+  background: #141838;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--noche-3),
+    0 var(--px) 0 0 var(--noche-3),
+    calc(var(--px) * -1) 0 0 0 var(--noche-3),
+    var(--px) 0 0 0 var(--noche-3);
 }
 
 .resultados dt {
   color: #cfc6e6;
-  font-size: clamp(10px, 1.4cqw, 15px);
+  font-size: clamp(10px, calc(var(--px) * 3.2), 15px);
 }
 
 .resultados dd {
   margin: 0;
-  color: #f2c14e;
-  font-size: clamp(15px, 2.6cqw, 28px);
+  color: var(--dorado);
+  font-size: clamp(16px, calc(var(--px) * 6), 28px);
   font-weight: 700;
 }
 
@@ -338,22 +431,26 @@ body.tactil .ayuda-teclado {
 .aviso {
   position: absolute;
   left: 50%;
-  bottom: 4cqw;
+  bottom: calc(var(--px) * 6);
   z-index: 3;
-  max-width: 90%;
+  max-width: 88%;
   margin: 0;
-  padding: .7cqw 1.6cqw;
-  border: 2px solid var(--tinta);
-  border-radius: 8px;
-  background: rgba(246, 239, 229, .94);
+  padding: calc(var(--px) * 2) calc(var(--px) * 5);
+  background: var(--crema);
   color: var(--tinta);
-  font-size: clamp(11px, 1.8cqw, 19px);
+  font-size: clamp(11px, calc(var(--px) * 4), 18px);
   font-weight: 600;
   text-align: center;
   opacity: 0;
-  transform: translate(-50%, 8px);
-  transition: opacity .25s ease, transform .25s ease;
+  transform: translate(-50%, calc(var(--px) * 3));
+  transition: opacity .2s steps(3), transform .2s steps(3);
   pointer-events: none;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--tinta),
+    0 var(--px) 0 0 var(--tinta),
+    calc(var(--px) * -1) 0 0 0 var(--tinta),
+    var(--px) 0 0 0 var(--tinta),
+    inset 0 calc(var(--px) * -1) 0 0 var(--arena);
 }
 
 .aviso.visible {
@@ -383,41 +480,46 @@ body.tactil .controles {
 }
 
 .tecla {
+  --t: 4px;
   display: grid;
   place-items: center;
-  width: 72px;
-  height: 72px;
-  border: 3px solid rgba(27, 26, 42, .9);
-  border-radius: 16px;
-  background: rgba(246, 239, 229, .28);
+  width: 64px;
+  height: 64px;
+  margin: var(--t);
+  background: rgba(246, 239, 229, .2);
   color: var(--crema-2);
-  font: 700 28px / 1 var(--fuente);
-  box-shadow: 0 5px 0 rgba(27, 26, 42, .7);
   touch-action: none;
+  box-shadow:
+    0 calc(var(--t) * -1) 0 0 var(--tinta),
+    0 var(--t) 0 0 var(--tinta),
+    calc(var(--t) * -1) 0 0 0 var(--tinta),
+    var(--t) 0 0 0 var(--tinta),
+    inset 0 var(--t) 0 0 rgba(255, 255, 255, .22),
+    inset 0 calc(var(--t) * -2) 0 0 rgba(0, 0, 0, .25),
+    0 calc(var(--t) * 2) 0 calc(var(--t) * -1) var(--tinta);
+}
+
+.tecla svg {
+  width: 44%;
+  height: 44%;
+  filter: drop-shadow(0 2px 0 var(--tinta));
 }
 
 .tecla.activo {
-  background: rgba(232, 121, 46, .75);
-  transform: translateY(3px);
-  box-shadow: 0 2px 0 rgba(27, 26, 42, .7);
+  background: rgba(232, 121, 46, .8);
+  transform: translateY(var(--t));
+  box-shadow:
+    0 calc(var(--t) * -1) 0 0 var(--tinta),
+    0 var(--t) 0 0 var(--tinta),
+    calc(var(--t) * -1) 0 0 0 var(--tinta),
+    var(--t) 0 0 0 var(--tinta),
+    inset 0 var(--t) 0 0 rgba(255, 168, 96, .9);
 }
 
 .tecla-saltar {
-  width: 92px;
-  height: 92px;
-  border-radius: 50%;
-  background: rgba(232, 121, 46, .45);
-  align-content: center;
-  gap: 2px;
-}
-
-.tecla-saltar span {
-  font-size: 30px;
-}
-
-.tecla-saltar small {
-  font-size: 12px;
-  font-weight: 600;
+  width: 84px;
+  height: 84px;
+  background: rgba(232, 121, 46, .55);
 }
 
 .girar {
@@ -428,19 +530,32 @@ body.tactil .controles {
   text-align: center;
 }
 
-/* Celular en horizontal: controles sobre el juego */
+/* Celular en horizontal: los controles van a los lados del juego,
+   sin tapar la acción. */
 @media (orientation: landscape) {
+  body.tactil {
+    --hueco: clamp(124px, 20vw, 180px);
+  }
+
+  body.tactil .app {
+    padding: 0 max(var(--hueco), env(safe-area-inset-right)) 0 max(var(--hueco), env(safe-area-inset-left));
+  }
+
+  body.tactil .escenario {
+    width: min(calc(100vw - var(--hueco) * 2 - env(safe-area-inset-left) - env(safe-area-inset-right)), calc(100dvh * 16 / 9));
+    box-shadow: none;
+  }
+
   body.tactil .controles {
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     z-index: 2;
+    align-items: flex-end;
     padding:
       0
-      max(16px, env(safe-area-inset-right))
-      max(14px, env(safe-area-inset-bottom))
-      max(16px, env(safe-area-inset-left));
+      max(10px, env(safe-area-inset-right))
+      max(16px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
     pointer-events: none;
   }
 
@@ -449,8 +564,34 @@ body.tactil .controles {
     pointer-events: auto;
   }
 
+  /* Dos flechas una al lado de la otra si hay espacio */
+  body.tactil .cruceta {
+    width: calc(var(--hueco) - 12px);
+    justify-content: center;
+    gap: 6px;
+  }
+
   body.tactil .tecla {
-    opacity: .85;
+    width: min(68px, calc((var(--hueco) - 34px) / 2));
+    height: 76px;
+  }
+
+  body.tactil .tecla-saltar {
+    width: min(92px, calc(var(--hueco) - 26px));
+    height: min(92px, calc(var(--hueco) - 26px));
+    margin-right: max(4px, calc((var(--hueco) - 26px - min(92px, calc(var(--hueco) - 26px))) / 2));
+  }
+}
+
+/* Pantallas muy angostas en horizontal: flechas una sobre otra */
+@media (orientation: landscape) and (max-width: 700px) {
+  body.tactil .cruceta {
+    flex-direction: column-reverse;
+  }
+
+  body.tactil .tecla {
+    width: calc(var(--hueco) - 30px);
+    height: 58px;
   }
 }
 
@@ -461,7 +602,6 @@ body.tactil .controles {
     padding-top: max(12px, env(safe-area-inset-top));
   }
 
-  /* Sin contención: así las pantallas "fixed" cubren todo el teléfono */
   body.tactil .escenario {
     width: 100vw;
     container-type: normal;
@@ -473,29 +613,19 @@ body.tactil .controles {
     align-items: center;
     padding:
       18px
-      max(20px, env(safe-area-inset-right))
-      max(24px, env(safe-area-inset-bottom))
-      max(20px, env(safe-area-inset-left));
+      max(22px, env(safe-area-inset-right))
+      max(28px, env(safe-area-inset-bottom))
+      max(22px, env(safe-area-inset-left));
   }
 
   body.tactil .tecla {
-    width: 84px;
-    height: 84px;
-    background: rgba(246, 239, 229, .12);
+    width: 76px;
+    height: 76px;
   }
 
   body.tactil .tecla-saltar {
-    width: 108px;
-    height: 108px;
-    background: rgba(232, 121, 46, .55);
-  }
-
-  /* El aviso va debajo del juego para no tapar a Monky */
-  body.tactil .aviso {
-    top: calc(100% + 14px);
-    bottom: auto;
-    font-size: 14px;
-    padding: 8px 14px;
+    width: 100px;
+    height: 100px;
   }
 
   body.tactil .girar {
@@ -504,20 +634,22 @@ body.tactil .controles {
     padding: 0 10px;
   }
 
-  /* En vertical el escenario es bajito: las pantallas ocupan todo */
-  body.tactil .pantalla {
-    position: fixed;
-    gap: 14px;
-    padding: 24px;
-    background: rgba(16, 19, 40, .94);
+  body.tactil .aviso {
+    top: calc(100% + 14px);
+    bottom: auto;
+    font-size: 14px;
   }
 
-  /* La portada deja ver a Monky dormido en el lienzo de arriba */
+  body.tactil .pantalla {
+    position: fixed;
+    padding: 20px;
+    background: rgba(13, 15, 38, .9);
+  }
+
   body.tactil .pantalla-inicio {
     justify-content: flex-end;
-    gap: 28px;
     padding-bottom: 18vh;
-    background: linear-gradient(to bottom, transparent 0, transparent 27vh, rgba(16, 19, 40, .94) 34vh);
+    background: linear-gradient(to bottom, transparent 0, transparent 27vh, rgba(13, 15, 38, .92) 34vh);
   }
 
   body.tactil .hud-botones {
@@ -526,7 +658,6 @@ body.tactil .controles {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn,
   .aviso {
     transition: none;
   }
