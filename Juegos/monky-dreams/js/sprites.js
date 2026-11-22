@@ -346,6 +346,192 @@ window.MonkySprites = (function () {
   ];
 
   /* -------------------------------------------------------
+     CARRERA INFINITA: poderes, enemigos nuevos y alas
+     ------------------------------------------------------- */
+  const ALAS_A = [
+    "..kk...",
+    ".k66k..",
+    "k6666k.",
+    ".kk66k.",
+    "...kk.."
+  ];
+
+  const ALAS_B = [
+    ".......",
+    "kkkk...",
+    "k6666k.",
+    ".k666k.",
+    "..kkk.."
+  ];
+
+  const P_ESCUDO = [
+    "..kkkkkkkk..",
+    ".klllLLlllk.",
+    ".kllLLLLllk.",
+    ".kllL66Lllk.",
+    ".kllL66Lllk.",
+    ".kllLLLLllk.",
+    "..kllLLllk..",
+    "..kllllllk..",
+    "...kllllk...",
+    "....kllk....",
+    ".....kk.....",
+    "............"
+  ];
+
+  const P_IMAN = [
+    "............",
+    "...kkkkkk...",
+    "..kzzzzzzk..",
+    ".kzzkkkkzzk.",
+    ".kzk....kzk.",
+    ".kzk....kzk.",
+    ".kzk....kzk.",
+    ".kzk....kzk.",
+    ".k6k....k6k.",
+    ".k6k....k6k.",
+    ".kkk....kkk.",
+    "............"
+  ];
+
+  const P_DOBLE = [
+    "............",
+    ".......kk...",
+    "......k66k..",
+    ".....k666k..",
+    "....k666kk..",
+    "...k666k6k..",
+    "..k666k66k..",
+    "..k66k66k...",
+    ".k66k66k....",
+    ".k6k66k.....",
+    "kkkkkk......",
+    "............"
+  ];
+
+  const P_IMPULSO = [
+    "............",
+    "......kkkk..",
+    ".....kOOOk..",
+    "....kOOOk...",
+    "...kOOOkkkk.",
+    "..kOWOOOOOk.",
+    ".kkkkOOOOk..",
+    "....kOOOk...",
+    "...kOOOk....",
+    "..kOOk......",
+    "..kkk.......",
+    "............"
+  ];
+
+  const HONGO = [
+    "....kkkkkkk.....",
+    "..kkzzzzzzzkk...",
+    ".kzz66zzzz66zk..",
+    "kzz666zzzz666zk.",
+    "kzzzzzzzzzzzzzk.",
+    "kkzzzz66zzzzzkk.",
+    ".kkkkkkkkkkkkk..",
+    "...khhhhhhhk....",
+    "...khkhhhkhk....",
+    "...khhhhhhhk....",
+    "...khkkkkkhk....",
+    "....khhhhhk.....",
+    "....kk...kk.....",
+    "...kkk...kkk...."
+  ];
+
+  const POLILLA_A = [
+    "..kk........kk..",
+    ".kUUk......kUUk.",
+    ".kUuUk....kUuUk.",
+    "..kUuUkkkkUuUk..",
+    "...kUuvvvvuUk...",
+    "....kvyvvyvk....",
+    "....kvvvvvvk....",
+    ".....kvvvvk.....",
+    "......k..k......",
+    "................",
+    "................",
+    "................"
+  ];
+
+  const POLILLA_B = [
+    "................",
+    "................",
+    "......kkkk......",
+    "....kkvvvvkk....",
+    "..kkUkvyyvkUkk..",
+    ".kUUukvvvvkuUUk.",
+    "kUUuukvvvvkuuUUk",
+    ".kUuk.kvvk.kuUk.",
+    "..kk...kk...kk..",
+    "................",
+    "................",
+    "................"
+  ];
+
+  const DRON_A = [
+    "..kkkk....kkkk..",
+    ".....k....k.....",
+    "...kkkkkkkkkk...",
+    "..kAAAAAAAAAAk..",
+    ".kAAIIAAAAAAAAk.",
+    ".kAAkrrkAAAAAAk.",
+    ".kAAkrrkAAAAAAk.",
+    ".kAAAAAAAAAAAAk.",
+    "..kaaaaaaaaaak..",
+    "...kkkkkkkkkk...",
+    "....k......k....",
+    "...kk......kk..."
+  ];
+
+  const DRON_B = [
+    "....kk....kk....",
+    ".....k....k.....",
+    "...kkkkkkkkkk...",
+    "..kAAAAAAAAAAk..",
+    ".kAAIIAAAAAAAAk.",
+    ".kAAkrrkAAAAAAk.",
+    ".kAAkrrkAAAAAAk.",
+    ".kAAAAAAAAAAAAk.",
+    "..kaaaaaaaaaak..",
+    "...kkkkkkkkkk...",
+    "....k......k....",
+    "...kk......kk..."
+  ];
+
+  const CUERVO_A = [
+    "...kk.............",
+    "..kqqk............",
+    "..kqQqk......kk...",
+    "...kqQqk...kkqqk..",
+    "....kqqqkkkqqqqk..",
+    ".....kqqqqqqqrkk..",
+    "......kqqqqqqqkkk.",
+    ".......kqqqqqk....",
+    "........kkkkk.....",
+    "..................",
+    "..................",
+    ".................."
+  ];
+
+  const CUERVO_B = [
+    "..................",
+    "..................",
+    "..........kk......",
+    ".........kqqk.....",
+    "...kkkkkkqqqqk....",
+    "..kqqqqqqqqqrkk...",
+    ".kqQqqqqqqqqqqkkk.",
+    "kqQqk.kqqqqqk.....",
+    "kqk....kkkkk......",
+    "kk................",
+    "..................",
+    ".................."
+  ];
+
+  /* -------------------------------------------------------
      CONSTRUCCIÓN
      ------------------------------------------------------- */
   function crearCanvas(ancho, alto) {
@@ -473,6 +659,95 @@ window.MonkySprites = (function () {
     return c;
   }
 
+
+  /* Tronco rodante: 4 cuadros de giro */
+  function tronco(cuadroN) {
+    const c = crearCanvas(16, 14);
+    const g = c.getContext("2d");
+    const ang = (cuadroN / 4) * Math.PI;
+    for (let y = 0; y < 14; y++) for (let x = 0; x < 16; x++) {
+      const dx = x + 0.5 - 8, dy = y + 0.5 - 7;
+      const d = Math.hypot(dx, dy);
+      if (d > 6.9) continue;
+      let color = "#d9a066";
+      if (d > 5.9) color = "#16152a";
+      else if (d > 4.6) color = (Math.atan2(dy, dx) * 3 + cuadroN) % 2 > 1 ? "#7e4022" : "#a8602f";
+      else if (Math.abs(d - 2.6) < 0.6) color = "#a8602f";
+      else if (Math.abs(dx * Math.sin(ang) - dy * Math.cos(ang)) < 0.6) color = "#8a5538";
+      g.fillStyle = color;
+      g.fillRect(x, y, 1, 1);
+    }
+    return c;
+  }
+
+  /* Burbuja de poder (16x16) con el icono dentro */
+  function burbuja(icono, color) {
+    const c = crearCanvas(16, 16);
+    const g = c.getContext("2d");
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const d = Math.hypot(x + 0.5 - 8, y + 0.5 - 8);
+      if (d > 7.8) continue;
+      if (d > 6.9) g.fillStyle = "#16152a";
+      else if (d > 5.9) g.fillStyle = color;
+      else g.fillStyle = (x + y) % 2 === 0 ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.04)";
+      g.fillRect(x, y, 1, 1);
+    }
+    g.drawImage(icono, 2, 2);
+    g.fillStyle = "#ffffff";
+    g.fillRect(4, 3, 2, 1); g.fillRect(3, 4, 1, 2);
+    return c;
+  }
+
+  /* Sombra gigante de la Pesadilla: 4 cuadros (64x96) */
+  function sombraGigante(cuadroN) {
+    const W = 64, H = 96;
+    const c = crearCanvas(W, H);
+    const g = c.getContext("2d");
+    const borde = (y) => 46 + Math.sin(y * 0.22 + cuadroN * 1.6) * 5 + Math.sin(y * 0.07 + cuadroN) * 3;
+    const dentro = (x, y) => {
+      if (y < 0 || y >= H || x < 0) return false;
+      const cabeza = Math.hypot((x - 30) / 26, (y - 34) / 30) <= 1;
+      const cuerpo = y > 30 && x < borde(y) - (y > 80 ? (y - 80) * 0.8 : 0);
+      return cabeza || cuerpo;
+    };
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (dentro(x, y)) {
+        const filo = !dentro(x + 1, y) || !dentro(x, y - 1) || !dentro(x + 2, y);
+        g.fillStyle = filo ? "#2a1f4a" : (x + y * 3) % 11 === 0 ? "#151029" : "#0a0814";
+        g.fillRect(x, y, 1, 1);
+      } else if ((dentro(x - 2, y) || dentro(x - 3, y + 1)) && (x + y + cuadroN) % 2 === 0) {
+        g.fillStyle = "rgba(42, 31, 74, 0.55)";
+        g.fillRect(x, y, 1, 1);
+      }
+    }
+    // Garras que se estiran hacia Monky
+    for (let i = 0; i < 3; i++) {
+      const y0 = 60 + i * 9, largo = 10 + ((cuadroN + i) % 4) * 3;
+      for (let k = 0; k < largo; k++) {
+        g.fillStyle = k > largo - 3 ? "#2a1f4a" : "#0a0814";
+        g.fillRect(Math.round(borde(y0) - 2 + k), y0 + Math.round(Math.sin(k * 0.5 + cuadroN) * 1.5), 2, 2);
+      }
+    }
+    // Ojos
+    [[36, 26], [50, 30]].forEach(([ox, oy], i) => {
+      for (let y = -3; y <= 3; y++) for (let x = -5; x <= 5; x++) {
+        const d = Math.hypot(x / 5, y / 3);
+        if (d > 1) continue;
+        g.fillStyle = d > 0.75 ? "#ff4d6d" : "#ffe0e6";
+        g.fillRect(ox + x, oy + y, 1, 1);
+      }
+      g.fillStyle = "#16152a";
+      g.fillRect(ox + 1 + (cuadroN % 2), oy - 1, 2, 3);
+    });
+    // Boca dentada
+    for (let x = 30; x < 56; x++) {
+      const y = 44 + Math.round((x - 30) * 0.16);
+      g.fillStyle = "#ff4d6d"; g.fillRect(x, y, 1, 4 + (cuadroN % 2));
+      if (x % 3 === 0) { g.fillStyle = "#fff4de"; g.fillRect(x, y, 1, 2); g.fillRect(x, y + 3 + (cuadroN % 2), 1, 1); }
+    }
+    return c;
+  }
+
   function construir() {
     const m = {
       quieto: [cuadro(monky("normal", "quieto", 0)), cuadro(monky("normal", "respira", 1))],
@@ -489,7 +764,11 @@ window.MonkySprites = (function () {
       caer: cuadro(monky("normal", "caida", 0)),
       dolor: cuadro(monky("dolor", "caida", 0)),
       festejo: [cuadro(monky("feliz", "festejo", 0)), cuadro(monky("feliz", "salto", 1))],
-      dormido: [cuadro(monky("dormido", "quieto", 0)), cuadro(monky("dormido", "respira", 1))]
+      dormido: [cuadro(monky("dormido", "quieto", 0)), cuadro(monky("dormido", "respira", 1))],
+      deslizar: [
+        cuadro(CABEZA.normal.concat(["bbb.kssskksssssk.."])),
+        cuadro(CABEZA.normal.concat([".bbbksssk.ksssssk."]))
+      ]
     };
 
     const bicho = BICHO_PATAS.map((patas) => cuadro(BICHO_CUERPO.concat(patas)));
@@ -510,6 +789,23 @@ window.MonkySprites = (function () {
       lamparaEncendida: cuadro(LAMPARA),
       despertador: cuadro(DESPERTADOR),
       destello: [destello(1, "#fff1b0"), destello(2, "#ffe08a"), destello(3, "#f2c14e")].map(desdeLienzo),
+      alas: [cuadro(ALAS_A), cuadro(ALAS_B)],
+      poderes: {
+        escudo: desdeLienzo(burbuja(pintar(P_ESCUDO), "#7aa6cf")),
+        iman: desdeLienzo(burbuja(pintar(P_IMAN), "#ff6b6b")),
+        doble: desdeLienzo(burbuja(pintar(P_DOBLE), "#e7dcf6")),
+        impulso: desdeLienzo(burbuja(pintar(P_IMPULSO), "#ffb35a"))
+      },
+      iconos: {
+        escudo: pintar(P_ESCUDO), iman: pintar(P_IMAN), doble: pintar(P_DOBLE), impulso: pintar(P_IMPULSO)
+      },
+      hongo: [cuadro(HONGO), cuadro(HONGO, { z: "#7a2a55", "6": "#c2507a", h: "#5a4466" })],
+      polilla: [cuadro(POLILLA_A), cuadro(POLILLA_B)],
+      dron: [cuadro(DRON_A), cuadro(DRON_B)],
+      cuervo: [cuadro(CUERVO_A), cuadro(CUERVO_B)],
+      tronco: [0, 1, 2, 3].map((i) => desdeLienzo(tronco(i))),
+      bichoDigital: BICHO_PATAS.map((patas) => cuadro(BICHO_CUERPO.concat(patas), { u: "#2bb8d8", U: "#5ff0ff", V: "#1a6f8f", v: "#0c3550", r: "#ff6bd5" })),
+      sombra: [0, 1, 2, 3].map((i) => desdeLienzo(sombraGigante(i))),
       polvo: [0, 1, 2, 3].map((i) => desdeLienzo(polvo(i))),
       crearCanvas: crearCanvas
     };

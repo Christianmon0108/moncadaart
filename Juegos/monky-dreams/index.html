@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Monky Dreams — MoncadaArt</title>
-  <meta name="description" content="Monky Dreams: juego de plataformas en pixel art protagonizado por Monky, la mascota de MoncadaArt.">
+  <meta name="description" content="Monky Dreams: carrera infinita en pixel art protagonizada por Monky, la mascota de MoncadaArt.">
   <meta name="theme-color" content="#0d0f26">
   <link rel="icon" href="../../assets/img/perfil.jpeg">
 
-  <!-- Jugar a pantalla completa al agregarlo a la pantalla de inicio -->
+  <!-- Pantalla completa al agregarlo a la pantalla de inicio (iPhone y Android) -->
   <link rel="manifest" href="app.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -34,44 +34,40 @@
     <symbol id="i-izq" viewBox="0 0 7 9"><path d="M4 0h2v1H4zM3 1h2v1H3zM2 2h2v1H2zM1 3h2v1H1zM0 4h2v1H0zM1 5h2v1H1zM2 6h2v1H2zM3 7h2v1H3zM4 8h2v1H4z"/></symbol>
     <symbol id="i-der" viewBox="0 0 7 9"><path d="M1 0h2v1H1zM2 1h2v1H2zM3 2h2v1H3zM4 3h2v1H4zM5 4h2v1H5zM4 5h2v1H4zM3 6h2v1H3zM2 7h2v1H2zM1 8h2v1H1z"/></symbol>
     <symbol id="i-salto" viewBox="0 0 9 9"><path d="M4 0h1v1H4zM3 1h3v1H3zM2 2h5v1H2zM1 3h7v1H1zM3 4h3v5H3z"/></symbol>
+    <symbol id="i-abajo" viewBox="0 0 9 9"><path d="M3 0h3v5H3zM1 5h7v1H1zM2 6h5v1H2zM3 7h3v1H3zM4 8h1v1H4z"/></symbol>
   </svg>
 
   <main class="app">
-
     <div class="escenario">
 
       <canvas id="juego" width="320" height="180" tabindex="-1"
-        aria-label="Monky Dreams, juego de plataformas"></canvas>
+        aria-label="Monky Dreams, juego de plataformas en pixel art"></canvas>
 
-      <!-- Botones superiores -->
-      <div class="hud-botones" id="hud-botones">
-        <button class="btn-icono" id="btn-pausa" type="button" data-accion="pausa" aria-label="Pausar" hidden>
-          <svg><use href="#i-pausa"/></svg>
-        </button>
-        <button class="btn-icono" id="btn-sonido" type="button" data-accion="sonido" aria-label="Silenciar sonido" aria-pressed="false">
-          <svg class="icono-on"><use href="#i-sonido"/></svg>
-          <svg class="icono-off"><use href="#i-silencio"/></svg>
-        </button>
-        <button class="btn-icono" id="btn-pantalla" type="button" data-accion="pantalla" aria-label="Pantalla completa" hidden>
-          <svg class="icono-on"><use href="#i-pantalla"/></svg>
-          <svg class="icono-off"><use href="#i-salir-pantalla"/></svg>
-        </button>
+      <!-- Carrera: mitad izquierda = deslizarse, mitad derecha = saltar -->
+      <div class="zona zona-abajo" id="zona-abajo" aria-hidden="true">
+        <span class="zona-icono"><svg><use href="#i-abajo"/></svg></span>
+      </div>
+      <div class="zona zona-saltar" id="zona-saltar" aria-hidden="true">
+        <span class="zona-icono"><svg><use href="#i-salto"/></svg></span>
       </div>
 
       <p class="aviso" id="aviso" role="status" aria-live="polite"></p>
 
-      <!-- INICIO: el logotipo y Monky dormido se dibujan en el lienzo -->
+      <!-- MENÚ PRINCIPAL: el logotipo y Monky se dibujan en el lienzo -->
       <section class="pantalla pantalla-inicio" id="pantalla-inicio" aria-labelledby="titulo-juego">
         <h1 id="titulo-juego" class="solo-lectores">Monky Dreams, un juego de MoncadaArt</h1>
-        <div class="inicio-abajo">
-          <button class="btn btn-principal btn-grande" type="button" data-accion="jugar" data-principal>
-            Jugar
+        <div class="menu">
+          <button class="btn btn-principal btn-grande" type="button" data-accion="carrera" data-principal>
+            Carrera inf&zwnj;inita
           </button>
+          <button class="btn" type="button" data-accion="aventura">Aventura</button>
+          <p class="record" id="record-menu"></p>
           <p class="ayuda ayuda-teclado">
-            <kbd>←</kbd> <kbd>→</kbd> moverse · <kbd>Espacio</kbd> saltar · <kbd>P</kbd> pausa · <kbd>F</kbd> pantalla completa
+            <kbd>Espacio</kbd> saltar · <kbd>↓</kbd> deslizar · <kbd>P</kbd> pausa · <kbd>F</kbd> pantalla completa
           </p>
-          <p class="ayuda ayuda-tactil">
-            Flechas para moverte · botón grande para saltar
+          <p class="ayuda ayuda-tactil">Toca la derecha para saltar · la izquierda para deslizarte</p>
+          <p class="ayuda consejo" id="consejo-ios" hidden>
+            Para jugar a pantalla completa en iPhone: <strong>Compartir → Agregar a pantalla de inicio</strong>
           </p>
           <a class="volver" href="../../juegos.html">← Volver a MoncadaArt</a>
         </div>
@@ -84,26 +80,43 @@
           <p class="bajada">Monky sigue soñando…</p>
           <div class="acciones">
             <button class="btn btn-principal" type="button" data-accion="continuar" data-principal>Continuar</button>
-            <button class="btn" type="button" data-accion="jugar">Reiniciar</button>
-            <button class="btn" type="button" data-accion="inicio">Salir al inicio</button>
+            <button class="btn" type="button" data-accion="reintentar">Reiniciar</button>
+            <button class="btn" type="button" data-accion="menu">Menú</button>
           </div>
           <a class="volver" href="../../juegos.html">← Volver a MoncadaArt</a>
         </div>
       </section>
 
-      <!-- DERROTA -->
+      <!-- FIN DE LA CARRERA -->
+      <section class="pantalla" id="pantalla-fin-carrera" aria-labelledby="fc-titulo" hidden>
+        <div class="marco">
+          <h2 id="fc-titulo">Fin de la carrera</h2>
+          <p class="nuevo-record" id="fc-nuevo" hidden>¡Nuevo récord!</p>
+          <dl class="resultados">
+            <div><dt>Distancia</dt><dd id="fc-metros">0 m</dd></div>
+            <div><dt>Monedas</dt><dd id="fc-monedas">0</dd></div>
+            <div><dt>Récord</dt><dd id="fc-record">0 m</dd></div>
+          </dl>
+          <div class="acciones">
+            <button class="btn btn-principal" type="button" data-accion="reintentar" data-principal>Volver a jugar</button>
+            <button class="btn" type="button" data-accion="menu">Menú</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- AVENTURA: DERROTA -->
       <section class="pantalla" id="pantalla-derrota" aria-labelledby="titulo-derrota" hidden>
         <div class="marco">
           <h2 id="titulo-derrota">Fin del sueño</h2>
           <p class="bajada">Las pesadillas ganaron esta vez. ¡Monky quiere intentarlo otra vez!</p>
           <div class="acciones">
-            <button class="btn btn-principal" type="button" data-accion="jugar" data-principal>Reintentar</button>
-            <button class="btn" type="button" data-accion="inicio">Salir al inicio</button>
+            <button class="btn btn-principal" type="button" data-accion="reintentar" data-principal>Reintentar</button>
+            <button class="btn" type="button" data-accion="menu">Menú</button>
           </div>
         </div>
       </section>
 
-      <!-- VICTORIA -->
+      <!-- AVENTURA: VICTORIA -->
       <section class="pantalla" id="pantalla-victoria" aria-labelledby="titulo-victoria" hidden>
         <div class="marco">
           <h2 id="titulo-victoria">¡Monky despertó!</h2>
@@ -114,33 +127,51 @@
             <div><dt>Vidas</dt><dd id="res-vidas">3/3</dd></div>
           </dl>
           <div class="acciones">
-            <button class="btn btn-principal" type="button" data-accion="jugar" data-principal>Jugar de nuevo</button>
-            <button class="btn" type="button" data-accion="inicio">Salir al inicio</button>
+            <button class="btn btn-principal" type="button" data-accion="reintentar" data-principal>Jugar de nuevo</button>
+            <button class="btn" type="button" data-accion="menu">Menú</button>
           </div>
         </div>
       </section>
-
     </div>
 
-    <!-- CONTROLES TÁCTILES -->
+    <!-- Botones superiores -->
+    <div class="hud-botones" id="hud-botones">
+      <button class="btn-icono" id="btn-pausa" type="button" data-accion="pausa" aria-label="Pausar" hidden>
+        <svg><use href="#i-pausa"/></svg>
+      </button>
+      <button class="btn-icono" id="btn-sonido" type="button" data-accion="sonido" aria-label="Silenciar sonido" aria-pressed="false">
+        <svg class="icono-on"><use href="#i-sonido"/></svg>
+        <svg class="icono-off"><use href="#i-silencio"/></svg>
+      </button>
+      <button class="btn-icono" id="btn-pantalla" type="button" data-accion="pantalla" aria-label="Pantalla completa" hidden>
+        <svg class="icono-on"><use href="#i-pantalla"/></svg>
+        <svg class="icono-off"><use href="#i-salir-pantalla"/></svg>
+      </button>
+    </div>
+
+    <!-- Controles táctiles de Aventura -->
     <div class="controles" aria-hidden="true">
       <div class="cruceta" id="cruceta">
         <span class="tecla" id="btn-izq"><svg><use href="#i-izq"/></svg></span>
         <span class="tecla" id="btn-der"><svg><use href="#i-der"/></svg></span>
       </div>
-      <p class="girar">Gira tu teléfono para jugar en grande</p>
-      <div class="tecla tecla-saltar" id="btn-saltar">
-        <svg><use href="#i-salto"/></svg>
-      </div>
+      <div class="tecla tecla-saltar" id="btn-saltar"><svg><use href="#i-salto"/></svg></div>
     </div>
 
+    <p class="girar">Gira tu teléfono para jugar a pantalla completa</p>
   </main>
 
   <script src="js/fisica.js"></script>
   <script src="js/sprites.js"></script>
   <script src="js/escenario.js"></script>
+  <script src="js/hud.js"></script>
+  <script src="js/generador.js"></script>
   <script src="js/nivel.js"></script>
   <script src="js/sonido.js"></script>
+  <script src="js/pantalla.js"></script>
+  <script src="js/entrada.js"></script>
+  <script src="js/aventura.js"></script>
+  <script src="js/carrera.js"></script>
   <script src="js/juego.js"></script>
 </body>
 </html>
